@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Encanto Kids | Carregando</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at center, #242424 0%, #111 40%, #070707 100%);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.loading-box{
+    width:90%;
+    max-width:500px;
+    text-align:center;
+    animation:entrada .8s ease;
+}
+
+.logo{
+    width:110px;
+    height:110px;
+    object-fit:cover;
+    border-radius:50%;
+    margin-bottom:20px;
+    border:3px solid rgba(255,255,255,.9);
+    box-shadow:0 0 40px rgba(255,255,255,.12);
+    animation:pulsar 2s infinite;
+}
+
+.empresa{
+    font-size:15px;
+    color:#888;
+    margin-bottom:30px;
+    letter-spacing:1px;
+}
+
+.saudacao{
+    font-size:18px;
+    color:#aaa;
+}
+
+.nome{
+    font-size:34px;
+    margin-top:5px;
+    margin-bottom:25px;
+    font-weight:700;
+}
+
+.sucesso{
+    color:#72e59a;
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+.subtitulo{
+    color:#aaa;
+    margin-bottom:30px;
+}
+
+.barra{
+    width:100%;
+    height:10px;
+    background:#202020;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid #333;
+}
+
+.progresso{
+    width:0%;
+    height:100%;
+    background:white;
+    border-radius:20px;
+    transition:width .35s ease;
+}
+
+.porcentagem{
+    margin-top:10px;
+    color:#777;
+    font-size:13px;
+}
+
+.status{
+    margin-top:25px;
+    min-height:24px;
+    color:#bbb;
+    font-size:14px;
+}
+
+.fade-out{
+    animation:saida .6s forwards;
+}
+
+@keyframes entrada{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes pulsar{
+    0%,100%{
+        transform:scale(1);
+        box-shadow:0 0 30px rgba(255,255,255,.08);
+    }
+    50%{
+        transform:scale(1.04);
+        box-shadow:0 0 55px rgba(255,255,255,.18);
+    }
+}
+
+@keyframes saida{
+    to{
+        opacity:0;
+        transform:scale(.98);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="loading-box" id="loadingBox">
+
+    <img
+        src="assets/logo.png"
+        class="logo"
+        alt="Encanto Kids"
+        onerror="this.style.display='none'"
+    >
+
+    <div class="empresa">
+        ENCANTO KIDS INFLÁVEIS
+    </div>
+
+    <div class="saudacao" id="saudacao">
+        Bem-vindo,
+    </div>
+
+    <div class="nome" id="nomeUsuario">
+        Sr. Administrador 👋
+    </div>
+
+    <div class="sucesso">
+        ✓ Login realizado!
+    </div>
+
+    <div class="subtitulo">
+        Abrindo painel...
+    </div>
+
+    <div class="barra">
+        <div class="progresso" id="progresso"></div>
+    </div>
+
+    <div class="porcentagem" id="porcentagem">
+        0%
+    </div>
+
+    <div class="status" id="status">
+        Preparando sistema...
+    </div>
+
+</div>
+
+<script>
+
+if(localStorage.getItem("adminLogado") !== "true"){
+    window.location.href = "login.html";
+}
+
+const usuario =
+    localStorage.getItem("adminUsuario") || "Administrador";
+
+const hora = new Date().getHours();
+
+let cumprimento = "Bem-vindo,";
+
+if(hora >= 5 && hora < 12){
+    cumprimento = "Bom dia,";
+}
+else if(hora >= 12 && hora < 18){
+    cumprimento = "Boa tarde,";
+}
+else{
+    cumprimento = "Boa noite,";
+}
+
+document.getElementById("saudacao").textContent = cumprimento;
+
+document.getElementById("nomeUsuario").textContent =
+    "Sr. " + formatarNome(usuario) + " 👋";
+
+
+function formatarNome(nome){
+
+    if(!nome){
+        return "Administrador";
+    }
+
+    return nome
+        .trim()
+        .split(" ")
+        .map(parte =>
+            parte.charAt(0).toUpperCase() +
+            parte.slice(1).toLowerCase()
+        )
+        .join(" ");
+}
+
+
+const progresso =
+    document.getElementById("progresso");
+
+const porcentagem =
+    document.getElementById("porcentagem");
+
+const status =
+    document.getElementById("status");
+
+const etapas = [
+
+    {
+        valor:15,
+        texto:"Verificando sessão..."
+    },
+
+    {
+        valor:35,
+        texto:"Conectando ao banco de dados..."
+    },
+
+    {
+        valor:55,
+        texto:"Carregando clientes..."
+    },
+
+    {
+        valor:72,
+        texto:"Carregando reservas..."
+    },
+
+    {
+        valor:88,
+        texto:"Preparando dashboard..."
+    },
+
+    {
+        valor:100,
+        texto:"Tudo pronto!"
+    }
+
+];
+
+let etapaAtual = 0;
+
+
+function executarEtapa(){
+
+    if(etapaAtual >= etapas.length){
+
+        setTimeout(() => {
+
+            document
+                .getElementById("loadingBox")
+                .classList.add("fade-out");
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "dashboard.html";
+
+            },600);
+
+        },500);
+
+        return;
+    }
+
+    const etapa =
+        etapas[etapaAtual];
+
+    progresso.style.width =
+        etapa.valor + "%";
+
+    porcentagem.textContent =
+        etapa.valor + "%";
+
+    status.textContent =
+        etapa.texto;
+
+    etapaAtual++;
+
+    setTimeout(
+        executarEtapa,
+        380
+    );
+}
+
+setTimeout(
+    executarEtapa,
+    400
+);
+
+</script>
+
+</body>
+</html>
