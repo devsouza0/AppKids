@@ -114,34 +114,31 @@ Usuário ou senha inválidos
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 
 const supabase = window.supabase.createClient(
 'https://stnjpquafragqjwxyjza.supabase.co',
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0bmpwcXVhZnJhZ3Fqd3h5anphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzI2MzAsImV4cCI6MjEwMDUwODYzMH0.r3YlozqWb2h96TLomC-VOfeQNLknio8x5xaiNVlQOkE";'
+'SUA_CHAVE_ANON'
 );
 
 async function login(){
 
-const usuario=document.getElementById('usuario').value;
-const senha=document.getElementById('senha').value;
+const usuario = document.getElementById('usuario').value;
+const senha = document.getElementById('senha').value;
 
 const { data, error } = await supabase
 .from('administradores')
 .select('*')
-.eq('usuario',usuario)
-.eq('senha',senha)
+.eq('usuario', usuario)
+.eq('senha', senha)
 .single();
 
 if(data){
-
-localStorage.setItem('adminLogado','true');
-window.location.href='dashboard.html';
-
+    localStorage.setItem('adminLogado','true');
+    window.location.href='dashboard.html';
 }else{
-
-document.getElementById('erro').style.display='block';
-
+    document.getElementById('erro').style.display='block';
 }
 
 }
