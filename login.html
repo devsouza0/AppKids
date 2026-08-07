@@ -1,91 +1,414 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Encanto Kids ADM</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-    background:#111;
-    color:white;
-    font-family:Arial;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
+    <title>Encanto Kids | Painel Administrativo</title>
 
-.box{
-    background:#1c1c1c;
-    padding:30px;
-    border-radius:10px;
-    width:300px;
-}
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-input{
-    width:100%;
-    padding:10px;
-    margin:5px 0 15px;
-    box-sizing:border-box;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-button{
-    width:100%;
-    padding:10px;
-    cursor:pointer;
-}
-</style>
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top right, #252525, transparent 40%),
+                #090909;
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+            color: #fff;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            background: #141414;
+            border: 1px solid #292929;
+            border-radius: 20px;
+            padding: 35px;
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,.55);
+        }
+
+        .marca {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+
+            object-fit: cover;
+            border-radius: 50%;
+
+            border: 3px solid #fff;
+
+            margin-bottom: 15px;
+        }
+
+        .marca h1 {
+            font-size: 23px;
+            margin-bottom: 5px;
+        }
+
+        .marca p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 7px;
+        }
+
+        .campo input {
+            width: 100%;
+            height: 50px;
+
+            background: #0c0c0c;
+            color: white;
+
+            border: 1px solid #333;
+            border-radius: 10px;
+
+            outline: none;
+
+            padding: 0 15px;
+
+            font-size: 15px;
+
+            transition: .2s;
+        }
+
+        .campo input:focus {
+            border-color: #fff;
+        }
+
+        .btn-login {
+            width: 100%;
+            height: 50px;
+
+            border: 0;
+            border-radius: 10px;
+
+            background: white;
+            color: black;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            background: #e9e9e9;
+        }
+
+        .btn-login:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #mensagem {
+            display: none;
+
+            margin-top: 18px;
+            padding: 12px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .erro {
+            display: block !important;
+            background: rgba(239,68,68,.12);
+            border: 1px solid rgba(239,68,68,.4);
+            color: #ff7979;
+        }
+
+        .sucesso {
+            display: block !important;
+            background: rgba(34,197,94,.12);
+            border: 1px solid rgba(34,197,94,.4);
+            color: #6ee7a0;
+        }
+
+        .rodape {
+            text-align: center;
+            color: #555;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        @media(max-width:500px) {
+            .login-card {
+                padding: 27px 22px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="box">
-<h2>Encanto Kids ADM</h2>
+<div class="login-container">
 
-<input type="text" id="usuario" placeholder="Usuário">
-<input type="password" id="senha" placeholder="Senha">
+    <div class="login-card">
 
-<button onclick="login()">Entrar</button>
+        <div class="marca">
 
-<p id="msg"></p>
+            <img
+                src="assets/logo.png"
+                alt="Encanto Kids"
+                class="logo"
+                onerror="this.style.display='none'"
+            >
+
+            <h1>Encanto Kids Infláveis</h1>
+
+            <p>Painel Administrativo</p>
+
+        </div>
+
+
+        <form id="formLogin">
+
+            <div class="campo">
+
+                <label for="usuario">
+                    Usuário
+                </label>
+
+                <input
+                    type="text"
+                    id="usuario"
+                    autocomplete="username"
+                    placeholder="Digite seu usuário"
+                    required
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="senha">
+                    Senha
+                </label>
+
+                <input
+                    type="password"
+                    id="senha"
+                    autocomplete="current-password"
+                    placeholder="Digite sua senha"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn-login"
+                id="btnLogin"
+            >
+                Entrar
+            </button>
+
+            <div id="mensagem"></div>
+
+        </form>
+
+    </div>
+
+
+    <div class="rodape">
+        Encanto Kids Infláveis • Sistema Administrativo
+    </div>
+
 </div>
+
 
 <script>
 
-const supabase = window.supabase.createClient(
-'https://stnjpquafragqjwxyjza.supabase.co',
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0bmpwcXVhZnJhZ3Fqd3h5anphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzI2MzAsImV4cCI6MjEwMDUwODYzMH0.r3YlozqWb2h96TLomC-VOfeQNLknio8x5xaiNVlQOkE'
-);
+const SUPABASE_URL =
+    'https://stnjpquafragqjwxyjza.supabase.co';
 
-async function login(){
+const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0bmpwcXVhZnJhZ3Fqd3h5anphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzI2MzAsImV4cCI6MjEwMDUwODYzMH0.r3YlozqWb2h96TLomC-VOfeQNLknio8x5xaiNVlQOkE'
 
-    const usuario = document.getElementById('usuario').value;
-    const senha = document.getElementById('senha').value;
 
-    const { data, error } = await supabase
-    .from('administradores')
-    .select('*')
-    .eq('usuario', usuario)
-    .eq('senha', senha)
-    .single();
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
-    if(error){
-        document.getElementById('msg').innerText =
-        'Erro: ' + error.message;
+
+const formLogin =
+    document.getElementById('formLogin');
+
+const btnLogin =
+    document.getElementById('btnLogin');
+
+const mensagem =
+    document.getElementById('mensagem');
+
+
+function mostrarMensagem(texto, tipo) {
+
+    mensagem.textContent = texto;
+
+    mensagem.className = '';
+
+    mensagem.classList.add(tipo);
+
+}
+
+
+formLogin.addEventListener('submit', async function(event) {
+
+    event.preventDefault();
+
+    const usuario =
+        document.getElementById('usuario')
+        .value
+        .trim();
+
+    const senha =
+        document.getElementById('senha')
+        .value;
+
+
+    if (!usuario || !senha) {
+
+        mostrarMensagem(
+            'Preencha usuário e senha.',
+            'erro'
+        );
+
         return;
     }
 
-    if(data){
-        document.getElementById('msg').innerText =
-        'LOGIN OK!';
-    }else{
-        document.getElementById('msg').innerText =
-        'Usuário não encontrado';
+
+    btnLogin.disabled = true;
+
+    btnLogin.textContent =
+        'Entrando...';
+
+
+    try {
+
+        const { data, error } =
+            await supabaseClient
+            .from('administradores')
+            .select('id, usuario')
+            .eq('usuario', usuario)
+            .eq('senha', senha)
+            .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                'Erro Supabase:',
+                error
+            );
+
+            mostrarMensagem(
+                'Erro ao conectar com o banco: ' +
+                error.message,
+                'erro'
+            );
+
+            return;
+        }
+
+
+        if (!data) {
+
+            mostrarMensagem(
+                'Usuário ou senha incorretos.',
+                'erro'
+            );
+
+            return;
+        }
+
+
+        localStorage.setItem(
+            'adminLogado',
+            'true'
+        );
+
+        localStorage.setItem(
+            'adminUsuario',
+            data.usuario
+        );
+
+
+        mostrarMensagem(
+            'Login realizado! Abrindo painel...',
+            'sucesso'
+        );
+
+
+        setTimeout(function() {
+
+            window.location.href =
+                'dashboard.html';
+
+        }, 500);
+
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        mostrarMensagem(
+            'Não foi possível realizar o login.',
+            'erro'
+        );
+
+
+    } finally {
+
+        btnLogin.disabled = false;
+
+        btnLogin.textContent =
+            'Entrar';
+
     }
 
-}
+});
+
 </script>
 
 </body>
