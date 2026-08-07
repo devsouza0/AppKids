@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reservas | Encanto Kids</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#080a0f;
+    --sidebar:#0d1017;
+    --card:#121722;
+    --card2:#171d29;
+    --border:#242b39;
+    --text:#f5f7fa;
+    --muted:#7f8999;
+}
+
+body{
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:260px;
+    height:100vh;
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+    padding:24px 18px;
+    display:flex;
+    flex-direction:column;
+    z-index:1000;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 8px 25px;
+    border-bottom:1px solid var(--border);
+}
+
+.logo-area img{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    object-fit:cover;
+}
+
+.logo-area h2{
+    font-size:16px;
+}
+
+.logo-area p{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.menu-title{
+    font-size:10px;
+    color:#555f70;
+    margin:25px 10px 10px;
+    font-weight:bold;
+    letter-spacing:1.4px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#8994a6;
+    padding:13px 14px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    border-radius:10px;
+    transition:.2s;
+}
+
+.menu a i{
+    width:20px;
+    text-align:center;
+}
+
+.menu a:hover{
+    background:#171d28;
+    color:white;
+}
+
+.menu a.active{
+    background:white;
+    color:#080a0f;
+    font-weight:bold;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+}
+
+.logout{
+    width:100%;
+    border:none;
+    padding:13px;
+    border-radius:10px;
+    background:#191116;
+    color:#ff6363;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.main{
+    margin-left:260px;
+    min-height:100vh;
+    padding:30px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    gap:20px;
+}
+
+.topbar h1{
+    font-size:27px;
+}
+
+.topbar p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+.btn-primary,
+.btn-secondary{
+    border:none;
+    border-radius:10px;
+    padding:12px 16px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-primary{
+    background:white;
+    color:#090b10;
+}
+
+.btn-secondary{
+    background:#1b2230;
+    color:white;
+    border:1px solid var(--border);
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:1.6fr .8fr;
+    gap:20px;
+}
+
+.panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+
+.panel-header{
+    padding:18px 20px;
+    border-bottom:1px solid var(--border);
+}
+
+.panel-header h3{
+    font-size:15px;
+}
+
+.panel-body{
+    padding:20px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    display:block;
+    font-size:11px;
+    color:#8994a6;
+    margin-bottom:7px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    background:#0d1118;
+    color:white;
+    border:1px solid #283040;
+    border-radius:9px;
+    outline:none;
+    padding:0 12px;
+}
+
+.form-group input,
+.form-group select{
+    height:45px;
+}
+
+.form-group textarea{
+    min-height:100px;
+    padding-top:12px;
+    resize:vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:#657087;
+}
+
+.item-line{
+    display:grid;
+    grid-template-columns:1.7fr .6fr .8fr .8fr 42px;
+    gap:10px;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #1d2330;
+}
+
+.item-line:last-child{
+    border-bottom:none;
+}
+
+.item-line select,
+.item-line input{
+    width:100%;
+    height:42px;
+    background:#0d1118;
+    color:white;
+    border:1px solid #283040;
+    border-radius:8px;
+    padding:0 10px;
+}
+
+.remove-item{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:8px;
+    background:rgba(239,68,68,.12);
+    color:#ff6b6b;
+    cursor:pointer;
+}
+
+.add-item{
+    margin-top:15px;
+}
+
+.resumo-linha{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:12px 0;
+    border-bottom:1px solid #1d2330;
+    font-size:13px;
+}
+
+.resumo-linha:last-child{
+    border-bottom:none;
+}
+
+.resumo-linha span{
+    color:#8590a2;
+}
+
+.resumo-linha strong{
+    font-size:16px;
+}
+
+.total-final strong{
+    font-size:24px;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    min-width:300px;
+    background:#151b25;
+    border:1px solid #30394a;
+    border-left:4px solid #22c55e;
+    border-radius:12px;
+    padding:15px 18px;
+    transform:translateY(120px);
+    opacity:0;
+    transition:.35s;
+    z-index:9000;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.toast.error{
+    border-left-color:#ef4444;
+}
+
+.toast strong{
+    display:block;
+    font-size:12px;
+}
+
+.toast p{
+    color:#8490a2;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.mobile-menu{
+    display:none;
+    width:42px;
+    height:42px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    background:#151a24;
+    color:white;
+}
+
+@media(max-width:1000px){
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .item-line{
+        grid-template-columns:1fr;
+        background:#0e131c;
+        padding:15px;
+        border-radius:10px;
+        margin-bottom:12px;
+    }
+
+    .remove-item{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo-area">
+        <img src="assets/logo.png" alt="Encanto Kids">
+        <div>
+            <h2>Encanto Kids</h2>
+            <p>Painel Administrativo</p>
+        </div>
+    </div>
+
+    <div class="menu-title">MENU PRINCIPAL</div>
+
+    <nav class="menu">
+        <a href="dashboard.html">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
+        </a>
+
+        <a href="reservas.html" class="active">
+            <i class="fa-solid fa-calendar-check"></i>
+            Reservas
+        </a>
+
+        <a href="clientes.html">
+            <i class="fa-solid fa-users"></i>
+            Clientes
+        </a>
+
+        <a href="calendario.html">
+            <i class="fa-solid fa-calendar-days"></i>
+            Calendário
+        </a>
+
+        <a href="contratos.html">
+            <i class="fa-solid fa-file-signature"></i>
+            Contratos
+        </a>
+    </nav>
+
+    <div class="menu-title">GESTÃO</div>
+
+    <nav class="menu">
+        <a href="brinquedos.html">
+            <i class="fa-solid fa-shapes"></i>
+            Brinquedos
+        </a>
+
+        <a href="financeiro.html">
+            <i class="fa-solid fa-wallet"></i>
+            Financeiro
+        </a>
+
+        <a href="configuracoes.html">
+            <i class="fa-solid fa-gear"></i>
+            Configurações
+        </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <button class="logout" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            &nbsp; Sair
+        </button>
+    </div>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+    <div style="display:flex;align-items:center;gap:15px;">
+        <button class="mobile-menu" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div>
+            <h1>Nova Reserva</h1>
+            <p>Cadastre uma nova locação para a Encanto Kids.</p>
+        </div>
+    </div>
+
+</header>
+
+<div class="layout">
+
+<div>
+
+<section class="panel">
+
+    <div class="panel-header">
+        <h3>Cliente</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label>Selecione o cliente *</label>
+
+            <select id="cliente">
+                <option value="">Carregando clientes...</option>
+            </select>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+        <h3>Brinquedos da Reserva</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div id="listaItens"></div>
+
+        <button
+        class="btn-secondary add-item"
+        onclick="adicionarItem()">
+
+            <i class="fa-solid fa-plus"></i>
+            Adicionar Brinquedo
+
+        </button>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+        <h3>Dados do Evento</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Data do evento *</label>
+                <input type="date" id="dataEvento">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select id="status">
+                    <option>Pendente</option>
+                    <option>Confirmada</option>
+                    <option>Concluída</option>
+                    <option>Cancelada</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Horário inicial</label>
+                <input type="time" id="horarioInicio">
+            </div>
+
+            <div class="form-group">
+                <label>Horário final</label>
+                <input type="time" id="horarioFim">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+        <h3>Local do Evento</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+                <label>Endereço</label>
+                <input
+                type="text"
+                id="enderecoEvento"
+                placeholder="Rua, número e bairro">
+            </div>
+
+            <div class="form-group">
+                <label>Cidade</label>
+                <input
+                type="text"
+                id="cidadeEvento"
+                placeholder="Cidade">
+            </div>
+
+            <div class="form-group">
+                <label>Estado</label>
+
+                <select id="estadoEvento">
+                    <option value="">Selecione</option>
+                    <option value="SP">SP</option>
+                    <option value="MG">MG</option>
+                    <option value="RJ">RJ</option>
+                    <option value="PR">PR</option>
+                    <option value="SC">SC</option>
+                    <option value="RS">RS</option>
+                    <option value="GO">GO</option>
+                    <option value="MS">MS</option>
+                    <option value="MT">MT</option>
+                    <option value="BA">BA</option>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+        <h3>Observações</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <textarea
+            id="observacoes"
+            placeholder="Informações adicionais sobre a reserva..."></textarea>
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+<div>
+
+<section class="panel">
+
+    <div class="panel-header">
+        <h3>Pagamento</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label>Valor da entrada</label>
+
+            <input
+            type="number"
+            id="valorEntrada"
+            value="0"
+            min="0"
+            step="0.01"
+            oninput="atualizarResumo()">
+        </div>
+
+        <div class="form-group">
+            <label>Forma de pagamento</label>
+
+            <select id="formaPagamento">
+                <option value="">Selecione</option>
+                <option value="Pix">Pix</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Cartão">Cartão</option>
+                <option value="Transferência">Transferência</option>
+            </select>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+        <h3>Resumo da Reserva</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="resumo-linha">
+            <span>Itens</span>
+            <strong id="qtdItens">0</strong>
+        </div>
+
+        <div class="resumo-linha total-final">
+            <span>Valor Total</span>
+            <strong id="valorTotal">R$ 0,00</strong>
+        </div>
+
+        <div class="resumo-linha">
+            <span>Entrada</span>
+            <strong id="entradaResumo">R$ 0,00</strong>
+        </div>
+
+        <div class="resumo-linha">
+            <span>Restante</span>
+            <strong id="valorRestante">R$ 0,00</strong>
+        </div>
+
+        <div class="actions">
+
+            <button
+            class="btn-primary"
+            id="btnSalvar"
+            onclick="salvarReserva()">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+                Salvar Reserva
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+</div>
+
+</main>
+
+<div class="toast" id="toast">
+    <strong id="toastTitulo"></strong>
+    <p id="toastTexto"></p>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+
+<script>
+
+protegerPagina();
+
+let clientes = [];
+let brinquedos = [];
+
+function toggleMenu(){
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("open");
+}
+
+async function carregarDados(){
+
+    const [
+        clientesResponse,
+        brinquedosResponse
+    ] = await Promise.all([
+
+        supabaseClient
+        .from("clientes")
+        .select("*")
+        .order("nome"),
+
+        supabaseClient
+        .from("brinquedos")
+        .select("*")
+        .order("nome")
+
+    ]);
+
+
+    if(clientesResponse.error){
+        mostrarToast(
+            "Erro",
+            clientesResponse.error.message,
+            true
+        );
+        return;
+    }
+
+
+    if(brinquedosResponse.error){
+        mostrarToast(
+            "Erro",
+            brinquedosResponse.error.message,
+            true
+        );
+        return;
+    }
+
+
+    clientes =
+    clientesResponse.data || [];
+
+    brinquedos =
+    brinquedosResponse.data || [];
+
+
+    preencherClientes();
+
+    adicionarItem();
+
+}
+
+
+function preencherClientes(){
+
+    const select =
+    document.getElementById("cliente");
+
+    select.innerHTML =
+    '<option value="">Selecione um cliente</option>';
+
+
+    clientes.forEach(cliente => {
+
+        const option =
+        document.createElement("option");
+
+        option.value =
+        cliente.id;
+
+        option.textContent =
+        `${cliente.nome} - ${cliente.telefone || ""}`;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+function adicionarItem(){
+
+    const container =
+    document.getElementById("listaItens");
+
+
+    const linha =
+    document.createElement("div");
+
+    linha.className =
+    "item-line";
+
+
+    const options =
+    brinquedos.map(brinquedo => {
+
+        return `
+        <option
+        value="${brinquedo.id}"
+        data-valor="${Number(brinquedo.valor || 0)}">
+
+            ${escapeHTML(brinquedo.nome)}
+
+        </option>
+        `;
+
+    }).join("");
+
+
+    linha.innerHTML = `
+
+        <select
+        class="brinquedo"
+        onchange="alterarBrinquedo(this)">
+
+            <option value="">
+                Selecione o brinquedo
+            </option>
+
+            ${options}
+
+        </select>
+
+
+        <input
+        type="number"
+        class="quantidade"
+        value="1"
+        min="1"
+        oninput="calcularLinha(this)">
+
+
+        <input
+        type="number"
+        class="valorUnitario"
+        value="0"
+        min="0"
+        step="0.01"
+        oninput="calcularLinha(this)">
+
+
+        <input
+        type="number"
+        class="subtotal"
+        value="0"
+        readonly>
+
+
+        <button
+        class="remove-item"
+        onclick="removerItem(this)">
+
+            <i class="fa-solid fa-trash"></i>
+
+        </button>
+
+    `;
+
+
+    container.appendChild(
+        linha
+    );
+
+}
+
+
+function alterarBrinquedo(select){
+
+    const linha =
+    select.closest(".item-line");
+
+    const option =
+    select.options[
+        select.selectedIndex
+    ];
+
+
+    const valor =
+    Number(
+        option.dataset.valor || 0
+    );
+
+
+    linha
+    .querySelector(".valorUnitario")
+    .value =
+    valor.toFixed(2);
+
+
+    calcularLinha(
+        linha.querySelector(".quantidade")
+    );
+
+}
+
+
+function calcularLinha(elemento){
+
+    const linha =
+    elemento.closest(".item-line");
+
+
+    const quantidade =
+    Number(
+        linha
+        .querySelector(".quantidade")
+        .value || 0
+    );
+
+
+    const valor =
+    Number(
+        linha
+        .querySelector(".valorUnitario")
+        .value || 0
+    );
+
+
+    const subtotal =
+    quantidade * valor;
+
+
+    linha
+    .querySelector(".subtotal")
+    .value =
+    subtotal.toFixed(2);
+
+
+    atualizarResumo();
+
+}
+
+
+function removerItem(botao){
+
+    const linhas =
+    document.querySelectorAll(".item-line");
+
+
+    if(linhas.length === 1){
+
+        mostrarToast(
+            "Atenção",
+            "A reserva precisa ter pelo menos um item.",
+            true
+        );
+
+        return;
+    }
+
+
+    botao
+    .closest(".item-line")
+    .remove();
+
+
+    atualizarResumo();
+
+}
+
+
+function obterItens(){
+
+    const linhas =
+    document.querySelectorAll(".item-line");
+
+
+    const itens = [];
+
+
+    linhas.forEach(linha => {
+
+        const brinquedoId =
+        Number(
+            linha
+            .querySelector(".brinquedo")
+            .value
+        );
+
+
+        const quantidade =
+        Number(
+            linha
+            .querySelector(".quantidade")
+            .value || 0
+        );
+
+
+        const valorUnitario =
+        Number(
+            linha
+            .querySelector(".valorUnitario")
+            .value || 0
+        );
+
+
+        const subtotal =
+        quantidade *
+        valorUnitario;
+
+
+        if(brinquedoId){
+
+            itens.push({
+
+                brinquedo_id:
+                brinquedoId,
+
+                quantidade,
+
+                valor_unitario:
+                valorUnitario,
+
+                subtotal
+
+            });
+
+        }
+
+    });
+
+
+    return itens;
+
+}
+
+
+function atualizarResumo(){
+
+    const itens =
+    obterItens();
+
+
+    const total =
+    itens.reduce(
+        (soma,item) =>
+        soma +
+        Number(item.subtotal || 0),
+        0
+    );
+
+
+    const entrada =
+    Number(
+        document
+        .getElementById("valorEntrada")
+        .value || 0
+    );
+
+
+    const restante =
+    Math.max(
+        total - entrada,
+        0
+    );
+
+
+    document.getElementById(
+        "qtdItens"
+    ).textContent =
+    itens.length;
+
+
+    document.getElementById(
+        "valorTotal"
+    ).textContent =
+    moeda(total);
+
+
+    document.getElementById(
+        "entradaResumo"
+    ).textContent =
+    moeda(entrada);
+
+
+    document.getElementById(
+        "valorRestante"
+    ).textContent =
+    moeda(restante);
+
+}
+
+
+async function salvarReserva(){
+
+    const clienteId =
+    Number(
+        document.getElementById("cliente").value
+    );
+
+
+    const dataEvento =
+    document.getElementById("dataEvento").value;
+
+
+    const itens =
+    obterItens();
+
+
+    if(!clienteId){
+
+        mostrarToast(
+            "Atenção",
+            "Selecione um cliente.",
+            true
+        );
+
+        return;
+    }
+
+
+    if(!dataEvento){
+
+        mostrarToast(
+            "Atenção",
+            "Informe a data do evento.",
+            true
+        );
+
+        return;
+    }
+
+
+    if(itens.length === 0){
+
+        mostrarToast(
+            "Atenção",
+            "Adicione pelo menos um brinquedo.",
+            true
+        );
+
+        return;
+    }
+
+
+    const total =
+    itens.reduce(
+        (soma,item) =>
+        soma +
+        Number(item.subtotal || 0),
+        0
+    );
+
+
+    const entrada =
+    Number(
+        document
+        .getElementById("valorEntrada")
+        .value || 0
+    );
+
+
+    if(entrada > total){
+
+        mostrarToast(
+            "Atenção",
+            "A entrada não pode ser maior que o valor total.",
+            true
+        );
+
+        return;
+    }
+
+
+    const btn =
+    document.getElementById("btnSalvar");
+
+
+    btn.disabled = true;
+
+    btn.innerHTML =
+    '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+
+    try{
+
+        const reservaDados = {
+
+            cliente_id:
+            clienteId,
+
+            data_evento:
+            dataEvento,
+
+            horario_inicio:
+            document.getElementById("horarioInicio").value || null,
+
+            horario_fim:
+            document.getElementById("horarioFim").value || null,
+
+            endereco_evento:
+            document.getElementById("enderecoEvento").value.trim(),
+
+            cidade_evento:
+            document.getElementById("cidadeEvento").value.trim(),
+
+            estado_evento:
+            document.getElementById("estadoEvento").value,
+
+            valor_total:
+            total,
+
+            valor_entrada:
+            entrada,
+
+            forma_pagamento:
+            document.getElementById("formaPagamento").value,
+
+            status:
+            document.getElementById("status").value,
+
+            observacoes:
+            document.getElementById("observacoes").value.trim()
+
+        };
+
+
+        const {
+            data:reservaCriada,
+            error:erroReserva
+        } =
+        await supabaseClient
+        .from("reservas")
+        .insert(reservaDados)
+        .select()
+        .single();
+
+
+        if(erroReserva){
+            throw erroReserva;
+        }
+
+
+        const itensBanco =
+        itens.map(item => ({
+
+            reserva_id:
+            reservaCriada.id,
+
+            brinquedo_id:
+            item.brinquedo_id,
+
+            quantidade:
+            item.quantidade,
+
+            valor_unitario:
+            item.valor_unitario,
+
+            subtotal:
+            item.subtotal
+
+        }));
+
+
+        const {
+            error:erroItens
+        } =
+        await supabaseClient
+        .from("reserva_itens")
+        .insert(itensBanco);
+
+
+        if(erroItens){
+
+            await supabaseClient
+            .from("reservas")
+            .delete()
+            .eq("id",reservaCriada.id);
+
+            throw erroItens;
+        }
+
+
+        await criarMovimentoFinanceiro(
+            reservaCriada.id,
+            clienteId,
+            total,
+            entrada
+        );
+
+
+        mostrarToast(
+            "Reserva criada",
+            "A reserva foi salva com sucesso.",
+            false
+        );
+
+
+        setTimeout(() => {
+
+            window.location.href =
+            "dashboard.html";
+
+        },1200);
+
+    }
+    catch(erro){
+
+        console.error(erro);
+
+        mostrarToast(
+            "Erro",
+            erro.message ||
+            "Não foi possível salvar a reserva.",
+            true
+        );
+
+    }
+    finally{
+
+        btn.disabled = false;
+
+        btn.innerHTML =
+        '<i class="fa-solid fa-floppy-disk"></i> Salvar Reserva';
+
+    }
+
+}
+
+
+async function criarMovimentoFinanceiro(
+    reservaId,
+    clienteId,
+    total,
+    entrada
+){
+
+    if(entrada <= 0){
+        return;
+    }
+
+
+    const cliente =
+    clientes.find(
+        item =>
+        Number(item.id)
+        === Number(clienteId)
+    );
+
+
+    const descricao =
+    `Entrada da reserva #${reservaId} - ${
+        cliente?.nome || "Cliente"
+    }`;
+
+
+    const {
+        error
+    } =
+    await supabaseClient
+    .from("financeiro")
+    .insert({
+
+        reserva_id:
+        reservaId,
+
+        tipo:
+        "Receita",
+
+        descricao,
+
+        valor:
+        entrada,
+
+        categoria:
+        "Reserva",
+
+        forma_pagamento:
+        document.getElementById("formaPagamento").value,
+
+        status:
+        "Pago"
+
+    });
+
+
+    if(error){
+        console.warn(
+            "Reserva salva, mas financeiro não foi criado:",
+            error
+        );
+    }
+
+}
+
+
+function mostrarToast(
+    titulo,
+    texto,
+    erro = false
+){
+
+    const toast =
+    document.getElementById("toast");
+
+
+    document.getElementById(
+        "toastTitulo"
+    ).textContent =
+    titulo;
+
+
+    document.getElementById(
+        "toastTexto"
+    ).textContent =
+    texto;
+
+
+    toast.className =
+    erro
+    ? "toast error"
+    : "toast";
+
+
+    requestAnimationFrame(() => {
+
+        toast.classList.add("show");
+
+    });
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    },3500);
+
+}
+
+
+carregarDados();
+
+</script>
+
+</body>
+</html>
