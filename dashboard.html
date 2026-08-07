@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard - Encanto Kids</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f1115;
+color:white;
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#181c23;
+padding:20px;
+border-right:1px solid #2b3240;
+}
+
+.logo{
+text-align:center;
+margin-bottom:30px;
+}
+
+.logo img{
+width:100px;
+height:100px;
+border-radius:50%;
+object-fit:cover;
+}
+
+.logo h2{
+font-size:18px;
+margin-top:10px;
+}
+
+.logo span{
+font-size:12px;
+color:#999;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.menu a{
+color:white;
+text-decoration:none;
+padding:12px;
+border-radius:10px;
+background:#232833;
+transition:.3s;
+}
+
+.menu a:hover{
+background:#2f3745;
+}
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.topo{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.card{
+background:#232833;
+padding:20px;
+border-radius:15px;
+}
+
+.card h3{
+font-size:14px;
+color:#ccc;
+margin-bottom:10px;
+}
+
+.card p{
+font-size:28px;
+font-weight:bold;
+}
+
+.azul{
+border-left:5px solid #3b82f6;
+}
+
+.verde{
+border-left:5px solid #22c55e;
+}
+
+.laranja{
+border-left:5px solid #f59e0b;
+}
+
+.vermelho{
+border-left:5px solid #ef4444;
+}
+
+.tabela{
+background:#232833;
+padding:20px;
+border-radius:15px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+text-align:left;
+border-bottom:1px solid #333;
+}
+
+th{
+color:#aaa;
+}
+
+@media(max-width:768px){
+
+body{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">
+<img src="assets/logo.png">
+<h2>Encanto Kids</h2>
+<span>Painel Administrativo</span>
+</div>
+
+<div class="menu">
+
+<a href="dashboard.html">
+<i class="fa-solid fa-chart-line"></i>
+ Dashboard
+</a>
+
+<a href="clientes.html">
+<i class="fa-solid fa-users"></i>
+ Clientes
+</a>
+
+<a href="reservas.html">
+<i class="fa-solid fa-calendar-check"></i>
+ Reservas
+</a>
+
+<a href="calendario.html">
+<i class="fa-solid fa-calendar-days"></i>
+ Calendário
+</a>
+
+<a href="contratos.html">
+<i class="fa-solid fa-file-contract"></i>
+ Contratos
+</a>
+
+<a href="login.html" onclick="logout()">
+<i class="fa-solid fa-right-from-bracket"></i>
+ Sair
+</a>
+
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topo">
+<h1>Dashboard</h1>
+<p id="dataAtual"></p>
+</div>
+
+<div class="cards">
+
+<div class="card azul">
+<h3>Clientes</h3>
+<p id="clientes">0</p>
+</div>
+
+<div class="card verde">
+<h3>Reservas</h3>
+<p id="reservas">0</p>
+</div>
+
+<div class="card laranja">
+<h3>Brinquedos</h3>
+<p id="brinquedos">0</p>
+</div>
+
+<div class="card vermelho">
+<h3>Contratos</h3>
+<p id="contratos">0</p>
+</div>
+
+</div>
+
+<div class="tabela">
+
+<h2 style="margin-bottom:20px;">
+Próximas Reservas
+</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Data</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody id="listaReservas">
+
+<tr>
+<td colspan="3">
+Carregando...
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+if(localStorage.getItem("adminLogado")!="true"){
+window.location="login.html";
+}
+
+const supabase = window.supabase.createClient(
+"https://stnjpquafragqjwxyjza.supabase.co",
+"SUA_ANON_KEY"
+);
+
+document.getElementById("dataAtual").innerHTML =
+new Date().toLocaleDateString("pt-BR");
+
+async function carregarDados(){
+
+const { count:clientes } = await supabase
+.from("clientes")
+.select("*",{count:"exact",head:true});
+
+const { count:reservas } = await supabase
+.from("reservas")
+.select("*",{count:"exact",head:true});
+
+const { count:brinquedos } = await supabase
+.from("brinquedos")
+.select("*",{count:"exact",head:true});
+
+const { count:contratos } = await supabase
+.from("contratos")
+.select("*",{count:"exact",head:true});
+
+document.getElementById("clientes").innerText = clientes || 0;
+document.getElementById("reservas").innerText = reservas || 0;
+document.getElementById("brinquedos").innerText = brinquedos || 0;
+document.getElementById("contratos").innerText = contratos || 0;
+
+}
+
+async function carregarReservas(){
+
+const { data } = await supabase
+.from("reservas")
+.select("*")
+.order("data_evento",{ascending:true})
+.limit(10);
+
+let html="";
+
+if(data && data.length){
+
+data.forEach(item=>{
+
+html+=`
+<tr>
+<td>${item.cliente_id}</td>
+<td>${item.data_evento}</td>
+<td>${item.status}</td>
+</tr>
+`;
+
+});
+
+}else{
+
+html=`
+<tr>
+<td colspan="3">
+Nenhuma reserva encontrada
+</td>
+</tr>
+`;
+
+}
+
+document.getElementById("listaReservas").innerHTML=html;
+
+}
+
+function logout(){
+
+localStorage.removeItem("adminLogado");
+
+}
+
+carregarDados();
+carregarReservas();
+
+</script>
+
+</body>
+</html>
