@@ -375,17 +375,14 @@ formLogin.addEventListener('submit', async function(event) {
 
 
         mostrarMensagem(
-            'Login realizado! Abrindo painel...',
-            'sucesso'
-        );
+    'Login realizado! Abrindo painel...',
+    'sucesso'
+);
 
-
-        setTimeout(function() {
-
-            window.location.href =
-                'dashboard.html';
-
-        }, 500);
+setTimeout(function() {
+    window.location.href =
+        'loading.html';
+}, 700);
 
 
     } catch (erro) {
