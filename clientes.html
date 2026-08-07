@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Clientes | Encanto Kids</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#080a0f;
+    --sidebar:#0d1017;
+    --card:#121722;
+    --card2:#171d29;
+    --border:#242b39;
+    --text:#f5f7fa;
+    --muted:#7f8999;
+}
+
+body{
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+}
+
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+
+    width:260px;
+    height:100vh;
+
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+
+    padding:24px 18px;
+
+    display:flex;
+    flex-direction:column;
+
+    z-index:1000;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:0 8px 25px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.logo-area img{
+    width:52px;
+    height:52px;
+
+    border-radius:14px;
+    object-fit:cover;
+}
+
+.logo-area h2{
+    font-size:16px;
+}
+
+.logo-area p{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.menu-title{
+    font-size:10px;
+    color:#555f70;
+
+    margin:25px 10px 10px;
+
+    font-weight:bold;
+    letter-spacing:1.4px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#8994a6;
+
+    padding:13px 14px;
+
+    display:flex;
+    align-items:center;
+    gap:13px;
+
+    border-radius:10px;
+
+    transition:.2s;
+}
+
+.menu a i{
+    width:20px;
+    text-align:center;
+}
+
+.menu a:hover{
+    background:#171d28;
+    color:white;
+}
+
+.menu a.active{
+    background:white;
+    color:#080a0f;
+    font-weight:bold;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+}
+
+.logout{
+    width:100%;
+    border:none;
+
+    padding:13px;
+
+    border-radius:10px;
+
+    background:#191116;
+    color:#ff6363;
+
+    cursor:pointer;
+    font-weight:bold;
+
+    transition:.2s;
+}
+
+.logout:hover{
+    background:#271418;
+}
+
+
+/* =========================
+MAIN
+========================= */
+
+.main{
+    margin-left:260px;
+    min-height:100vh;
+    padding:30px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+.topbar h1{
+    font-size:27px;
+}
+
+.topbar p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+
+/* =========================
+BUTTONS
+========================= */
+
+.btn-primary{
+    border:none;
+    background:white;
+    color:#080a0f;
+
+    padding:12px 17px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    transition:.2s;
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    border:1px solid var(--border);
+
+    background:#171d28;
+    color:white;
+
+    padding:11px 14px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+.btn-danger{
+    background:rgba(239,68,68,.12);
+    color:#ff6b6b;
+
+    border:1px solid rgba(239,68,68,.25);
+
+    width:36px;
+    height:36px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+.btn-edit{
+    background:rgba(59,130,246,.12);
+    color:#60a5fa;
+
+    border:1px solid rgba(59,130,246,.25);
+
+    width:36px;
+    height:36px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+.btn-whatsapp{
+    background:rgba(34,197,94,.12);
+    color:#4ade80;
+
+    border:1px solid rgba(34,197,94,.25);
+
+    width:36px;
+    height:36px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+
+/* =========================
+CARDS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:17px;
+    margin-bottom:22px;
+}
+
+.stat-card{
+    background:linear-gradient(
+        145deg,
+        var(--card2),
+        var(--card)
+    );
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:20px;
+}
+
+.stat-card span{
+    color:#838da0;
+    font-size:11px;
+}
+
+.stat-card strong{
+    display:block;
+
+    margin-top:8px;
+
+    font-size:28px;
+}
+
+
+/* =========================
+TOOLBAR
+========================= */
+
+.toolbar{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    padding:15px;
+
+    margin-bottom:18px;
+
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+
+.search{
+    flex:1;
+    position:relative;
+}
+
+.search i{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+
+    color:#667084;
+}
+
+.search input{
+    width:100%;
+    height:45px;
+
+    border:1px solid var(--border);
+    background:#0d1119;
+
+    color:white;
+
+    border-radius:10px;
+
+    padding:0 15px 0 40px;
+
+    outline:none;
+}
+
+.search input:focus{
+    border-color:#59657a;
+}
+
+
+/* =========================
+TABLE
+========================= */
+
+.table-box{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    overflow:hidden;
+}
+
+.table-header{
+    padding:18px 20px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:1px solid var(--border);
+}
+
+.table-header h3{
+    font-size:14px;
+}
+
+.table-header span{
+    font-size:11px;
+    color:var(--muted);
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#0e121a;
+}
+
+th{
+    text-align:left;
+
+    font-size:10px;
+
+    color:#687386;
+
+    letter-spacing:.8px;
+
+    padding:14px 17px;
+
+    white-space:nowrap;
+}
+
+td{
+    padding:15px 17px;
+
+    border-top:1px solid #1d2330;
+
+    font-size:12px;
+
+    color:#d6dbe4;
+}
+
+.cliente-nome{
+    font-weight:bold;
+    color:white;
+}
+
+.cliente-sub{
+    color:#6f798a;
+    font-size:10px;
+    margin-top:4px;
+}
+
+.actions{
+    display:flex;
+    gap:7px;
+}
+
+.empty{
+    padding:45px;
+    text-align:center;
+    color:#5e697b;
+}
+
+.empty i{
+    font-size:32px;
+    margin-bottom:12px;
+}
+
+
+/* =========================
+MODAL
+========================= */
+
+.modal-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    backdrop-filter:blur(6px);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:5000;
+}
+
+.modal-overlay.show{
+    display:flex;
+}
+
+.modal{
+    width:100%;
+    max-width:620px;
+
+    background:#121722;
+
+    border:1px solid #2a3242;
+
+    border-radius:18px;
+
+    box-shadow:0 30px 90px rgba(0,0,0,.6);
+
+    animation:modalIn .25s ease;
+
+    max-height:90vh;
+
+    overflow:auto;
+}
+
+.modal-header{
+    padding:20px 22px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:1px solid var(--border);
+}
+
+.modal-header h2{
+    font-size:17px;
+}
+
+.close-modal{
+    border:none;
+    background:#1d2430;
+    color:white;
+
+    width:35px;
+    height:35px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+.modal-body{
+    padding:22px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:16px;
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group.full{
+    grid-column:1 / -1;
+}
+
+.form-group label{
+    display:block;
+
+    color:#8b95a6;
+
+    font-size:11px;
+
+    margin-bottom:7px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    height:45px;
+
+    background:#0d1118;
+    color:white;
+
+    border:1px solid #283040;
+
+    border-radius:9px;
+
+    padding:0 12px;
+
+    outline:none;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#657087;
+}
+
+.modal-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+
+    padding:18px 22px;
+
+    border-top:1px solid var(--border);
+}
+
+
+/* =========================
+TOAST
+========================= */
+
+.toast{
+    position:fixed;
+
+    right:25px;
+    bottom:25px;
+
+    background:#151b25;
+
+    border:1px solid #30394a;
+
+    border-radius:12px;
+
+    padding:15px 18px;
+
+    min-width:290px;
+
+    transform:translateY(120px);
+
+    opacity:0;
+
+    transition:.35s;
+
+    z-index:9000;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.toast.success{
+    border-left:4px solid #22c55e;
+}
+
+.toast.error{
+    border-left:4px solid #ef4444;
+}
+
+.toast strong{
+    display:block;
+    font-size:12px;
+}
+
+.toast p{
+    color:#8490a2;
+    font-size:11px;
+    margin-top:4px;
+}
+
+
+/* =========================
+MOBILE
+========================= */
+
+.mobile-menu{
+    display:none;
+
+    background:#151a24;
+    color:white;
+
+    border:1px solid var(--border);
+
+    width:42px;
+    height:42px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+@media(max-width:1000px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .topbar{
+        align-items:flex-start;
+    }
+
+    .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@keyframes modalIn{
+
+    from{
+        opacity:0;
+        transform:scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo-area">
+
+        <img
+        src="assets/logo.png"
+        alt="Encanto Kids"
+        onerror="this.style.display='none'">
+
+        <div>
+            <h2>Encanto Kids</h2>
+            <p>Painel Administrativo</p>
+        </div>
+
+    </div>
+
+
+    <div class="menu-title">
+        MENU PRINCIPAL
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="dashboard.html">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
+        </a>
+
+        <a href="reservas.html">
+            <i class="fa-solid fa-calendar-check"></i>
+            Reservas
+        </a>
+
+        <a href="clientes.html" class="active">
+            <i class="fa-solid fa-users"></i>
+            Clientes
+        </a>
+
+        <a href="calendario.html">
+            <i class="fa-solid fa-calendar-days"></i>
+            Calendário
+        </a>
+
+        <a href="contratos.html">
+            <i class="fa-solid fa-file-signature"></i>
+            Contratos
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title">
+        GESTÃO
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="brinquedos.html">
+            <i class="fa-solid fa-shapes"></i>
+            Brinquedos
+        </a>
+
+        <a href="financeiro.html">
+            <i class="fa-solid fa-wallet"></i>
+            Financeiro
+        </a>
+
+        <a href="configuracoes.html">
+            <i class="fa-solid fa-gear"></i>
+            Configurações
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <button class="logout" onclick="logout()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+            &nbsp; Sair
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<main class="main">
+
+
+    <header class="topbar">
+
+        <div style="display:flex;gap:15px;align-items:center;">
+
+            <button
+            class="mobile-menu"
+            onclick="toggleMenu()">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+
+            <div>
+
+                <h1>Clientes</h1>
+
+                <p>
+                    Cadastre e gerencie os clientes da Encanto Kids.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+        class="btn-primary"
+        onclick="abrirNovoCliente()">
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            Novo Cliente
+
+        </button>
+
+    </header>
+
+
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <span>
+                CLIENTES CADASTRADOS
+            </span>
+
+            <strong id="totalClientes">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                CADASTRADOS ESTE MÊS
+            </span>
+
+            <strong id="clientesMes">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                CLIENTES COM TELEFONE
+            </span>
+
+            <strong id="clientesTelefone">
+                0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="toolbar">
+
+        <div class="search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+            type="text"
+            id="pesquisa"
+            placeholder="Pesquisar por nome, telefone, cidade..."
+            oninput="filtrarClientes()">
+
+        </div>
+
+    </section>
+
+
+
+    <section class="table-box">
+
+        <div class="table-header">
+
+            <h3>
+                Lista de clientes
+            </h3>
+
+            <span id="contadorLista">
+                0 clientes
+            </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>CLIENTE</th>
+                        <th>TELEFONE</th>
+                        <th>CIDADE</th>
+                        <th>ENDEREÇO</th>
+                        <th>CADASTRO</th>
+                        <th>AÇÕES</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tabelaClientes">
+
+                    <tr>
+
+                        <td colspan="6">
+
+                            <div class="empty">
+                                Carregando clientes...
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<div class="modal-overlay" id="modalCliente">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="tituloModal">
+                Novo Cliente
+            </h2>
+
+            <button
+            class="close-modal"
+            onclick="fecharModal()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <form id="formCliente">
+
+            <div class="modal-body">
+
+                <input
+                type="hidden"
+                id="clienteId">
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Nome completo *
+                        </label>
+
+                        <input
+                        type="text"
+                        id="nome"
+                        required
+                        placeholder="Nome do cliente">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Telefone / WhatsApp *
+                        </label>
+
+                        <input
+                        type="text"
+                        id="telefone"
+                        required
+                        placeholder="(19) 99999-9999">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Cidade
+                        </label>
+
+                        <input
+                        type="text"
+                        id="cidade"
+                        placeholder="Cidade">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Estado
+                        </label>
+
+                        <select id="estado">
+
+                            <option value="">
+                                Selecione
+                            </option>
+
+                            <option value="SP">SP</option>
+                            <option value="MG">MG</option>
+                            <option value="RJ">RJ</option>
+                            <option value="PR">PR</option>
+                            <option value="SC">SC</option>
+                            <option value="RS">RS</option>
+                            <option value="GO">GO</option>
+                            <option value="MS">MS</option>
+                            <option value="MT">MT</option>
+                            <option value="BA">BA</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Endereço
+                        </label>
+
+                        <input
+                        type="text"
+                        id="endereco"
+                        placeholder="Rua, número, bairro...">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                type="button"
+                class="btn-secondary"
+                onclick="fecharModal()">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                type="submit"
+                class="btn-primary"
+                id="btnSalvar">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Salvar Cliente
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<div class="toast" id="toast">
+
+    <strong id="toastTitulo">
+        Sucesso
+    </strong>
+
+    <p id="toastTexto">
+    </p>
+
+</div>
+
+
+
+<script>
+
+
+/* =============================
+PROTEÇÃO
+============================= */
+
+if(
+    localStorage.getItem("adminLogado")
+    !== "true"
+){
+    window.location.href =
+    "login.html";
+}
+
+
+/* =============================
+SUPABASE
+============================= */
+
+const SUPABASE_URL =
+"https://stnjpquafragqjwxyjza.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0bmpwcXVhZnJhZ3Fqd3h5anphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzI2MzAsImV4cCI6MjEwMDUwODYzMH0.r3YlozqWb2h96TLomC-VOfeQNLknio8x5xaiNVlQOkE"
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+
+/* =============================
+VARIÁVEIS
+============================= */
+
+let clientes = [];
+
+let modoEdicao = false;
+
+
+/* =============================
+CARREGAR
+============================= */
+
+async function carregarClientes(){
+
+    const { data, error } =
+    await supabaseClient
+    .from("clientes")
+    .select("*")
+    .order(
+        "created_at",
+        {ascending:false}
+    );
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarToast(
+            "Erro",
+            "Não foi possível carregar os clientes.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    clientes =
+    data || [];
+
+
+    atualizarEstatisticas();
+
+    renderizarClientes(
+        clientes
+    );
+
+}
+
+
+/* =============================
+ESTATÍSTICAS
+============================= */
+
+function atualizarEstatisticas(){
+
+    document.getElementById(
+        "totalClientes"
+    ).textContent =
+    clientes.length;
+
+
+    const agora =
+    new Date();
+
+
+    const clientesMes =
+    clientes.filter(cliente => {
+
+        if(!cliente.created_at){
+            return false;
+        }
+
+        const data =
+        new Date(
+            cliente.created_at
+        );
+
+        return (
+            data.getMonth()
+            === agora.getMonth()
+            &&
+            data.getFullYear()
+            === agora.getFullYear()
+        );
+
+    }).length;
+
+
+    document.getElementById(
+        "clientesMes"
+    ).textContent =
+    clientesMes;
+
+
+    const comTelefone =
+    clientes.filter(cliente =>
+        cliente.telefone
+        &&
+        cliente.telefone.trim()
+    ).length;
+
+
+    document.getElementById(
+        "clientesTelefone"
+    ).textContent =
+    comTelefone;
+
+}
+
+
+/* =============================
+RENDERIZAR
+============================= */
+
+function renderizarClientes(lista){
+
+    const tabela =
+    document.getElementById(
+        "tabelaClientes"
+    );
+
+
+    document.getElementById(
+        "contadorLista"
+    ).textContent =
+    `${lista.length} cliente${
+        lista.length === 1 ? "" : "s"
+    }`;
+
+
+    if(lista.length === 0){
+
+        tabela.innerHTML = `
+
+        <tr>
+
+            <td colspan="6">
+
+                <div class="empty">
+
+                    <i class="fa-regular fa-user"></i>
+
+                    <p>
+                        Nenhum cliente encontrado.
+                    </p>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        `;
+
+        return;
+    }
+
+
+    tabela.innerHTML =
+    lista.map(cliente => {
+
+        const dataCadastro =
+        cliente.created_at
+        ?
+        new Date(
+            cliente.created_at
+        ).toLocaleDateString(
+            "pt-BR"
+        )
+        :
+        "-";
+
+
+        return `
+
+        <tr>
+
+            <td>
+
+                <div class="cliente-nome">
+                    ${escapeHTML(
+                        cliente.nome || "-"
+                    )}
+                </div>
+
+                <div class="cliente-sub">
+                    ID #${cliente.id}
+                </div>
+
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    cliente.telefone || "-"
+                )}
+            </td>
+
+
+            <td>
+
+                ${
+                    cliente.cidade
+                    ?
+                    escapeHTML(
+                        cliente.cidade
+                    )
+                    :
+                    "-"
+                }
+
+                ${
+                    cliente.estado
+                    ?
+                    " / " +
+                    escapeHTML(
+                        cliente.estado
+                    )
+                    :
+                    ""
+                }
+
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    cliente.endereco || "-"
+                )}
+            </td>
+
+
+            <td>
+                ${dataCadastro}
+            </td>
+
+
+            <td>
+
+                <div class="actions">
+
+                    <button
+                    class="btn-whatsapp"
+                    title="WhatsApp"
+                    onclick="abrirWhatsApp(
+                        '${escapeJS(
+                            cliente.telefone || ""
+                        )}'
+                    )">
+
+                        <i class="fa-brands fa-whatsapp"></i>
+
+                    </button>
+
+
+                    <button
+                    class="btn-edit"
+                    title="Editar"
+                    onclick="editarCliente(
+                        ${cliente.id}
+                    )">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </button>
+
+
+                    <button
+                    class="btn-danger"
+                    title="Excluir"
+                    onclick="excluirCliente(
+                        ${cliente.id},
+                        '${escapeJS(
+                            cliente.nome || ""
+                        )}'
+                    )">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* =============================
+PESQUISA
+============================= */
+
+function filtrarClientes(){
+
+    const termo =
+    document.getElementById(
+        "pesquisa"
+    )
+    .value
+    .toLowerCase()
+    .trim();
+
+
+    if(!termo){
+
+        renderizarClientes(
+            clientes
+        );
+
+        return;
+    }
+
+
+    const filtrados =
+    clientes.filter(cliente => {
+
+        const texto = `
+            ${cliente.nome || ""}
+            ${cliente.telefone || ""}
+            ${cliente.cidade || ""}
+            ${cliente.estado || ""}
+            ${cliente.endereco || ""}
+        `.toLowerCase();
+
+
+        return texto.includes(
+            termo
+        );
+
+    });
+
+
+    renderizarClientes(
+        filtrados
+    );
+
+}
+
+
+/* =============================
+NOVO
+============================= */
+
+function abrirNovoCliente(){
+
+    modoEdicao = false;
+
+    document.getElementById(
+        "tituloModal"
+    ).textContent =
+    "Novo Cliente";
+
+
+    document.getElementById(
+        "clienteId"
+    ).value = "";
+
+
+    document.getElementById(
+        "formCliente"
+    ).reset();
+
+
+    document.getElementById(
+        "modalCliente"
+    ).classList.add(
+        "show"
+    );
+
+
+    setTimeout(() => {
+
+        document.getElementById(
+            "nome"
+        ).focus();
+
+    },100);
+
+}
+
+
+/* =============================
+EDITAR
+============================= */
+
+function editarCliente(id){
+
+    const cliente =
+    clientes.find(
+        item =>
+        Number(item.id)
+        === Number(id)
+    );
+
+
+    if(!cliente){
+        return;
+    }
+
+
+    modoEdicao = true;
+
+
+    document.getElementById(
+        "tituloModal"
+    ).textContent =
+    "Editar Cliente";
+
+
+    document.getElementById(
+        "clienteId"
+    ).value =
+    cliente.id;
+
+
+    document.getElementById(
+        "nome"
+    ).value =
+    cliente.nome || "";
+
+
+    document.getElementById(
+        "telefone"
+    ).value =
+    cliente.telefone || "";
+
+
+    document.getElementById(
+        "cidade"
+    ).value =
+    cliente.cidade || "";
+
+
+    document.getElementById(
+        "estado"
+    ).value =
+    cliente.estado || "";
+
+
+    document.getElementById(
+        "endereco"
+    ).value =
+    cliente.endereco || "";
+
+
+    document.getElementById(
+        "modalCliente"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+/* =============================
+SALVAR
+============================= */
+
+document.getElementById(
+    "formCliente"
+)
+.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const btnSalvar =
+        document.getElementById(
+            "btnSalvar"
+        );
+
+
+        const nome =
+        document.getElementById(
+            "nome"
+        ).value.trim();
+
+
+        const telefone =
+        document.getElementById(
+            "telefone"
+        ).value.trim();
+
+
+        const cidade =
+        document.getElementById(
+            "cidade"
+        ).value.trim();
+
+
+        const estado =
+        document.getElementById(
+            "estado"
+        ).value;
+
+
+        const endereco =
+        document.getElementById(
+            "endereco"
+        ).value.trim();
+
+
+        if(!nome || !telefone){
+
+            mostrarToast(
+                "Atenção",
+                "Nome e telefone são obrigatórios.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        btnSalvar.disabled =
+        true;
+
+
+        btnSalvar.innerHTML =
+        `
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Salvando...
+        `;
+
+
+        try{
+
+
+            if(modoEdicao){
+
+                const id =
+                document.getElementById(
+                    "clienteId"
+                ).value;
+
+
+                const { error } =
+                await supabaseClient
+                .from("clientes")
+                .update({
+
+                    nome,
+                    telefone,
+                    cidade,
+                    estado,
+                    endereco
+
+                })
+                .eq(
+                    "id",
+                    id
+                );
+
+
+                if(error){
+                    throw error;
+                }
+
+
+                mostrarToast(
+                    "Cliente atualizado",
+                    "As alterações foram salvas.",
+                    "success"
+                );
+
+            }
+            else{
+
+                const { error } =
+                await supabaseClient
+                .from("clientes")
+                .insert({
+
+                    nome,
+                    telefone,
+                    cidade,
+                    estado,
+                    endereco
+
+                });
+
+
+                if(error){
+                    throw error;
+                }
+
+
+                mostrarToast(
+                    "Cliente cadastrado",
+                    "Novo cliente adicionado com sucesso.",
+                    "success"
+                );
+
+            }
+
+
+            fecharModal();
+
+            await carregarClientes();
+
+
+        }
+        catch(erro){
+
+            console.error(
+                erro
+            );
+
+
+            mostrarToast(
+                "Erro",
+                erro.message ||
+                "Não foi possível salvar o cliente.",
+                "error"
+            );
+
+        }
+        finally{
+
+            btnSalvar.disabled =
+            false;
+
+
+            btnSalvar.innerHTML =
+            `
+            <i class="fa-solid fa-floppy-disk"></i>
+            Salvar Cliente
+            `;
+
+        }
+
+    }
+);
+
+
+/* =============================
+EXCLUIR
+============================= */
+
+async function excluirCliente(
+    id,
+    nome
+){
+
+    const confirmar =
+    confirm(
+        `Deseja realmente excluir o cliente "${nome}"?`
+    );
+
+
+    if(!confirmar){
+        return;
+    }
+
+
+    const { error } =
+    await supabaseClient
+    .from("clientes")
+    .delete()
+    .eq(
+        "id",
+        id
+    );
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarToast(
+            "Erro",
+            "Não foi possível excluir o cliente.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    mostrarToast(
+        "Cliente excluído",
+        "O cadastro foi removido.",
+        "success"
+    );
+
+
+    await carregarClientes();
+
+}
+
+
+/* =============================
+WHATSAPP
+============================= */
+
+function abrirWhatsApp(
+    telefone
+){
+
+    if(!telefone){
+
+        mostrarToast(
+            "Sem telefone",
+            "Esse cliente não possui telefone cadastrado.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    let numero =
+    telefone.replace(
+        /\D/g,
+        ""
+    );
+
+
+    if(
+        !numero.startsWith(
+            "55"
+        )
+    ){
+        numero =
+        "55" + numero;
+    }
+
+
+    const mensagem =
+    encodeURIComponent(
+        "Olá! Aqui é da Encanto Kids Infláveis 🎈"
+    );
+
+
+    window.open(
+        `https://wa.me/${numero}?text=${mensagem}`,
+        "_blank"
+    );
+
+}
+
+
+/* =============================
+MODAL
+============================= */
+
+function fecharModal(){
+
+    document.getElementById(
+        "modalCliente"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+document.getElementById(
+    "modalCliente"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target === this
+        ){
+            fecharModal();
+        }
+
+    }
+);
+
+
+/* =============================
+TOAST
+============================= */
+
+function mostrarToast(
+    titulo,
+    texto,
+    tipo
+){
+
+    const toast =
+    document.getElementById(
+        "toast"
+    );
+
+
+    document.getElementById(
+        "toastTitulo"
+    ).textContent =
+    titulo;
+
+
+    document.getElementById(
+        "toastTexto"
+    ).textContent =
+    texto;
+
+
+    toast.className =
+    `toast ${tipo}`;
+
+
+    requestAnimationFrame(
+        () =>
+        toast.classList.add(
+            "show"
+        )
+    );
+
+
+    setTimeout(() => {
+
+        toast.classList.remove(
+            "show"
+        );
+
+    },3500);
+
+}
+
+
+/* =============================
+SEGURANÇA HTML
+============================= */
+
+function escapeHTML(valor){
+
+    return String(valor)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function escapeJS(valor){
+
+    return String(valor)
+    .replaceAll("\\","\\\\")
+    .replaceAll("'","\\'")
+    .replaceAll("\n"," ");
+
+}
+
+
+/* =============================
+MENU MOBILE
+============================= */
+
+function toggleMenu(){
+
+    document.getElementById(
+        "sidebar"
+    )
+    .classList
+    .toggle(
+        "open"
+    );
+
+}
+
+
+/* =============================
+LOGOUT
+============================= */
+
+function logout(){
+
+    localStorage.removeItem(
+        "adminLogado"
+    );
+
+    localStorage.removeItem(
+        "adminUsuario"
+    );
+
+
+    window.location.href =
+    "login.html";
+
+}
+
+
+/* =============================
+INICIAR
+============================= */
+
+carregarClientes();
+
+</script>
+
+</body>
+</html>
