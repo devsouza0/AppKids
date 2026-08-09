@@ -1,0 +1,4948 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Calendário | Encanto Kids</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#080a0f;
+    --sidebar:#0d1017;
+    --card:#121722;
+    --card2:#171d29;
+    --border:#242b39;
+    --text:#f5f7fa;
+    --muted:#7f8999;
+
+    --blue:#3b82f6;
+    --green:#22c55e;
+    --orange:#f59e0b;
+    --red:#ef4444;
+    --purple:#a855f7;
+}
+
+body{
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+}
+
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+
+    width:260px;
+    height:100vh;
+
+    background:var(--sidebar);
+
+    border-right:1px solid var(--border);
+
+    padding:24px 18px;
+
+    display:flex;
+    flex-direction:column;
+
+    z-index:1000;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:0 8px 25px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.logo-area img{
+    width:52px;
+    height:52px;
+
+    border-radius:14px;
+    object-fit:cover;
+}
+
+.logo-area h2{
+    font-size:16px;
+}
+
+.logo-area p{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.menu-title{
+    font-size:10px;
+    color:#555f70;
+
+    margin:25px 10px 10px;
+
+    font-weight:bold;
+    letter-spacing:1.4px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#8994a6;
+
+    padding:13px 14px;
+
+    display:flex;
+    align-items:center;
+    gap:13px;
+
+    border-radius:10px;
+
+    transition:.2s;
+}
+
+.menu a i{
+    width:20px;
+    text-align:center;
+}
+
+.menu a:hover{
+    background:#171d28;
+    color:white;
+}
+
+.menu a.active{
+    background:white;
+    color:#080a0f;
+    font-weight:bold;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+}
+
+.logout{
+    width:100%;
+
+    border:none;
+
+    padding:13px;
+
+    border-radius:10px;
+
+    background:#191116;
+    color:#ff6363;
+
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+/* =========================
+MAIN
+========================= */
+
+.main{
+    margin-left:260px;
+
+    min-height:100vh;
+
+    padding:30px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.topbar h1{
+    font-size:27px;
+}
+
+.topbar p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+.mobile-menu{
+    display:none;
+
+    width:42px;
+    height:42px;
+
+    border-radius:9px;
+
+    background:#151a24;
+    color:white;
+
+    border:1px solid var(--border);
+
+    cursor:pointer;
+}
+
+
+/* =========================
+CALENDAR BOX
+========================= */
+
+.calendar-box{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:17px;
+
+    overflow:hidden;
+}
+
+.calendar-header{
+    padding:20px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:1px solid var(--border);
+}
+
+.calendar-header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.calendar-header h2{
+    font-size:18px;
+    text-transform:capitalize;
+}
+
+.calendar-controls{
+    display:flex;
+    gap:8px;
+}
+
+.calendar-btn{
+    height:38px;
+    min-width:38px;
+
+    padding:0 12px;
+
+    border:1px solid #2d3544;
+
+    background:#171d27;
+
+    color:#aab3c1;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.calendar-btn:hover{
+    background:#222a38;
+    color:white;
+}
+
+.calendar-btn.today{
+    font-weight:bold;
+}
+
+
+/* =========================
+WEEK DAYS
+========================= */
+
+.weekdays{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+
+    background:#0d1118;
+
+    border-bottom:1px solid var(--border);
+}
+
+.weekday{
+    padding:13px 8px;
+
+    text-align:center;
+
+    color:#687386;
+
+    font-size:10px;
+
+    font-weight:bold;
+
+    letter-spacing:.7px;
+}
+
+
+/* =========================
+CALENDAR GRID
+========================= */
+
+.calendar-grid{
+    display:grid;
+
+    grid-template-columns:repeat(7,1fr);
+}
+
+.day{
+    position:relative;
+
+    min-height:135px;
+
+    border-right:1px solid #1d2430;
+    border-bottom:1px solid #1d2430;
+
+    padding:10px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    overflow:hidden;
+}
+
+.day:nth-child(7n){
+    border-right:none;
+}
+
+.day:hover{
+    background:#161d28;
+}
+
+.day.other-month{
+    opacity:.28;
+}
+
+.day.today{
+    background:rgba(59,130,246,.07);
+}
+
+.day.selected{
+    outline:1px solid #66738a;
+    outline-offset:-1px;
+}
+
+.day-number{
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+}
+
+.day.today .day-number{
+    background:white;
+    color:#080a0f;
+}
+
+
+/* =========================
+EVENTS INSIDE DAY
+========================= */
+
+.day-events{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.day-event{
+    padding:6px 7px;
+
+    background:#1d2634;
+
+    border-left:3px solid #64748b;
+
+    border-radius:5px;
+
+    font-size:9px;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+}
+
+.day-event.confirmada{
+    border-left-color:#22c55e;
+}
+
+.day-event.pendente{
+    border-left-color:#f59e0b;
+}
+
+.day-event.cancelada{
+    border-left-color:#ef4444;
+}
+
+.day-event.concluida{
+    border-left-color:#3b82f6;
+}
+
+.more-events{
+    font-size:9px;
+    color:#758095;
+    margin-top:2px;
+}
+
+
+/* =========================
+SUMMARY
+========================= */
+
+.calendar-summary{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+.summary-card{
+    background:linear-gradient(
+        145deg,
+        var(--card2),
+        var(--card)
+    );
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    padding:17px;
+}
+
+.summary-card span{
+    display:block;
+
+    color:#7c8798;
+
+    font-size:9px;
+
+    letter-spacing:.7px;
+}
+
+.summary-card strong{
+    display:block;
+
+    margin-top:7px;
+
+    font-size:22px;
+}
+
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+
+    .calendar-summary{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .day{
+        min-height:105px;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .calendar-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .calendar-grid,
+    .weekdays{
+        min-width:720px;
+    }
+
+    .calendar-box{
+        overflow-x:auto;
+    }
+
+    .calendar-summary{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =========================
+SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo-area">
+
+        <img
+        src="assets/logo.png"
+        alt="Encanto Kids"
+        onerror="this.style.display='none'">
+
+        <div>
+
+            <h2>
+                Encanto Kids
+            </h2>
+
+            <p>
+                Painel Administrativo
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu-title">
+        MENU PRINCIPAL
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="dashboard.html">
+
+            <i class="fa-solid fa-chart-pie"></i>
+
+            Dashboard
+
+        </a>
+
+
+        <a href="reservas.html">
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            Reservas
+
+        </a>
+
+
+        <a href="clientes.html">
+
+            <i class="fa-solid fa-users"></i>
+
+            Clientes
+
+        </a>
+
+
+        <a
+        href="calendario.html"
+        class="active">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            Calendário
+
+        </a>
+
+
+        <a href="contratos.html">
+
+            <i class="fa-solid fa-file-signature"></i>
+
+            Contratos
+
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title">
+        GESTÃO
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="brinquedos.html">
+
+            <i class="fa-solid fa-shapes"></i>
+
+            Brinquedos
+
+        </a>
+
+
+        <a href="financeiro.html">
+
+            <i class="fa-solid fa-wallet"></i>
+
+            Financeiro
+
+        </a>
+
+
+        <a href="configuracoes.html">
+
+            <i class="fa-solid fa-gear"></i>
+
+            Configurações
+
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <button
+        class="logout"
+        onclick="logout()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            &nbsp; Sair
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================
+MAIN
+========================= -->
+
+<main class="main">
+
+
+<header class="topbar">
+
+
+    <div class="topbar-left">
+
+
+        <button
+        class="mobile-menu"
+        onclick="toggleMenu()">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+
+        <div>
+
+            <h1>
+                Calendário
+            </h1>
+
+            <p>
+                Visualize todas as reservas e eventos.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</header>
+
+
+<!-- =========================
+SUMMARY
+========================= -->
+
+<section class="calendar-summary">
+
+
+    <div class="summary-card">
+
+        <span>
+            EVENTOS NO MÊS
+        </span>
+
+        <strong id="eventosMes">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            CONFIRMADAS
+        </span>
+
+        <strong id="confirmadasMes">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            PENDENTES
+        </span>
+
+        <strong id="pendentesMes">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            FATURAMENTO DO MÊS
+        </span>
+
+        <strong id="faturamentoMes">
+            R$ 0,00
+        </strong>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================
+CALENDAR
+========================= -->
+
+<section class="calendar-box">
+
+
+    <div class="calendar-header">
+
+
+        <div class="calendar-header-left">
+
+            <h2 id="mesTitulo">
+                Mês
+            </h2>
+
+        </div>
+
+
+        <div class="calendar-controls">
+
+
+            <button
+            class="calendar-btn"
+            onclick="mesAnterior()">
+
+                <i class="fa-solid fa-chevron-left"></i>
+
+            </button>
+
+
+            <button
+            class="calendar-btn today"
+            onclick="irParaHoje()">
+
+                Hoje
+
+            </button>
+
+
+            <button
+            class="calendar-btn"
+            onclick="proximoMes()">
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="weekdays">
+
+        <div class="weekday">DOM</div>
+        <div class="weekday">SEG</div>
+        <div class="weekday">TER</div>
+        <div class="weekday">QUA</div>
+        <div class="weekday">QUI</div>
+        <div class="weekday">SEX</div>
+        <div class="weekday">SÁB</div>
+
+    </div>
+
+
+    <div
+    class="calendar-grid"
+    id="calendarGrid">
+
+    </div>
+
+
+</section>
+
+
+</main>
+
+
+<!-- CONTINUA NA PARTE 2/5 -->
+  <!-- ==========================================
+PAINEL LATERAL DO DIA
+========================================== -->
+
+<div
+class="day-overlay"
+id="dayOverlay"
+onclick="fecharPainelDia(event)">
+
+    <aside class="day-panel" id="dayPanel">
+
+        <div class="day-panel-header">
+
+            <div>
+
+                <span>
+                    AGENDA DO DIA
+                </span>
+
+                <h2 id="diaSelecionadoTitulo">
+                    Data
+                </h2>
+
+                <p id="diaSelecionadoResumo">
+                    0 reservas
+                </p>
+
+            </div>
+
+
+            <button
+            class="close-btn"
+            onclick="fecharPainelDiaDireto()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div
+        class="day-panel-body"
+        id="reservasDoDia">
+
+            <div class="day-empty">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <p>
+                    Nenhuma reserva nesta data.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="day-panel-footer">
+
+            <button
+            class="new-day-reservation"
+            onclick="novaReservaNoDia()">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Nova reserva nesta data
+
+            </button>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+<!-- ==========================================
+MODAL DE DETALHES DA RESERVA
+========================================== -->
+
+<div
+class="reservation-overlay"
+id="reservationOverlay"
+onclick="fecharDetalhesReserva(event)">
+
+    <div class="reservation-modal">
+
+        <div class="reservation-modal-header">
+
+            <div>
+
+                <span>
+                    DETALHES
+                </span>
+
+                <h2 id="reservaTitulo">
+                    Reserva #0
+                </h2>
+
+            </div>
+
+
+            <button
+            class="close-btn"
+            onclick="fecharDetalhesDireto()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="reservation-modal-body">
+
+
+            <div class="detail-main-card">
+
+                <div class="detail-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        CLIENTE
+                    </span>
+
+                    <strong id="reservaCliente">
+                        -
+                    </strong>
+
+                    <p id="reservaTelefone">
+                        -
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+
+                <div class="detail-box">
+
+                    <span>
+                        DATA
+                    </span>
+
+                    <strong id="reservaData">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span>
+                        HORÁRIO
+                    </span>
+
+                    <strong id="reservaHorario">
+                        -
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="detail-section">
+
+                <h3>
+
+                    <i class="fa-solid fa-shapes"></i>
+
+                    Brinquedos
+
+                </h3>
+
+                <div id="reservaBrinquedos">
+                    -
+                </div>
+
+            </div>
+
+
+            <div class="detail-section">
+
+                <h3>
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Local do evento
+
+                </h3>
+
+                <p id="reservaEndereco">
+                    -
+                </p>
+
+            </div>
+
+
+            <div class="detail-section">
+
+                <h3>
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Pagamento
+
+                </h3>
+
+
+                <div class="payment-grid">
+
+
+                    <div>
+
+                        <span>
+                            TOTAL
+                        </span>
+
+                        <strong id="reservaTotal">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            ENTRADA
+                        </span>
+
+                        <strong id="reservaEntrada">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            RESTANTE
+                        </span>
+
+                        <strong id="reservaRestante">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-section">
+
+                <h3>
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Status
+
+                </h3>
+
+                <div id="reservaStatus"></div>
+
+            </div>
+
+
+            <div class="detail-section">
+
+                <h3>
+
+                    <i class="fa-solid fa-note-sticky"></i>
+
+                    Observações
+
+                </h3>
+
+                <p id="reservaObservacoes">
+                    Nenhuma observação.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="reservation-actions">
+
+
+            <button
+            class="reservation-action edit"
+            onclick="editarReservaSelecionada()">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Editar
+
+            </button>
+
+
+            <button
+            class="reservation-action whatsapp"
+            onclick="whatsappReservaSelecionada()">
+
+                <i class="fa-brands fa-whatsapp"></i>
+
+                WhatsApp
+
+            </button>
+
+
+            <button
+            class="reservation-action contract"
+            onclick="contratoReservaSelecionada()">
+
+                <i class="fa-solid fa-file-signature"></i>
+
+                Contrato
+
+            </button>
+
+
+            <button
+            class="reservation-action delete"
+            onclick="excluirReservaSelecionada()">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Excluir
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+CONFIRMAR EXCLUSÃO
+========================================== -->
+
+<div
+class="delete-overlay"
+id="deleteOverlay">
+
+    <div class="delete-modal">
+
+        <div class="delete-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <h2>
+            Excluir reserva?
+        </h2>
+
+
+        <p>
+            A reserva selecionada será excluída permanentemente.
+        </p>
+
+
+        <div class="delete-info">
+
+            <strong id="deleteCliente">
+                Cliente
+            </strong>
+
+            <span id="deleteData">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="delete-buttons">
+
+            <button
+            class="cancel-delete"
+            onclick="fecharExclusao()">
+
+                Cancelar
+
+            </button>
+
+
+            <button
+            class="confirm-delete"
+            id="btnExcluir"
+            onclick="confirmarExclusao()">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Excluir
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+TOAST
+========================================== -->
+
+<div class="toast" id="toast">
+
+    <div
+    class="toast-icon"
+    id="toastIcon">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+    </div>
+
+
+    <div>
+
+        <strong id="toastTitulo">
+            Sucesso
+        </strong>
+
+        <p id="toastTexto"></p>
+
+    </div>
+
+</div>
+
+
+<style>
+
+/* ==========================================
+PAINEL DO DIA
+========================================== */
+
+.day-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    display:none;
+
+    justify-content:flex-end;
+
+    z-index:5000;
+}
+
+.day-overlay.show{
+    display:flex;
+}
+
+.day-panel{
+    width:430px;
+    max-width:100%;
+
+    height:100%;
+
+    background:#10151e;
+
+    border-left:1px solid #293142;
+
+    box-shadow:
+    -30px 0 80px rgba(0,0,0,.55);
+
+    display:flex;
+    flex-direction:column;
+
+    animation:panelIn .25s ease;
+}
+
+.day-panel-header{
+    padding:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    border-bottom:1px solid var(--border);
+}
+
+.day-panel-header span{
+    color:#667084;
+
+    font-size:9px;
+
+    letter-spacing:1.2px;
+}
+
+.day-panel-header h2{
+    font-size:20px;
+
+    margin-top:4px;
+
+    text-transform:capitalize;
+}
+
+.day-panel-header p{
+    color:#748095;
+
+    font-size:10px;
+
+    margin-top:5px;
+}
+
+.close-btn{
+    width:38px;
+    height:38px;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#1a2230;
+
+    color:#9aa5b6;
+
+    cursor:pointer;
+}
+
+.close-btn:hover{
+    background:#242d3b;
+
+    color:white;
+}
+
+.day-panel-body{
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:17px;
+}
+
+.day-reservation{
+    background:#151c28;
+
+    border:1px solid #293243;
+
+    border-radius:13px;
+
+    padding:15px;
+
+    margin-bottom:11px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.day-reservation:hover{
+    border-color:#46526a;
+
+    transform:translateY(-1px);
+}
+
+.day-reservation-top{
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    margin-bottom:11px;
+}
+
+.day-reservation-client strong{
+    display:block;
+
+    font-size:13px;
+}
+
+.day-reservation-client span{
+    display:block;
+
+    color:#747f92;
+
+    font-size:10px;
+
+    margin-top:4px;
+}
+
+.day-reservation-time{
+    color:#aeb7c5;
+
+    font-size:10px;
+
+    white-space:nowrap;
+}
+
+.day-reservation-items{
+    color:#8b96a8;
+
+    font-size:10px;
+
+    line-height:1.6;
+
+    margin-bottom:11px;
+}
+
+.day-reservation-bottom{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    border-top:1px solid #252d3a;
+
+    padding-top:10px;
+}
+
+.day-reservation-value{
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.day-status{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:5px 8px;
+
+    border-radius:20px;
+
+    font-size:9px;
+
+    font-weight:bold;
+}
+
+.day-status.confirmada{
+    color:#4ade80;
+    background:rgba(34,197,94,.12);
+}
+
+.day-status.pendente{
+    color:#fbbf24;
+    background:rgba(245,158,11,.12);
+}
+
+.day-status.cancelada{
+    color:#f87171;
+    background:rgba(239,68,68,.12);
+}
+
+.day-status.concluida{
+    color:#60a5fa;
+    background:rgba(59,130,246,.12);
+}
+
+.day-empty{
+    padding:50px 20px;
+
+    text-align:center;
+
+    color:#626d80;
+}
+
+.day-empty i{
+    font-size:34px;
+
+    margin-bottom:13px;
+}
+
+.day-empty p{
+    font-size:11px;
+}
+
+.day-panel-footer{
+    padding:15px;
+
+    border-top:1px solid var(--border);
+}
+
+.new-day-reservation{
+    width:100%;
+
+    height:44px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:white;
+
+    color:#090b10;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+/* ==========================================
+DETALHES RESERVA
+========================================== */
+
+.reservation-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    backdrop-filter:blur(6px);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:6000;
+}
+
+.reservation-overlay.show{
+    display:flex;
+}
+
+.reservation-modal{
+    width:100%;
+
+    max-width:610px;
+
+    max-height:90vh;
+
+    background:#111722;
+
+    border:1px solid #2b3445;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:
+    0 35px 100px rgba(0,0,0,.65);
+
+    animation:modalIn .25s ease;
+}
+
+.reservation-modal-header{
+    padding:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:1px solid var(--border);
+}
+
+.reservation-modal-header span{
+    color:#677286;
+
+    font-size:9px;
+
+    letter-spacing:1.1px;
+}
+
+.reservation-modal-header h2{
+    font-size:19px;
+
+    margin-top:4px;
+}
+
+.reservation-modal-body{
+    padding:20px;
+
+    overflow-y:auto;
+}
+
+.detail-main-card{
+    background:#151c28;
+
+    border:1px solid #2b3445;
+
+    border-radius:13px;
+
+    padding:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    margin-bottom:12px;
+}
+
+.detail-avatar{
+    width:45px;
+    height:45px;
+
+    border-radius:11px;
+
+    background:#20293a;
+
+    color:#98a5b8;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.detail-main-card span,
+.detail-box span{
+    display:block;
+
+    color:#6f7a8d;
+
+    font-size:8px;
+
+    letter-spacing:.7px;
+}
+
+.detail-main-card strong{
+    display:block;
+
+    font-size:13px;
+
+    margin-top:4px;
+}
+
+.detail-main-card p{
+    font-size:10px;
+
+    color:#788397;
+
+    margin-top:4px;
+}
+
+.detail-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+
+    margin-bottom:18px;
+}
+
+.detail-box{
+    background:#151c28;
+
+    border:1px solid #2b3445;
+
+    border-radius:11px;
+
+    padding:13px;
+}
+
+.detail-box strong{
+    display:block;
+
+    margin-top:5px;
+
+    font-size:12px;
+}
+
+.detail-section{
+    margin-top:19px;
+}
+
+.detail-section h3{
+    font-size:11px;
+
+    color:#8995a8;
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+    margin-bottom:10px;
+}
+
+.detail-section p{
+    font-size:11px;
+
+    color:#c0c8d4;
+
+    line-height:1.6;
+}
+
+.detail-toy{
+    background:#151c28;
+
+    border:1px solid #293243;
+
+    border-radius:9px;
+
+    padding:10px;
+
+    margin-bottom:7px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+}
+
+.detail-toy strong{
+    font-size:11px;
+}
+
+.detail-toy span{
+    display:block;
+
+    color:#748095;
+
+    font-size:9px;
+
+    margin-top:3px;
+}
+
+.payment-grid{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:8px;
+}
+
+.payment-grid div{
+    background:#151c28;
+
+    border:1px solid #293243;
+
+    border-radius:9px;
+
+    padding:11px;
+}
+
+.payment-grid span{
+    display:block;
+
+    color:#6e798c;
+
+    font-size:8px;
+}
+
+.payment-grid strong{
+    display:block;
+
+    margin-top:5px;
+
+    font-size:12px;
+}
+
+
+/* ==========================================
+AÇÕES
+========================================== */
+
+.reservation-actions{
+    padding:15px;
+
+    border-top:1px solid var(--border);
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:7px;
+}
+
+.reservation-action{
+    min-height:42px;
+
+    border:none;
+
+    border-radius:9px;
+
+    font-size:10px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.reservation-action.edit{
+    background:#1b2637;
+    color:#7db0ff;
+}
+
+.reservation-action.whatsapp{
+    background:rgba(34,197,94,.12);
+    color:#4ade80;
+}
+
+.reservation-action.contract{
+    background:rgba(168,85,247,.12);
+    color:#c084fc;
+}
+
+.reservation-action.delete{
+    background:rgba(239,68,68,.12);
+    color:#f87171;
+}
+
+
+/* ==========================================
+EXCLUSÃO
+========================================== */
+
+.delete-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.8);
+
+    backdrop-filter:blur(6px);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:7000;
+}
+
+.delete-overlay.show{
+    display:flex;
+}
+
+.delete-modal{
+    width:100%;
+
+    max-width:400px;
+
+    background:#121821;
+
+    border:1px solid #303949;
+
+    border-radius:17px;
+
+    padding:25px;
+
+    text-align:center;
+}
+
+.delete-icon{
+    width:56px;
+    height:56px;
+
+    margin:0 auto 15px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(239,68,68,.12);
+
+    color:#f87171;
+}
+
+.delete-modal h2{
+    font-size:19px;
+
+    margin-bottom:9px;
+}
+
+.delete-modal > p{
+    color:#798598;
+
+    font-size:11px;
+}
+
+.delete-info{
+    background:#0c1118;
+
+    border:1px solid #252d3a;
+
+    border-radius:10px;
+
+    padding:13px;
+
+    margin:18px 0;
+}
+
+.delete-info strong{
+    display:block;
+
+    font-size:12px;
+}
+
+.delete-info span{
+    display:block;
+
+    color:#747f92;
+
+    font-size:10px;
+
+    margin-top:4px;
+}
+
+.delete-buttons{
+    display:flex;
+
+    justify-content:center;
+
+    gap:8px;
+}
+
+.cancel-delete,
+.confirm-delete{
+    border:none;
+
+    padding:11px 15px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.cancel-delete{
+    background:#1b2230;
+
+    color:white;
+
+    border:1px solid #30394a;
+}
+
+.confirm-delete{
+    background:#dc2626;
+
+    color:white;
+}
+
+
+/* ==========================================
+TOAST
+========================================== */
+
+.toast{
+    position:fixed;
+
+    right:25px;
+
+    bottom:25px;
+
+    width:320px;
+
+    max-width:calc(100% - 40px);
+
+    background:#151b25;
+
+    border:1px solid #30394a;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    display:flex;
+
+    gap:12px;
+
+    opacity:0;
+
+    transform:translateY(120px);
+
+    transition:.35s;
+
+    z-index:9000;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+.toast-icon{
+    font-size:20px;
+
+    color:#4ade80;
+}
+
+.toast.error .toast-icon{
+    color:#f87171;
+}
+
+.toast strong{
+    font-size:12px;
+}
+
+.toast p{
+    color:#7e899c;
+
+    font-size:10px;
+
+    margin-top:4px;
+}
+
+
+/* ==========================================
+ANIMAÇÕES
+========================================== */
+
+@keyframes panelIn{
+
+    from{
+        transform:translateX(100%);
+    }
+
+    to{
+        transform:translateX(0);
+    }
+
+}
+
+@keyframes modalIn{
+
+    from{
+        opacity:0;
+
+        transform:scale(.97);
+    }
+
+    to{
+        opacity:1;
+
+        transform:scale(1);
+    }
+
+}
+
+
+/* ==========================================
+MOBILE
+========================================== */
+
+@media(max-width:650px){
+
+    .day-panel{
+        width:100%;
+    }
+
+    .reservation-actions{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .payment-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+
+<!-- CONTINUA NA PARTE 3/5 -->
+  <script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+
+<script>
+
+/* ==========================================
+PROTEÇÃO
+========================================== */
+
+if(
+    localStorage.getItem("adminLogado")
+    !== "true"
+){
+    window.location.href = "login.html";
+}
+
+
+/* ==========================================
+VARIÁVEIS
+========================================== */
+
+let reservas = [];
+
+let dataAtualCalendario =
+new Date();
+
+let dataSelecionada =
+null;
+
+let reservaSelecionada =
+null;
+
+let reservaExcluirId =
+null;
+
+
+/* ==========================================
+MENU MOBILE
+========================================== */
+
+function toggleMenu(){
+
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("open");
+
+}
+
+
+/* ==========================================
+CARREGAR RESERVAS
+========================================== */
+
+async function carregarReservas(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("reservas")
+    .select(`
+        *,
+        cliente:clientes(
+            id,
+            nome,
+            telefone,
+            cidade,
+            estado,
+            endereco
+        ),
+        itens:reserva_itens(
+            id,
+            quantidade,
+            valor_unitario,
+            subtotal,
+            brinquedo:brinquedos(
+                id,
+                nome,
+                valor
+            )
+        )
+    `)
+    .order(
+        "data_evento",
+        {
+            ascending:true
+        }
+    );
+
+
+    if(error){
+
+        console.error(
+            "Erro ao carregar reservas:",
+            error
+        );
+
+
+        mostrarToast(
+            "Erro",
+            error.message,
+            true
+        );
+
+
+        return;
+
+    }
+
+
+    reservas =
+    data || [];
+
+
+    renderizarCalendario();
+
+}
+
+
+/* ==========================================
+RENDERIZAR CALENDÁRIO
+========================================== */
+
+function renderizarCalendario(){
+
+    const ano =
+    dataAtualCalendario
+    .getFullYear();
+
+
+    const mes =
+    dataAtualCalendario
+    .getMonth();
+
+
+    atualizarTituloMes(
+        ano,
+        mes
+    );
+
+
+    atualizarResumoMes(
+        ano,
+        mes
+    );
+
+
+    const grid =
+    document.getElementById(
+        "calendarGrid"
+    );
+
+
+    grid.innerHTML = "";
+
+
+    const primeiroDiaMes =
+    new Date(
+        ano,
+        mes,
+        1
+    );
+
+
+    const ultimoDiaMes =
+    new Date(
+        ano,
+        mes + 1,
+        0
+    );
+
+
+    const primeiroDiaSemana =
+    primeiroDiaMes
+    .getDay();
+
+
+    const totalDiasMes =
+    ultimoDiaMes
+    .getDate();
+
+
+    const ultimoDiaMesAnterior =
+    new Date(
+        ano,
+        mes,
+        0
+    )
+    .getDate();
+
+
+    const totalCelulas = 42;
+
+
+    for(
+        let i = 0;
+        i < totalCelulas;
+        i++
+    ){
+
+        let dia;
+        let mesCelula;
+        let anoCelula;
+        let outroMes = false;
+
+
+        if(
+            i < primeiroDiaSemana
+        ){
+
+            dia =
+            ultimoDiaMesAnterior
+            -
+            primeiroDiaSemana
+            +
+            i
+            +
+            1;
+
+
+            mesCelula =
+            mes - 1;
+
+
+            anoCelula =
+            ano;
+
+
+            if(
+                mesCelula < 0
+            ){
+
+                mesCelula = 11;
+
+                anoCelula--;
+
+            }
+
+
+            outroMes = true;
+
+        }
+        else if(
+            i
+            >=
+            primeiroDiaSemana
+            +
+            totalDiasMes
+        ){
+
+            dia =
+            i
+            -
+            (
+                primeiroDiaSemana
+                +
+                totalDiasMes
+            )
+            +
+            1;
+
+
+            mesCelula =
+            mes + 1;
+
+
+            anoCelula =
+            ano;
+
+
+            if(
+                mesCelula > 11
+            ){
+
+                mesCelula = 0;
+
+                anoCelula++;
+
+            }
+
+
+            outroMes = true;
+
+        }
+        else{
+
+            dia =
+            i
+            -
+            primeiroDiaSemana
+            +
+            1;
+
+
+            mesCelula =
+            mes;
+
+
+            anoCelula =
+            ano;
+
+        }
+
+
+        criarCelulaDia(
+            grid,
+            anoCelula,
+            mesCelula,
+            dia,
+            outroMes
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+CRIAR CÉLULA
+========================================== */
+
+function criarCelulaDia(
+    grid,
+    ano,
+    mes,
+    dia,
+    outroMes
+){
+
+    const dataISO =
+    montarDataISO(
+        ano,
+        mes,
+        dia
+    );
+
+
+    const reservasDia =
+    reservas.filter(
+        reserva =>
+        reserva.data_evento
+        ===
+        dataISO
+    );
+
+
+    const div =
+    document.createElement(
+        "div"
+    );
+
+
+    div.className =
+    "day";
+
+
+    if(
+        outroMes
+    ){
+
+        div.classList.add(
+            "other-month"
+        );
+
+    }
+
+
+    if(
+        ehHoje(
+            ano,
+            mes,
+            dia
+        )
+    ){
+
+        div.classList.add(
+            "today"
+        );
+
+    }
+
+
+    if(
+        dataSelecionada
+        ===
+        dataISO
+    ){
+
+        div.classList.add(
+            "selected"
+        );
+
+    }
+
+
+    div.onclick =
+    function(){
+
+        abrirPainelDia(
+            dataISO
+        );
+
+    };
+
+
+    let eventosHTML = "";
+
+
+    reservasDia
+    .slice(
+        0,
+        3
+    )
+    .forEach(
+        reserva => {
+
+            const classe =
+            classeEvento(
+                reserva.status
+            );
+
+
+            const cliente =
+            reserva.cliente?.nome
+            ||
+            "Cliente";
+
+
+            const horario =
+            formatarHorario(
+                reserva.horario_inicio
+            );
+
+
+            eventosHTML += `
+
+                <div
+                class="day-event ${classe}">
+
+                    ${
+                        horario
+                        ?
+                        horario + " • "
+                        :
+                        ""
+                    }
+
+                    ${escapeHTML(
+                        cliente
+                    )}
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    if(
+        reservasDia.length > 3
+    ){
+
+        eventosHTML += `
+
+            <div class="more-events">
+
+                +${
+                    reservasDia.length - 3
+                } reserva(s)
+
+            </div>
+
+        `;
+
+    }
+
+
+    div.innerHTML = `
+
+        <div class="day-number">
+
+            ${dia}
+
+        </div>
+
+
+        <div class="day-events">
+
+            ${eventosHTML}
+
+        </div>
+
+    `;
+
+
+    grid.appendChild(
+        div
+    );
+
+}
+
+
+/* ==========================================
+TÍTULO DO MÊS
+========================================== */
+
+function atualizarTituloMes(
+    ano,
+    mes
+){
+
+    const data =
+    new Date(
+        ano,
+        mes,
+        1
+    );
+
+
+    const titulo =
+    data.toLocaleDateString(
+        "pt-BR",
+        {
+            month:"long",
+            year:"numeric"
+        }
+    );
+
+
+    document.getElementById(
+        "mesTitulo"
+    ).textContent =
+    titulo;
+
+}
+
+
+/* ==========================================
+RESUMO DO MÊS
+========================================== */
+
+function atualizarResumoMes(
+    ano,
+    mes
+){
+
+    const reservasMes =
+    reservas.filter(
+        reserva => {
+
+            if(
+                !reserva.data_evento
+            ){
+                return false;
+            }
+
+
+            const data =
+            new Date(
+                reserva.data_evento
+                +
+                "T12:00:00"
+            );
+
+
+            return (
+                data.getFullYear()
+                ===
+                ano
+                &&
+                data.getMonth()
+                ===
+                mes
+            );
+
+        }
+    );
+
+
+    const confirmadas =
+    reservasMes.filter(
+        reserva =>
+        normalizarTexto(
+            reserva.status
+        )
+        .includes(
+            "confirm"
+        )
+    ).length;
+
+
+    const pendentes =
+    reservasMes.filter(
+        reserva =>
+        normalizarTexto(
+            reserva.status
+        )
+        .includes(
+            "pendent"
+        )
+    ).length;
+
+
+    const faturamento =
+    reservasMes.reduce(
+        (
+            soma,
+            reserva
+        ) =>
+        soma
+        +
+        Number(
+            reserva.valor_total
+            || 0
+        ),
+        0
+    );
+
+
+    document.getElementById(
+        "eventosMes"
+    ).textContent =
+    reservasMes.length;
+
+
+    document.getElementById(
+        "confirmadasMes"
+    ).textContent =
+    confirmadas;
+
+
+    document.getElementById(
+        "pendentesMes"
+    ).textContent =
+    pendentes;
+
+
+    document.getElementById(
+        "faturamentoMes"
+    ).textContent =
+    moeda(
+        faturamento
+    );
+
+}
+
+
+/* ==========================================
+ABRIR PAINEL DO DIA
+========================================== */
+
+function abrirPainelDia(
+    dataISO
+){
+
+    dataSelecionada =
+    dataISO;
+
+
+    renderizarCalendario();
+
+
+    const reservasDia =
+    reservas.filter(
+        reserva =>
+        reserva.data_evento
+        ===
+        dataISO
+    );
+
+
+    const data =
+    new Date(
+        dataISO
+        +
+        "T12:00:00"
+    );
+
+
+    document.getElementById(
+        "diaSelecionadoTitulo"
+    ).textContent =
+    data.toLocaleDateString(
+        "pt-BR",
+        {
+            weekday:"long",
+            day:"2-digit",
+            month:"long"
+        }
+    );
+
+
+    document.getElementById(
+        "diaSelecionadoResumo"
+    ).textContent =
+    `${reservasDia.length} reserva${
+        reservasDia.length === 1
+        ?
+        ""
+        :
+        "s"
+    }`;
+
+
+    renderizarReservasDoDia(
+        reservasDia
+    );
+
+
+    document.getElementById(
+        "dayOverlay"
+    )
+    .classList
+    .add(
+        "show"
+    );
+
+}
+
+
+/* ==========================================
+RESERVAS DO DIA
+========================================== */
+
+function renderizarReservasDoDia(
+    lista
+){
+
+    const container =
+    document.getElementById(
+        "reservasDoDia"
+    );
+
+
+    if(
+        lista.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div class="day-empty">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <p>
+                    Nenhuma reserva nesta data.
+                </p>
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+    lista
+    .map(
+        reserva => {
+
+            const cliente =
+            reserva.cliente?.nome
+            ||
+            "Cliente";
+
+
+            const telefone =
+            reserva.cliente?.telefone
+            ||
+            "Sem telefone";
+
+
+            const inicio =
+            formatarHorario(
+                reserva.horario_inicio
+            );
+
+
+            const fim =
+            formatarHorario(
+                reserva.horario_fim
+            );
+
+
+            let horario =
+            "-";
+
+
+            if(
+                inicio
+                &&
+                fim
+            ){
+
+                horario =
+                `${inicio} às ${fim}`;
+
+            }
+            else if(
+                inicio
+            ){
+
+                horario =
+                inicio;
+
+            }
+
+
+            const itens =
+            (
+                reserva.itens
+                ||
+                []
+            )
+            .map(
+                item =>
+                item.brinquedo?.nome
+                ||
+                "Brinquedo"
+            )
+            .join(
+                ", "
+            );
+
+
+            const classe =
+            classeEvento(
+                reserva.status
+            );
+
+
+            return `
+
+                <div
+                class="day-reservation"
+                onclick="abrirDetalhesReserva(
+                    ${reserva.id}
+                )">
+
+
+                    <div class="day-reservation-top">
+
+
+                        <div class="day-reservation-client">
+
+                            <strong>
+
+                                ${escapeHTML(
+                                    cliente
+                                )}
+
+                            </strong>
+
+                            <span>
+
+                                ${escapeHTML(
+                                    telefone
+                                )}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="day-reservation-time">
+
+                            ${escapeHTML(
+                                horario
+                            )}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="day-reservation-items">
+
+                        ${
+                            escapeHTML(
+                                itens
+                                ||
+                                "Nenhum brinquedo"
+                            )
+                        }
+
+                    </div>
+
+
+                    <div class="day-reservation-bottom">
+
+
+                        <div class="day-reservation-value">
+
+                            ${moeda(
+                                reserva.valor_total
+                            )}
+
+                        </div>
+
+
+                        <span
+                        class="day-status ${classe}">
+
+                            ${escapeHTML(
+                                reserva.status
+                                ||
+                                "Pendente"
+                            )}
+
+                        </span>
+
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+        }
+    )
+    .join("");
+
+}
+
+
+/* ==========================================
+FECHAR PAINEL DIA
+========================================== */
+
+function fecharPainelDia(
+    event
+){
+
+    if(
+        event.target.id
+        ===
+        "dayOverlay"
+    ){
+
+        fecharPainelDiaDireto();
+
+    }
+
+}
+
+
+function fecharPainelDiaDireto(){
+
+    document.getElementById(
+        "dayOverlay"
+    )
+    .classList
+    .remove(
+        "show"
+    );
+
+}
+
+
+/* ==========================================
+NOVA RESERVA NO DIA
+========================================== */
+
+function novaReservaNoDia(){
+
+    if(
+        !dataSelecionada
+    ){
+
+        window.location.href =
+        "reservas.html";
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "novaReservaData",
+        dataSelecionada
+    );
+
+
+    window.location.href =
+    `reservas.html?nova=1&data=${dataSelecionada}`;
+
+}
+
+
+/* ==========================================
+NAVEGAÇÃO DE MÊS
+========================================== */
+
+function mesAnterior(){
+
+    dataAtualCalendario =
+    new Date(
+        dataAtualCalendario
+        .getFullYear(),
+
+        dataAtualCalendario
+        .getMonth()
+        -
+        1,
+
+        1
+    );
+
+
+    renderizarCalendario();
+
+}
+
+
+function proximoMes(){
+
+    dataAtualCalendario =
+    new Date(
+        dataAtualCalendario
+        .getFullYear(),
+
+        dataAtualCalendario
+        .getMonth()
+        +
+        1,
+
+        1
+    );
+
+
+    renderizarCalendario();
+
+}
+
+
+function irParaHoje(){
+
+    dataAtualCalendario =
+    new Date();
+
+
+    dataSelecionada =
+    montarDataISO(
+        dataAtualCalendario
+        .getFullYear(),
+
+        dataAtualCalendario
+        .getMonth(),
+
+        dataAtualCalendario
+        .getDate()
+    );
+
+
+    renderizarCalendario();
+
+}
+
+
+/* ==========================================
+UTILITÁRIOS
+========================================== */
+
+function montarDataISO(
+    ano,
+    mes,
+    dia
+){
+
+    return (
+        ano
+        +
+        "-"
+        +
+        String(
+            mes + 1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+        +
+        "-"
+        +
+        String(
+            dia
+        )
+        .padStart(
+            2,
+            "0"
+        )
+    );
+
+}
+
+
+function ehHoje(
+    ano,
+    mes,
+    dia
+){
+
+    const hoje =
+    new Date();
+
+
+    return (
+        hoje.getFullYear()
+        ===
+        ano
+        &&
+        hoje.getMonth()
+        ===
+        mes
+        &&
+        hoje.getDate()
+        ===
+        dia
+    );
+
+}
+
+
+function classeEvento(
+    status
+){
+
+    const texto =
+    normalizarTexto(
+        status
+    );
+
+
+    if(
+        texto.includes(
+            "confirm"
+        )
+    ){
+        return "confirmada";
+    }
+
+
+    if(
+        texto.includes(
+            "cancel"
+        )
+    ){
+        return "cancelada";
+    }
+
+
+    if(
+        texto.includes(
+            "conclu"
+        )
+    ){
+        return "concluida";
+    }
+
+
+    return "pendente";
+
+}
+
+
+function normalizarTexto(
+    valor
+){
+
+    return String(
+        valor
+        ||
+        ""
+    )
+    .normalize(
+        "NFD"
+    )
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    )
+    .toLowerCase();
+
+}
+
+
+function formatarHorario(
+    horario
+){
+
+    if(
+        !horario
+    ){
+        return "";
+    }
+
+
+    return String(
+        horario
+    )
+    .slice(
+        0,
+        5
+    );
+
+}
+
+
+/* ==========================================
+CONTINUA NA PARTE 4/5
+========================================== */
+
+</script>
+
+  <script>
+
+/* ==========================================
+ABRIR DETALHES DA RESERVA
+========================================== */
+
+function abrirDetalhesReserva(id){
+
+    const reserva =
+    reservas.find(
+        item =>
+        Number(item.id) === Number(id)
+    );
+
+
+    if(!reserva){
+
+        mostrarToast(
+            "Erro",
+            "Reserva não encontrada.",
+            true
+        );
+
+        return;
+    }
+
+
+    reservaSelecionada = reserva;
+
+
+    document.getElementById(
+        "reservaTitulo"
+    ).textContent =
+    `Reserva #${reserva.id}`;
+
+
+    document.getElementById(
+        "reservaCliente"
+    ).textContent =
+    reserva.cliente?.nome
+    || "Cliente removido";
+
+
+    document.getElementById(
+        "reservaTelefone"
+    ).textContent =
+    reserva.cliente?.telefone
+    || "Sem telefone";
+
+
+    document.getElementById(
+        "reservaData"
+    ).textContent =
+    formatarDataCalendario(
+        reserva.data_evento
+    );
+
+
+    /* ======================================
+    HORÁRIO
+    ====================================== */
+
+    const inicio =
+    formatarHorario(
+        reserva.horario_inicio
+    );
+
+
+    const fim =
+    formatarHorario(
+        reserva.horario_fim
+    );
+
+
+    let horarioTexto = "-";
+
+
+    if(inicio && fim){
+
+        horarioTexto =
+        `${inicio} às ${fim}`;
+
+    }
+    else if(inicio){
+
+        horarioTexto = inicio;
+
+    }
+
+
+    document.getElementById(
+        "reservaHorario"
+    ).textContent =
+    horarioTexto;
+
+
+    /* ======================================
+    BRINQUEDOS
+    ====================================== */
+
+    const brinquedosContainer =
+    document.getElementById(
+        "reservaBrinquedos"
+    );
+
+
+    const itens =
+    reserva.itens || [];
+
+
+    if(itens.length === 0){
+
+        brinquedosContainer.innerHTML = `
+
+            <p>
+                Nenhum brinquedo cadastrado.
+            </p>
+
+        `;
+
+    }
+    else{
+
+        brinquedosContainer.innerHTML =
+        itens.map(item => {
+
+            const nome =
+            item.brinquedo?.nome
+            || "Brinquedo";
+
+
+            const quantidade =
+            Number(
+                item.quantidade || 1
+            );
+
+
+            const valor =
+            Number(
+                item.subtotal
+                ||
+                (
+                    Number(
+                        item.valor_unitario || 0
+                    )
+                    *
+                    quantidade
+                )
+            );
+
+
+            return `
+
+                <div class="detail-toy">
+
+                    <div>
+
+                        <strong>
+                            ${escapeHTMLCalendario(nome)}
+                        </strong>
+
+                        <span>
+                            ${quantidade} unidade(s)
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        ${formatarMoedaCalendario(valor)}
+                    </strong>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+    }
+
+
+    /* ======================================
+    ENDEREÇO
+    ====================================== */
+
+    const endereco = [
+
+        reserva.endereco_evento,
+
+        reserva.cidade_evento,
+
+        reserva.estado_evento
+
+    ]
+    .filter(Boolean)
+    .join(" - ");
+
+
+    document.getElementById(
+        "reservaEndereco"
+    ).textContent =
+    endereco
+    ||
+    "Endereço não informado";
+
+
+    /* ======================================
+    VALORES
+    ====================================== */
+
+    const total =
+    Number(
+        reserva.valor_total || 0
+    );
+
+
+    const entrada =
+    Number(
+        reserva.valor_entrada || 0
+    );
+
+
+    /*
+    Se valor_restante não existir no banco,
+    calculamos automaticamente.
+    */
+
+    const restante =
+    reserva.valor_restante !== undefined
+    &&
+    reserva.valor_restante !== null
+    ?
+    Number(reserva.valor_restante)
+    :
+    Math.max(
+        total - entrada,
+        0
+    );
+
+
+    document.getElementById(
+        "reservaTotal"
+    ).textContent =
+    formatarMoedaCalendario(
+        total
+    );
+
+
+    document.getElementById(
+        "reservaEntrada"
+    ).textContent =
+    formatarMoedaCalendario(
+        entrada
+    );
+
+
+    document.getElementById(
+        "reservaRestante"
+    ).textContent =
+    formatarMoedaCalendario(
+        restante
+    );
+
+
+    /* ======================================
+    STATUS
+    ====================================== */
+
+    const status =
+    reserva.status
+    || "Pendente";
+
+
+    document.getElementById(
+        "reservaStatus"
+    ).innerHTML = `
+
+        <span class="day-status ${classeEvento(status)}">
+
+            ${escapeHTMLCalendario(status)}
+
+        </span>
+
+    `;
+
+
+    /* ======================================
+    OBSERVAÇÕES
+    ====================================== */
+
+    document.getElementById(
+        "reservaObservacoes"
+    ).textContent =
+    reserva.observacoes
+    ||
+    "Nenhuma observação.";
+
+
+    /* ======================================
+    ABRIR MODAL
+    ====================================== */
+
+    document.getElementById(
+        "reservationOverlay"
+    )
+    .classList
+    .add("show");
+
+}
+
+
+/* ==========================================
+FECHAR DETALHES
+========================================== */
+
+function fecharDetalhesDireto(){
+
+    document.getElementById(
+        "reservationOverlay"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+function fecharDetalhesReserva(event){
+
+    if(
+        event.target.id
+        ===
+        "reservationOverlay"
+    ){
+
+        fecharDetalhesDireto();
+
+    }
+
+}
+
+
+/* ==========================================
+EDITAR RESERVA
+========================================== */
+
+function editarReservaSelecionada(){
+
+    if(!reservaSelecionada){
+        return;
+    }
+
+
+    const id =
+    reservaSelecionada.id;
+
+
+    localStorage.setItem(
+        "editarReservaId",
+        String(id)
+    );
+
+
+    window.location.href =
+    `reservas.html?editar=${id}`;
+
+}
+
+
+/* ==========================================
+WHATSAPP
+========================================== */
+
+function whatsappReservaSelecionada(){
+
+    if(!reservaSelecionada){
+        return;
+    }
+
+
+    const reserva =
+    reservaSelecionada;
+
+
+    const telefoneOriginal =
+    reserva.cliente?.telefone;
+
+
+    if(!telefoneOriginal){
+
+        mostrarToast(
+            "Sem telefone",
+            "Esse cliente não possui telefone cadastrado.",
+            true
+        );
+
+        return;
+    }
+
+
+    let telefone =
+    String(
+        telefoneOriginal
+    )
+    .replace(
+        /\D/g,
+        ""
+    );
+
+
+    /*
+    Adiciona código do Brasil caso o número
+    tenha apenas DDD + telefone.
+    */
+
+    if(
+        telefone.length === 10
+        ||
+        telefone.length === 11
+    ){
+
+        telefone =
+        "55" + telefone;
+
+    }
+
+
+    const cliente =
+    reserva.cliente?.nome
+    || "Cliente";
+
+
+    const data =
+    formatarDataCalendario(
+        reserva.data_evento
+    );
+
+
+    const inicio =
+    formatarHorario(
+        reserva.horario_inicio
+    );
+
+
+    const fim =
+    formatarHorario(
+        reserva.horario_fim
+    );
+
+
+    let horario = "";
+
+
+    if(inicio && fim){
+
+        horario =
+        `${inicio} às ${fim}`;
+
+    }
+    else if(inicio){
+
+        horario = inicio;
+
+    }
+
+
+    const brinquedos =
+    (
+        reserva.itens || []
+    )
+    .map(item => {
+
+        const quantidade =
+        Number(
+            item.quantidade || 1
+        );
+
+
+        const nome =
+        item.brinquedo?.nome
+        || "Brinquedo";
+
+
+        if(quantidade > 1){
+
+            return `${quantidade}x ${nome}`;
+
+        }
+
+
+        return nome;
+
+    })
+    .join(", ");
+
+
+    const total =
+    Number(
+        reserva.valor_total || 0
+    );
+
+
+    const entrada =
+    Number(
+        reserva.valor_entrada || 0
+    );
+
+
+    const restante =
+    Math.max(
+        total - entrada,
+        0
+    );
+
+
+    let mensagem =
+`Olá, ${cliente}! 🎈
+
+Aqui é da Encanto Kids Infláveis.
+
+Segue um resumo da sua reserva:
+
+📅 Data: ${data}`;
+
+
+    if(horario){
+
+        mensagem +=
+        `\n⏰ Horário: ${horario}`;
+
+    }
+
+
+    mensagem +=
+`\n🎈 Brinquedos: ${brinquedos || "Não informado"}
+💰 Valor total: ${formatarMoedaCalendario(total)}
+💵 Entrada: ${formatarMoedaCalendario(entrada)}
+💳 Restante: ${formatarMoedaCalendario(restante)}
+📋 Status: ${reserva.status || "Pendente"}
+
+Qualquer dúvida estamos à disposição! 😊`;
+
+
+    const url =
+    `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+/* ==========================================
+CONTRATO
+========================================== */
+
+function contratoReservaSelecionada(){
+
+    if(!reservaSelecionada){
+        return;
+    }
+
+
+    const id =
+    reservaSelecionada.id;
+
+
+    localStorage.setItem(
+        "reservaContratoId",
+        String(id)
+    );
+
+
+    window.location.href =
+    `contratos.html?reserva=${id}`;
+
+}
+
+
+/* ==========================================
+PREPARAR EXCLUSÃO
+========================================== */
+
+function excluirReservaSelecionada(){
+
+    if(!reservaSelecionada){
+        return;
+    }
+
+
+    reservaExcluirId =
+    reservaSelecionada.id;
+
+
+    document.getElementById(
+        "deleteCliente"
+    ).textContent =
+    reservaSelecionada.cliente?.nome
+    ||
+    `Reserva #${reservaExcluirId}`;
+
+
+    document.getElementById(
+        "deleteData"
+    ).textContent =
+    `${formatarDataCalendario(
+        reservaSelecionada.data_evento
+    )} • ${formatarMoedaCalendario(
+        reservaSelecionada.valor_total
+    )}`;
+
+
+    document.getElementById(
+        "deleteOverlay"
+    )
+    .classList
+    .add("show");
+
+}
+
+
+/* ==========================================
+FECHAR EXCLUSÃO
+========================================== */
+
+function fecharExclusao(){
+
+    reservaExcluirId =
+    null;
+
+
+    document.getElementById(
+        "deleteOverlay"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+/* ==========================================
+CONFIRMAR EXCLUSÃO
+========================================== */
+
+async function confirmarExclusao(){
+
+    if(!reservaExcluirId){
+        return;
+    }
+
+
+    const id =
+    reservaExcluirId;
+
+
+    const btn =
+    document.getElementById(
+        "btnExcluir"
+    );
+
+
+    btn.disabled = true;
+
+
+    btn.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        Excluindo...
+
+    `;
+
+
+    try{
+
+
+        /* ==================================
+        FINANCEIRO
+        ================================== */
+
+        const {
+            error:erroFinanceiro
+        } =
+        await supabaseClient
+        .from("financeiro")
+        .delete()
+        .eq(
+            "reserva_id",
+            id
+        );
+
+
+        if(erroFinanceiro){
+
+            console.warn(
+                "Financeiro:",
+                erroFinanceiro
+            );
+
+        }
+
+
+        /* ==================================
+        CONTRATOS
+        ================================== */
+
+        const {
+            error:erroContrato
+        } =
+        await supabaseClient
+        .from("contratos")
+        .delete()
+        .eq(
+            "reserva_id",
+            id
+        );
+
+
+        if(erroContrato){
+
+            console.warn(
+                "Contratos:",
+                erroContrato
+            );
+
+        }
+
+
+        /* ==================================
+        ITENS DA RESERVA
+        ================================== */
+
+        const {
+            error:erroItens
+        } =
+        await supabaseClient
+        .from("reserva_itens")
+        .delete()
+        .eq(
+            "reserva_id",
+            id
+        );
+
+
+        if(erroItens){
+
+            throw erroItens;
+
+        }
+
+
+        /* ==================================
+        RESERVA
+        ================================== */
+
+        const {
+            error:erroReserva
+        } =
+        await supabaseClient
+        .from("reservas")
+        .delete()
+        .eq(
+            "id",
+            id
+        );
+
+
+        if(erroReserva){
+
+            throw erroReserva;
+
+        }
+
+
+        /* ==================================
+        SUCESSO
+        ================================== */
+
+        fecharExclusao();
+
+        fecharDetalhesDireto();
+
+
+        reservaSelecionada =
+        null;
+
+
+        mostrarToast(
+            "Reserva excluída",
+            `Reserva #${id} excluída com sucesso.`,
+            false
+        );
+
+
+        await carregarReservas();
+
+
+        if(dataSelecionada){
+
+            abrirPainelDia(
+                dataSelecionada
+            );
+
+        }
+
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao excluir:",
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            erro.message
+            ||
+            "Não foi possível excluir a reserva.",
+            true
+        );
+
+    }
+    finally{
+
+        btn.disabled =
+        false;
+
+
+        btn.innerHTML = `
+
+            <i class="fa-solid fa-trash"></i>
+
+            Excluir
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+TOAST
+========================================== */
+
+let toastTimer = null;
+
+
+function mostrarToast(
+    titulo,
+    texto,
+    erro = false
+){
+
+    const toast =
+    document.getElementById(
+        "toast"
+    );
+
+
+    document.getElementById(
+        "toastTitulo"
+    ).textContent =
+    titulo;
+
+
+    document.getElementById(
+        "toastTexto"
+    ).textContent =
+    texto;
+
+
+    document.getElementById(
+        "toastIcon"
+    ).innerHTML =
+    erro
+    ?
+    '<i class="fa-solid fa-circle-exclamation"></i>'
+    :
+    '<i class="fa-solid fa-circle-check"></i>';
+
+
+    toast.classList.toggle(
+        "error",
+        erro
+    );
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        3500
+    );
+
+}
+
+
+/* ==========================================
+FORMATAR DATA
+========================================== */
+
+function formatarDataCalendario(data){
+
+    if(!data){
+        return "-";
+    }
+
+
+    const partes =
+    String(data)
+    .split("-");
+
+
+    if(partes.length !== 3){
+        return data;
+    }
+
+
+    return (
+        partes[2]
+        +
+        "/"
+        +
+        partes[1]
+        +
+        "/"
+        +
+        partes[0]
+    );
+
+}
+
+
+/* ==========================================
+FORMATAR MOEDA
+========================================== */
+
+function formatarMoedaCalendario(valor){
+
+    return Number(
+        valor || 0
+    )
+    .toLocaleString(
+        "pt-BR",
+        {
+            style:"currency",
+            currency:"BRL"
+        }
+    );
+
+}
+
+
+/* ==========================================
+ESCAPAR HTML
+========================================== */
+
+function escapeHTMLCalendario(valor){
+
+    return String(
+        valor ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* ==========================================
+ATALHO ESC
+========================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key !== "Escape"){
+            return;
+        }
+
+
+        if(
+            document
+            .getElementById(
+                "deleteOverlay"
+            )
+            .classList
+            .contains("show")
+        ){
+
+            fecharExclusao();
+
+            return;
+
+        }
+
+
+        if(
+            document
+            .getElementById(
+                "reservationOverlay"
+            )
+            .classList
+            .contains("show")
+        ){
+
+            fecharDetalhesDireto();
+
+            return;
+
+        }
+
+
+        if(
+            document
+            .getElementById(
+                "dayOverlay"
+            )
+            .classList
+            .contains("show")
+        ){
+
+            fecharPainelDiaDireto();
+
+        }
+
+    }
+);
+
+
+/* ==========================================
+CONTINUA NA PARTE 5/5
+========================================== */
+
+</script>
+<script>
+
+/* ==========================================
+LOGOUT
+========================================== */
+
+function logout(){
+
+    const confirmar =
+    confirm(
+        "Deseja realmente sair do painel?"
+    );
+
+
+    if(!confirmar){
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "adminLogado"
+    );
+
+
+    localStorage.removeItem(
+        "adminUsuario"
+    );
+
+
+    window.location.href =
+    "login.html";
+
+}
+
+
+/* ==========================================
+FECHAR MENU MOBILE
+========================================== */
+
+document
+.querySelectorAll(
+    ".sidebar .menu a"
+)
+.forEach(link => {
+
+    link.addEventListener(
+        "click",
+        function(){
+
+            const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+
+            if(sidebar){
+
+                sidebar
+                .classList
+                .remove("open");
+
+            }
+
+        }
+    );
+
+});
+
+
+/* ==========================================
+CLIQUE FORA DA EXCLUSÃO
+========================================== */
+
+document
+.getElementById(
+    "deleteOverlay"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target
+            ===
+            this
+        ){
+
+            fecharExclusao();
+
+        }
+
+    }
+);
+
+
+/* ==========================================
+ATUALIZAR CALENDÁRIO
+========================================== */
+
+async function atualizarCalendario(){
+
+    try{
+
+        await carregarReservas();
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao atualizar calendário:",
+            erro
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+RECARREGAR QUANDO VOLTAR PARA ABA
+========================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState
+            ===
+            "visible"
+        ){
+
+            atualizarCalendario();
+
+        }
+
+    }
+);
+
+
+/* ==========================================
+VERIFICAR RESERVA VINDO DA URL
+========================================== */
+
+function verificarReservaURL(){
+
+    const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+    const reservaId =
+    parametros.get(
+        "reserva"
+    );
+
+
+    if(!reservaId){
+        return;
+    }
+
+
+    const reserva =
+    reservas.find(
+        item =>
+        Number(item.id)
+        ===
+        Number(reservaId)
+    );
+
+
+    if(!reserva){
+        return;
+    }
+
+
+    /*
+    Vai automaticamente para
+    o mês da reserva.
+    */
+
+    if(
+        reserva.data_evento
+    ){
+
+        const partes =
+        reserva.data_evento
+        .split("-");
+
+
+        if(
+            partes.length === 3
+        ){
+
+            dataAtualCalendario =
+            new Date(
+                Number(partes[0]),
+                Number(partes[1]) - 1,
+                1
+            );
+
+
+            dataSelecionada =
+            reserva.data_evento;
+
+
+            renderizarCalendario();
+
+        }
+
+    }
+
+
+    /*
+    Abre os detalhes automaticamente.
+    */
+
+    setTimeout(
+        () => {
+
+            abrirDetalhesReserva(
+                reserva.id
+            );
+
+        },
+        250
+    );
+
+}
+
+
+/* ==========================================
+ABRIR DATA VINDO DA URL
+========================================== */
+
+function verificarDataURL(){
+
+    const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+    const data =
+    parametros.get(
+        "data"
+    );
+
+
+    if(!data){
+        return;
+    }
+
+
+    const partes =
+    data.split("-");
+
+
+    if(
+        partes.length !== 3
+    ){
+        return;
+    }
+
+
+    const ano =
+    Number(
+        partes[0]
+    );
+
+
+    const mes =
+    Number(
+        partes[1]
+    ) - 1;
+
+
+    const dia =
+    Number(
+        partes[2]
+    );
+
+
+    if(
+        !ano
+        ||
+        mes < 0
+        ||
+        mes > 11
+        ||
+        !dia
+    ){
+        return;
+    }
+
+
+    dataAtualCalendario =
+    new Date(
+        ano,
+        mes,
+        1
+    );
+
+
+    dataSelecionada =
+    data;
+
+
+    renderizarCalendario();
+
+
+    setTimeout(
+        () => {
+
+            abrirPainelDia(
+                data
+            );
+
+        },
+        200
+    );
+
+}
+
+
+/* ==========================================
+ATUALIZAR INDICADOR DA DATA
+========================================== */
+
+function destacarDataSelecionada(){
+
+    renderizarCalendario();
+
+}
+
+
+/* ==========================================
+CORRIGIR TAMANHO EM CELULAR
+========================================== */
+
+function corrigirAlturaMobile(){
+
+    document.documentElement.style.setProperty(
+        "--altura-tela",
+        `${window.innerHeight}px`
+    );
+
+}
+
+
+window.addEventListener(
+    "resize",
+    corrigirAlturaMobile
+);
+
+
+corrigirAlturaMobile();
+
+
+/* ==========================================
+INICIALIZAÇÃO DO SISTEMA
+========================================== */
+
+async function iniciarCalendario(){
+
+    console.log(
+        "Iniciando Encanto Kids Calendário..."
+    );
+
+
+    /*
+    Verifica login
+    */
+
+    if(
+        localStorage.getItem(
+            "adminLogado"
+        )
+        !==
+        "true"
+    ){
+
+        window.location.href =
+        "login.html";
+
+        return;
+
+    }
+
+
+    try{
+
+
+        /*
+        Carrega reservas do Supabase
+        */
+
+        await carregarReservas();
+
+
+        /*
+        Verifica se existe uma reserva
+        específica na URL.
+        */
+
+        const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+        if(
+            parametros.has(
+                "reserva"
+            )
+        ){
+
+            verificarReservaURL();
+
+        }
+        else if(
+            parametros.has(
+                "data"
+            )
+        ){
+
+            verificarDataURL();
+
+        }
+
+
+        console.log(
+            "Calendário carregado com sucesso."
+        );
+
+
+    }
+    catch(erro){
+
+
+        console.error(
+            "Erro ao iniciar calendário:",
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            "Não foi possível carregar o calendário.",
+            true
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+INICIAR
+========================================== */
+
+iniciarCalendario();
+
+</script>
+
+</body>
+</html>
