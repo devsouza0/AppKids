@@ -8524,6 +8524,161 @@ document
 /* ==========================================
 INICIALIZAÇÃO
 ========================================== */
+    let pagamentoReservaAtual = null;
+
+
+function abrirPagamentoReserva(id){
+
+    const reserva =
+    reservas.find(
+        item =>
+        Number(item.id)
+        ===
+        Number(id)
+    );
+
+
+    if(!reserva){
+
+        mostrarToast(
+            "Erro",
+            "Reserva não encontrada.",
+            true
+        );
+
+        return;
+    }
+
+
+    pagamentoReservaAtual =
+    reserva;
+
+
+    const total =
+    Number(
+        reserva.valor_total || 0
+    );
+
+
+    const entrada =
+    Number(
+        reserva.valor_entrada || 0
+    );
+
+
+    const restante =
+    reserva.valor_restante !== null
+    &&
+    reserva.valor_restante !== undefined
+    ?
+    Number(
+        reserva.valor_restante || 0
+    )
+    :
+    Math.max(
+        total - entrada,
+        0
+    );
+
+
+    document.getElementById(
+        "paymentTitulo"
+    ).textContent =
+    `Pagamento da Reserva #${reserva.id}`;
+
+
+    document.getElementById(
+        "paymentCliente"
+    ).textContent =
+    reserva.cliente?.nome
+    || "Cliente";
+
+
+    document.getElementById(
+        "paymentTotal"
+    ).textContent =
+    moeda(total);
+
+
+    document.getElementById(
+        "paymentRecebido"
+    ).textContent =
+    moeda(
+        Math.max(
+            total - restante,
+            0
+        )
+    );
+
+
+    document.getElementById(
+        "paymentRestante"
+    ).textContent =
+    moeda(restante);
+
+
+    document.getElementById(
+        "paymentValor"
+    ).value =
+    restante > 0
+    ?
+    restante.toFixed(2)
+    :
+    "0.00";
+
+
+    document.getElementById(
+        "paymentForma"
+    ).value =
+    reserva.forma_pagamento
+    || "";
+
+
+    document.getElementById(
+        "paymentData"
+    ).value =
+    new Date()
+    .toISOString()
+    .slice(
+        0,
+        10
+    );
+
+
+    document.getElementById(
+        "paymentStatus"
+    ).value =
+    "Pago";
+
+
+    document.getElementById(
+        "paymentObservacoes"
+    ).value =
+    `Pagamento da reserva #${reserva.id}`;
+
+
+    document.getElementById(
+        "paymentOverlay"
+    )
+    .classList
+    .add("show");
+
+}
+
+
+function fecharPagamentoReserva(){
+
+    pagamentoReservaAtual =
+    null;
+
+
+    document.getElementById(
+        "paymentOverlay"
+    )
+    .classList
+    .remove("show");
+
+}
 
 async function iniciarSistemaReservas(){
 
