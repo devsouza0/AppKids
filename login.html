@@ -8,15 +8,18 @@
 
 <title>Encanto Kids | Painel Administrativo</title>
 
+<!-- FAVICON -->
 <link
 rel="icon"
 type="image/jpeg"
 href="assets/favicon.jpeg">
 
+<!-- FONT AWESOME -->
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -29,7 +32,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 }
 
 body{
+
     min-height:100vh;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            #252525,
+            transparent 40%
+        ),
+        #090909;
 
     display:flex;
     align-items:center;
@@ -37,530 +49,414 @@ body{
 
     padding:20px;
 
-    color:white;
+    color:#fff;
 
-    background:
-        linear-gradient(
-            rgba(2,6,15,.58),
-            rgba(2,6,15,.72)
-        ),
-        url("assets/login-bg.png");
-
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-    background-attachment:fixed;
-
-    overflow:hidden;
 }
 
-body::before{
-    content:"";
 
-    position:fixed;
-    inset:0;
-
-    background:
-        radial-gradient(
-            circle at center,
-            transparent 20%,
-            rgba(0,0,0,.45) 75%,
-            rgba(0,0,0,.72) 100%
-        );
-
-    pointer-events:none;
-}
+/* =========================================
+CONTAINER
+========================================= */
 
 .login-container{
+
     width:100%;
-    max-width:460px;
+    max-width:420px;
 
-    position:relative;
-
-    z-index:2;
 }
+
+
+/* =========================================
+CARD
+========================================= */
 
 .login-card{
-    width:100%;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(9,16,29,.94),
-            rgba(5,11,21,.97)
-        );
+    background:#141414;
 
-    border:1px solid rgba(255,122,0,.35);
-
-    border-radius:24px;
-
-    padding:30px 34px 27px;
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.70),
-        0 0 35px rgba(255,122,0,.08),
-        inset 0 1px 0 rgba(255,255,255,.04);
-
-    backdrop-filter:blur(14px);
-}
-
-.login-card::before{
-    content:"";
-
-    position:absolute;
-
-    top:-100px;
-    left:50%;
-
-    width:360px;
-    height:180px;
-
-    transform:translateX(-50%);
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(249,115,22,.16),
-            transparent 68%
-        );
-
-    pointer-events:none;
-}
-
-
-/* ========================================
-MARCA
-======================================== */
-
-.marca{
-    position:relative;
-
-    text-align:center;
-
-    margin-bottom:24px;
-}
-
-.logo{
-    width:78px;
-    height:78px;
-
-    object-fit:cover;
+    border:1px solid #292929;
 
     border-radius:20px;
 
-    margin-bottom:14px;
+    padding:35px;
 
     box-shadow:
-        0 15px 35px rgba(0,0,0,.45),
-        0 0 25px rgba(249,115,22,.15);
+        0 30px 80px rgba(0,0,0,.55);
+
 }
 
+
+/* =========================================
+MARCA
+========================================= */
+
+.marca{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+
+.logo{
+
+    width:90px;
+    height:90px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:3px solid #fff;
+
+    margin-bottom:15px;
+
+}
+
+
 .marca h1{
-    font-size:25px;
+
+    font-size:23px;
+
+    margin-bottom:5px;
+
+}
+
+
+.marca p{
+
+    color:#888;
+
+    font-size:14px;
+
+}
+
+
+/* =========================================
+CAMPOS
+========================================= */
+
+.campo{
+
+    margin-bottom:18px;
+
+}
+
+
+.campo label{
+
+    display:block;
+
+    font-size:13px;
+
+    color:#aaa;
 
     margin-bottom:7px;
 
-    font-weight:800;
-
-    letter-spacing:-.5px;
 }
 
-.marca h1 span{
-    color:#ff7a00;
-}
-
-.marca p{
-    color:#a0a9b7;
-
-    font-size:14px;
-
-    line-height:1.6;
-}
-
-.marca p strong{
-    color:#ff7a00;
-}
-
-
-/* ========================================
-FORM
-======================================== */
-
-.campo{
-    margin-bottom:19px;
-}
-
-.campo label{
-    display:block;
-
-    font-size:14px;
-
-    color:#edf1f6;
-
-    margin-bottom:8px;
-
-    font-weight:600;
-}
 
 .input-box{
+
     position:relative;
+
 }
 
-.input-icon{
-    position:absolute;
-
-    left:0;
-    top:0;
-
-    width:58px;
-    height:54px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:#ff7a00;
-
-    font-size:18px;
-
-    border-right:1px solid #313a4b;
-
-    z-index:2;
-}
 
 .campo input{
-    width:100%;
-    height:54px;
 
-    background:rgba(7,14,26,.85);
+    width:100%;
+
+    height:50px;
+
+    background:#0c0c0c;
 
     color:white;
 
-    border:1px solid #344055;
+    border:1px solid #333;
 
-    border-radius:14px;
+    border-radius:10px;
 
     outline:none;
 
-    padding:0 52px 0 75px;
+    padding:0 45px 0 15px;
 
     font-size:15px;
 
-    transition:.25s;
+    transition:.2s;
 
-    box-shadow:
-        inset 0 0 12px rgba(0,0,0,.18);
 }
 
-.campo input::placeholder{
-    color:#6f7b8e;
-}
 
 .campo input:focus{
-    border-color:#ff7a00;
 
-    box-shadow:
-        0 0 0 3px rgba(249,115,22,.10),
-        0 0 20px rgba(249,115,22,.10);
+    border-color:#fff;
+
 }
 
 
-/* ========================================
-MOSTRAR SENHA
-======================================== */
+.campo input::placeholder{
 
-.toggle-senha{
+    color:#555;
+
+}
+
+
+/* =========================================
+MOSTRAR SENHA
+========================================= */
+
+.ver-senha{
+
     position:absolute;
 
-    right:15px;
+    right:14px;
+
     top:50%;
 
     transform:translateY(-50%);
-
-    width:35px;
-    height:35px;
 
     border:none;
 
     background:transparent;
 
-    color:#8995a8;
+    color:#777;
 
     cursor:pointer;
 
-    font-size:16px;
+    font-size:15px;
 
-    z-index:3;
 }
 
-.toggle-senha:hover{
+
+.ver-senha:hover{
+
     color:white;
+
 }
 
 
-/* ========================================
+/* =========================================
 BOTÃO
-======================================== */
+========================================= */
 
 .btn-login{
-    width:100%;
-    height:56px;
 
-    margin-top:5px;
+    width:100%;
+
+    height:50px;
 
     border:0;
 
-    border-radius:14px;
+    border-radius:10px;
 
-    background:
-        linear-gradient(
-            90deg,
-            #f15a00,
-            #ff8a00
-        );
+    background:white;
 
-    color:white;
+    color:black;
 
-    font-size:16px;
+    font-size:15px;
 
-    font-weight:800;
-
-    letter-spacing:.3px;
+    font-weight:700;
 
     cursor:pointer;
 
-    transition:.25s;
+    transition:.2s;
 
-    box-shadow:
-        0 14px 30px rgba(249,115,22,.20),
-        inset 0 1px 0 rgba(255,255,255,.25);
 }
+
 
 .btn-login:hover{
+
     transform:translateY(-2px);
 
-    filter:brightness(1.07);
+    background:#e9e9e9;
 
-    box-shadow:
-        0 18px 38px rgba(249,115,22,.28);
 }
 
+
 .btn-login:disabled{
-    opacity:.65;
+
+    opacity:.6;
 
     cursor:not-allowed;
 
     transform:none;
+
 }
 
 
-/* ========================================
+/* =========================================
 MENSAGEM
-======================================== */
+========================================= */
 
 #mensagem{
+
     display:none;
 
-    margin-top:17px;
+    margin-top:18px;
 
-    padding:12px 14px;
+    padding:12px;
 
-    border-radius:10px;
+    border-radius:8px;
 
-    font-size:12px;
+    font-size:14px;
 
     text-align:center;
+
 }
 
+
 .erro{
+
     display:block !important;
 
     background:rgba(239,68,68,.12);
 
-    border:1px solid rgba(239,68,68,.35);
+    border:1px solid rgba(239,68,68,.4);
 
-    color:#ff8c8c;
+    color:#ff7979;
+
 }
 
+
 .sucesso{
+
     display:block !important;
 
     background:rgba(34,197,94,.12);
 
-    border:1px solid rgba(34,197,94,.35);
+    border:1px solid rgba(34,197,94,.4);
 
-    color:#68e49a;
+    color:#6ee7a0;
+
 }
 
 
-/* ========================================
-SEGURANÇA
-======================================== */
-
-.security{
-    margin-top:25px;
-
-    text-align:center;
-
-    color:#6f7a8c;
-
-    font-size:11px;
-}
-
-.security i{
-    margin-right:6px;
-}
-
-
-/* ========================================
+/* =========================================
 RODAPÉ
-======================================== */
+========================================= */
 
 .rodape{
+
     text-align:center;
 
-    color:#667185;
+    color:#555;
 
-    margin-top:13px;
+    margin-top:20px;
 
-    font-size:10px;
+    font-size:12px;
+
 }
 
 
-/* ========================================
-INTRO LOGIN
-======================================== */
+/* =========================================
+TELA DE ENTRADA
+========================================= */
 
 .login-intro{
+
     position:fixed;
 
     inset:0;
 
-    background:#080d16;
-
-    z-index:9999;
+    background:#090909;
 
     display:none;
 
     align-items:center;
-
     justify-content:center;
+
+    z-index:9999;
 
     text-align:center;
 
     padding:20px;
+
 }
+
 
 .login-intro.show{
+
     display:flex;
+
 }
+
 
 .intro-content{
-    animation:introIn .55s ease;
+
+    animation:entrada .5s ease;
+
 }
 
-.intro-logo{
-    width:100px;
-    height:100px;
 
-    border-radius:24px;
+.intro-logo{
+
+    width:95px;
+    height:95px;
 
     object-fit:cover;
 
-    margin-bottom:22px;
+    border-radius:50%;
 
-    box-shadow:
-        0 0 45px rgba(249,115,22,.18);
+    border:3px solid white;
+
+    margin-bottom:25px;
+
 }
 
-.intro-content span{
-    display:block;
-
-    color:#ff7a00;
-
-    font-size:11px;
-
-    letter-spacing:2px;
-
-    margin-bottom:8px;
-}
 
 .intro-content h2{
-    font-size:34px;
+
+    font-size:30px;
 
     margin-bottom:10px;
+
 }
+
 
 .intro-content p{
-    color:#7d899b;
 
-    font-size:13px;
+    color:#888;
+
+    font-size:14px;
+
 }
 
-.intro-loader{
-    width:230px;
+
+.loader{
+
+    width:220px;
+
     height:4px;
 
-    background:#171e2a;
+    background:#222;
 
     border-radius:10px;
 
-    margin:27px auto 0;
+    margin:25px auto 0;
 
     overflow:hidden;
+
 }
 
-.intro-loader div{
+
+.loader-bar{
+
     height:100%;
 
     width:0;
 
+    background:white;
+
     border-radius:10px;
 
-    background:
-        linear-gradient(
-            90deg,
-            #f15a00,
-            #ff9a19
-        );
-
-    animation:carregarIntro 2s forwards;
-}
-
-
-/* ========================================
-ANIMAÇÕES
-======================================== */
-
-@keyframes entradaLogin{
-
-    from{
-        opacity:0;
-        transform:translateY(18px) scale(.98);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
+    animation:carregar 2s forwards;
 
 }
 
-@keyframes introIn{
 
-    from{
-        opacity:0;
-        transform:scale(.96);
-    }
-
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
-
-}
-
-@keyframes carregarIntro{
+@keyframes carregar{
 
     from{
         width:0;
@@ -573,43 +469,47 @@ ANIMAÇÕES
 }
 
 
-/* ========================================
-RESPONSIVO
-======================================== */
+@keyframes entrada{
 
-@media(max-width:650px){
+    from{
 
-    body{
-        padding:15px;
+        opacity:0;
 
-        background-position:center;
+        transform:
+            translateY(10px)
+            scale(.98);
+
     }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================================
+RESPONSIVO
+========================================= */
+
+@media(max-width:500px){
 
     .login-card{
-        padding:32px 23px 27px;
 
-        border-radius:23px;
+        padding:27px 22px;
+
     }
 
-    .logo{
-        width:90px;
-        height:90px;
-    }
+    .intro-content h2{
 
-    .marca h1{
-        font-size:24px;
-    }
+        font-size:25px;
 
-    .marca p{
-        font-size:12px;
-    }
-
-    .campo input{
-        height:51px;
-    }
-
-    .input-icon{
-        height:51px;
     }
 
 }
@@ -618,53 +518,50 @@ RESPONSIVO
 
 </head>
 
+
 <body>
 
 
 <div class="login-container">
 
 
-<div class="login-card">
+    <div class="login-card">
 
 
-    <div class="marca">
-
-        <img
-        src="assets/favicon.jpeg"
-        alt="Encanto Kids"
-        class="logo"
-        onerror="this.src='assets/logo.png'">
+        <div class="marca">
 
 
-        <h1>
-            Encanto <span>Kids</span>
-        </h1>
+            <img
+            src="assets/favicon.jpeg"
+            alt="Encanto Kids"
+            class="logo"
+            onerror="this.src='assets/logo.png'">
 
 
-        <p>
-            Bem-vindo de volta!<br>
-            Faça login para acessar o
-            <strong>painel administrativo.</strong>
-        </p>
-
-    </div>
+            <h1>
+                Encanto Kids Infláveis
+            </h1>
 
 
-    <form id="formLogin">
+            <p>
+                Painel Administrativo
+            </p>
 
 
-        <div class="campo">
-
-            <label for="usuario">
-                Usuário
-            </label>
+        </div>
 
 
-            <div class="input-box">
+        <form id="formLogin">
 
-                <div class="input-icon">
-                    <i class="fa-solid fa-user"></i>
-                </div>
+
+            <div class="campo">
+
+
+                <label for="usuario">
+
+                    Usuário
+
+                </label>
 
 
                 <input
@@ -674,70 +571,64 @@ RESPONSIVO
                 placeholder="Digite seu usuário"
                 required>
 
+
             </div>
 
-        </div>
+
+            <div class="campo">
 
 
-        <div class="campo">
+                <label for="senha">
 
-            <label for="senha">
-                Senha
-            </label>
+                    Senha
+
+                </label>
 
 
-            <div class="input-box">
+                <div class="input-box">
 
-                <div class="input-icon">
-                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                    type="password"
+                    id="senha"
+                    autocomplete="current-password"
+                    placeholder="Digite sua senha"
+                    required>
+
+
+                    <button
+                    type="button"
+                    class="ver-senha"
+                    onclick="alternarSenha()">
+
+                        <i
+                        class="fa-solid fa-eye"
+                        id="iconeSenha"></i>
+
+                    </button>
+
+
                 </div>
 
 
-                <input
-                type="password"
-                id="senha"
-                autocomplete="current-password"
-                placeholder="Digite sua senha"
-                required>
-
-
-                <button
-                type="button"
-                class="toggle-senha"
-                onclick="alternarSenha()">
-
-                    <i
-                    class="fa-solid fa-eye"
-                    id="iconeSenha"></i>
-
-                </button>
-
             </div>
 
-        </div>
+
+            <button
+            type="submit"
+            class="btn-login"
+            id="btnLogin">
+
+                Entrar
+
+            </button>
 
 
-        <button
-        type="submit"
-        class="btn-login"
-        id="btnLogin">
-
-            ENTRAR
-
-        </button>
+            <div id="mensagem"></div>
 
 
-        <div id="mensagem"></div>
+        </form>
 
-
-    </form>
-
-
-    <div class="security">
-
-        <i class="fa-solid fa-shield-halved"></i>
-
-        Acesso seguro e restrito
 
     </div>
 
@@ -752,60 +643,61 @@ RESPONSIVO
 </div>
 
 
-</div>
-
-
-<!-- ========================================
-INTRO
-======================================== -->
+<!-- =========================================
+TELA DE ENTRADA
+========================================= -->
 
 <div
 class="login-intro"
 id="loginIntro">
+
 
     <div class="intro-content">
 
 
         <img
         src="assets/favicon.jpeg"
+        alt="Encanto Kids"
         class="intro-logo"
-        alt="Encanto Kids">
-
-
-        <span>
-            ENCANTO KIDS ADM
-        </span>
+        onerror="this.src='assets/logo.png'">
 
 
         <h2 id="introTitulo">
+
             Bem-vindo!
+
         </h2>
 
 
         <p>
+
             Login realizado! Abrindo painel...
+
         </p>
 
 
-        <div class="intro-loader">
+        <div class="loader">
 
-            <div></div>
+            <div class="loader-bar"></div>
 
         </div>
 
 
     </div>
 
+
 </div>
 
 
+<!-- SUPABASE CONFIG -->
 <script src="js/supabase.js"></script>
+
 
 <script>
 
-/* ========================================
-MOSTRAR / OCULTAR SENHA
-======================================== */
+/* =========================================
+MOSTRAR / ESCONDER SENHA
+========================================= */
 
 function alternarSenha(){
 
@@ -822,8 +714,7 @@ function alternarSenha(){
 
 
     if(
-        senha.type ===
-        "password"
+        senha.type === "password"
     ){
 
         senha.type =
@@ -848,9 +739,9 @@ function alternarSenha(){
 }
 
 
-/* ========================================
+/* =========================================
 LOGIN
-======================================== */
+========================================= */
 
 document
 .getElementById(
@@ -864,7 +755,8 @@ document
 
 
         const usuario =
-        document.getElementById(
+        document
+        .getElementById(
             "usuario"
         )
         .value
@@ -872,7 +764,8 @@ document
 
 
         const senha =
-        document.getElementById(
+        document
+        .getElementById(
             "senha"
         )
         .value;
@@ -912,6 +805,18 @@ document
 
 
         try{
+
+
+            if(
+                typeof supabaseClient ===
+                "undefined"
+            ){
+
+                throw new Error(
+                    "Supabase não conectado."
+                );
+
+            }
 
 
             const {
@@ -956,7 +861,10 @@ document
             }
 
 
-            /* SALVAR LOGIN */
+            /* =================================
+            LOGIN OK
+            ================================= */
+
 
             localStorage.setItem(
                 "adminLogado",
@@ -966,27 +874,37 @@ document
 
             localStorage.setItem(
                 "adminUsuario",
-                data.usuario
-                ||
-                usuario
+                data.usuario || usuario
             );
 
 
-            /* INTRO */
+            /* =================================
+            TELA DE BOAS-VINDAS
+            ================================= */
+
+
+            const nome =
+            data.usuario || usuario;
+
 
             document.getElementById(
                 "introTitulo"
             ).textContent =
-            `Bem-vindo, Sr. ${
-                data.usuario || usuario
-            }`;
+            `Bem-vindo, Sr. ${nome}`;
 
 
             document.getElementById(
                 "loginIntro"
             )
             .classList
-            .add("show");
+            .add(
+                "show"
+            );
+
+
+            /* =================================
+            ABRIR DASHBOARD
+            ================================= */
 
 
             setTimeout(
@@ -1003,30 +921,33 @@ document
         }
         catch(erro){
 
+
             console.error(
-                "Erro login:",
+                "Erro no login:",
                 erro
             );
 
 
             mensagem.textContent =
-            erro.message
-            ||
+            erro.message ||
             "Não foi possível realizar o login.";
 
 
             mensagem.className =
             "erro";
 
+
         }
         finally{
+
 
             btn.disabled =
             false;
 
 
             btn.innerHTML =
-            "ENTRAR";
+            "Entrar";
+
 
         }
 
@@ -1035,5 +956,7 @@ document
 
 </script>
 
+
 </body>
+
 </html>
