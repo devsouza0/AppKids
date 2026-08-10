@@ -1,0 +1,5726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Contratos | Encanto Kids</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#080a0f;
+    --sidebar:#0d1017;
+    --card:#121722;
+    --card2:#171d29;
+    --border:#242b39;
+    --text:#f5f7fa;
+    --muted:#7f8999;
+    --green:#22c55e;
+    --blue:#3b82f6;
+    --orange:#f59e0b;
+    --red:#ef4444;
+    --purple:#a855f7;
+}
+
+body{
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+}
+
+
+/* =========================================
+SIDEBAR
+========================================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+
+    width:260px;
+    height:100vh;
+
+    background:var(--sidebar);
+
+    border-right:1px solid var(--border);
+
+    padding:24px 18px;
+
+    display:flex;
+    flex-direction:column;
+
+    z-index:1000;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:0 8px 25px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.logo-area img{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    object-fit:cover;
+}
+
+.logo-area h2{
+    font-size:16px;
+}
+
+.logo-area p{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.menu-title{
+    font-size:10px;
+    color:#555f70;
+
+    margin:25px 10px 10px;
+
+    font-weight:bold;
+    letter-spacing:1.4px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#8994a6;
+
+    padding:13px 14px;
+
+    display:flex;
+    align-items:center;
+    gap:13px;
+
+    border-radius:10px;
+
+    transition:.2s;
+}
+
+.menu a i{
+    width:20px;
+    text-align:center;
+}
+
+.menu a:hover{
+    background:#171d28;
+    color:white;
+}
+
+.menu a.active{
+    background:white;
+    color:#080a0f;
+    font-weight:bold;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+}
+
+.logout{
+    width:100%;
+
+    border:none;
+
+    padding:13px;
+
+    border-radius:10px;
+
+    background:#191116;
+    color:#ff6363;
+
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+/* =========================================
+MAIN
+========================================= */
+
+.main{
+    margin-left:260px;
+
+    min-height:100vh;
+
+    padding:30px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.topbar h1{
+    font-size:27px;
+}
+
+.topbar p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+.mobile-menu{
+    display:none;
+
+    width:42px;
+    height:42px;
+
+    border-radius:9px;
+
+    background:#151a24;
+    color:white;
+
+    border:1px solid var(--border);
+
+    cursor:pointer;
+}
+
+.btn-primary{
+    border:none;
+
+    background:white;
+    color:#090b10;
+
+    padding:12px 17px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+
+/* =========================================
+RESUMO
+========================================= */
+
+.summary-grid{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+.summary-card{
+    background:linear-gradient(
+        145deg,
+        var(--card2),
+        var(--card)
+    );
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    padding:17px;
+}
+
+.summary-card span{
+    display:block;
+
+    color:#7c8798;
+
+    font-size:9px;
+
+    letter-spacing:.7px;
+}
+
+.summary-card strong{
+    display:block;
+
+    margin-top:7px;
+
+    font-size:22px;
+}
+
+
+/* =========================================
+FILTROS
+========================================= */
+
+.filters{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+}
+
+.search-box{
+    position:relative;
+    flex:1;
+}
+
+.search-box i{
+    position:absolute;
+
+    left:14px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#626d80;
+}
+
+.search-box input{
+    width:100%;
+
+    height:42px;
+
+    border:1px solid #293243;
+
+    border-radius:9px;
+
+    background:#0d121a;
+
+    color:white;
+
+    padding:0 15px 0 40px;
+
+    outline:none;
+}
+
+.search-box input:focus{
+    border-color:#4b5870;
+}
+
+.filter-select{
+    height:42px;
+
+    border:1px solid #293243;
+
+    border-radius:9px;
+
+    background:#0d121a;
+
+    color:#aab3c1;
+
+    padding:0 13px;
+
+    outline:none;
+}
+
+
+/* =========================================
+TABELA
+========================================= */
+
+.table-box{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    overflow:hidden;
+}
+
+.table-header{
+    padding:17px 19px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.table-header h2{
+    font-size:14px;
+}
+
+.table-header span{
+    color:#727d90;
+
+    font-size:10px;
+}
+
+.table-scroll{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:900px;
+}
+
+thead{
+    background:#0d1118;
+}
+
+th{
+    padding:12px 16px;
+
+    text-align:left;
+
+    color:#687386;
+
+    font-size:9px;
+
+    letter-spacing:.6px;
+}
+
+td{
+    padding:14px 16px;
+
+    border-top:1px solid #1d2430;
+
+    font-size:11px;
+
+    color:#c5ccd6;
+}
+
+tbody tr{
+    transition:.2s;
+}
+
+tbody tr:hover{
+    background:#151b25;
+}
+
+.client-cell strong{
+    display:block;
+
+    color:white;
+
+    font-size:11px;
+}
+
+.client-cell span{
+    display:block;
+
+    color:#707c90;
+
+    font-size:9px;
+
+    margin-top:4px;
+}
+
+.contract-number{
+    color:#8c98aa;
+    font-weight:bold;
+}
+
+.status{
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    font-size:9px;
+
+    font-weight:bold;
+}
+
+.status.gerado{
+    color:#60a5fa;
+    background:rgba(59,130,246,.12);
+}
+
+.status.assinado{
+    color:#4ade80;
+    background:rgba(34,197,94,.12);
+}
+
+.status.pendente{
+    color:#fbbf24;
+    background:rgba(245,158,11,.12);
+}
+
+.status.cancelado{
+    color:#f87171;
+    background:rgba(239,68,68,.12);
+}
+
+
+/* =========================================
+AÇÕES
+========================================= */
+
+.actions{
+    display:flex;
+    gap:6px;
+}
+
+.action-btn{
+    width:33px;
+    height:33px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    transition:.2s;
+}
+
+.action-btn:hover{
+    transform:translateY(-2px);
+}
+
+.action-view{
+    background:#1b2637;
+    color:#7db0ff;
+}
+
+.action-pdf{
+    background:rgba(168,85,247,.12);
+    color:#c084fc;
+}
+
+.action-whatsapp{
+    background:rgba(34,197,94,.12);
+    color:#4ade80;
+}
+
+.action-delete{
+    background:rgba(239,68,68,.12);
+    color:#f87171;
+}
+
+
+/* =========================================
+VAZIO / LOADING
+========================================= */
+
+.empty-state{
+    padding:60px 20px;
+
+    text-align:center;
+
+    color:#667185;
+}
+
+.empty-state i{
+    font-size:35px;
+
+    margin-bottom:14px;
+}
+
+.empty-state strong{
+    display:block;
+
+    font-size:13px;
+
+    color:#9ca6b7;
+
+    margin-bottom:6px;
+}
+
+.empty-state p{
+    font-size:10px;
+}
+
+
+/* =========================================
+RESPONSIVO
+========================================= */
+
+@media(max-width:1100px){
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .topbar{
+        align-items:flex-start;
+    }
+
+    .topbar-right .btn-primary span{
+        display:none;
+    }
+
+    .filters{
+        flex-direction:column;
+    }
+
+    .search-box,
+    .filter-select{
+        width:100%;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =========================================
+SIDEBAR
+========================================= -->
+
+<aside
+class="sidebar"
+id="sidebar">
+
+    <div class="logo-area">
+
+        <img
+        src="assets/logo.png"
+        alt="Encanto Kids"
+        onerror="this.style.display='none'">
+
+        <div>
+
+            <h2>
+                Encanto Kids
+            </h2>
+
+            <p>
+                Painel Administrativo
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu-title">
+        MENU PRINCIPAL
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="dashboard.html">
+
+            <i class="fa-solid fa-chart-pie"></i>
+
+            Dashboard
+
+        </a>
+
+
+        <a href="reservas.html">
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            Reservas
+
+        </a>
+
+
+        <a href="clientes.html">
+
+            <i class="fa-solid fa-users"></i>
+
+            Clientes
+
+        </a>
+
+
+        <a href="calendario.html">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            Calendário
+
+        </a>
+
+
+        <a
+        href="contratos.html"
+        class="active">
+
+            <i class="fa-solid fa-file-signature"></i>
+
+            Contratos
+
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title">
+        GESTÃO
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="brinquedos.html">
+
+            <i class="fa-solid fa-shapes"></i>
+
+            Brinquedos
+
+        </a>
+
+
+        <a href="financeiro.html">
+
+            <i class="fa-solid fa-wallet"></i>
+
+            Financeiro
+
+        </a>
+
+
+        <a href="configuracoes.html">
+
+            <i class="fa-solid fa-gear"></i>
+
+            Configurações
+
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <button
+        class="logout"
+        onclick="logout()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            &nbsp; Sair
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================
+CONTEÚDO
+========================================= -->
+
+<main class="main">
+
+
+<header class="topbar">
+
+    <div class="topbar-left">
+
+        <button
+        class="mobile-menu"
+        onclick="toggleMenu()">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+
+        <div>
+
+            <h1>
+                Contratos
+            </h1>
+
+            <p>
+                Gere e gerencie os contratos das reservas.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="topbar-right">
+
+        <button
+        class="btn-primary"
+        onclick="abrirNovoContrato()">
+
+            <i class="fa-solid fa-plus"></i>
+
+            <span>
+                Novo Contrato
+            </span>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================
+RESUMO
+========================================= -->
+
+<section class="summary-grid">
+
+    <div class="summary-card">
+
+        <span>
+            TOTAL DE CONTRATOS
+        </span>
+
+        <strong id="totalContratos">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            GERADOS
+        </span>
+
+        <strong id="contratosGerados">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            ASSINADOS
+        </span>
+
+        <strong id="contratosAssinados">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <span>
+            PENDENTES
+        </span>
+
+        <strong id="contratosPendentes">
+            0
+        </strong>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+FILTROS
+========================================= -->
+
+<section class="filters">
+
+    <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+        type="text"
+        id="buscaContrato"
+        placeholder="Buscar cliente, contrato ou reserva..."
+        oninput="filtrarContratos()">
+
+    </div>
+
+
+    <select
+    class="filter-select"
+    id="filtroStatus"
+    onchange="filtrarContratos()">
+
+        <option value="">
+            Todos os status
+        </option>
+
+        <option value="Gerado">
+            Gerados
+        </option>
+
+        <option value="Assinado">
+            Assinados
+        </option>
+
+        <option value="Pendente">
+            Pendentes
+        </option>
+
+        <option value="Cancelado">
+            Cancelados
+        </option>
+
+    </select>
+
+</section>
+
+
+<!-- =========================================
+LISTA
+========================================= -->
+
+<section class="table-box">
+
+    <div class="table-header">
+
+        <h2>
+            Contratos
+        </h2>
+
+        <span id="quantidadeLista">
+            0 registros
+        </span>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>CONTRATO</th>
+
+                    <th>CLIENTE</th>
+
+                    <th>RESERVA</th>
+
+                    <th>DATA DO EVENTO</th>
+
+                    <th>VALOR</th>
+
+                    <th>STATUS</th>
+
+                    <th>AÇÕES</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="tabelaContratos">
+
+                <tr>
+
+                    <td colspan="7">
+
+                        <div class="empty-state">
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            <strong>
+                                Carregando contratos...
+                            </strong>
+
+                            <p>
+                                Aguarde um momento.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- CONTINUA NA PARTE 2/5 -->
+  <!-- =========================================
+MODAL NOVO / EDITAR CONTRATO
+========================================= -->
+
+<div
+class="modal-overlay"
+id="modalContrato">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="modal-kicker">
+                    CONTRATO
+                </span>
+
+                <h2 id="tituloModalContrato">
+                    Novo Contrato
+                </h2>
+
+                <p>
+                    Selecione uma reserva para preencher os dados automaticamente.
+                </p>
+
+            </div>
+
+
+            <button
+            class="close-modal"
+            onclick="fecharModalContrato()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="modal-content">
+
+
+            <!-- =================================
+            RESERVA
+            ================================= -->
+
+            <section class="modal-section">
+
+                <div class="section-title">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                    Reserva
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Selecione a reserva *
+                    </label>
+
+                    <select
+                    id="reservaContrato"
+                    onchange="selecionarReservaContrato()">
+
+                        <option value="">
+                            Carregando reservas...
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+            CLIENTE
+            ================================= -->
+
+            <section class="modal-section">
+
+                <div class="section-title">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    Cliente
+
+                </div>
+
+
+                <div class="info-grid">
+
+
+                    <div class="info-box">
+
+                        <span>
+                            NOME
+                        </span>
+
+                        <strong id="previewCliente">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            TELEFONE
+                        </span>
+
+                        <strong id="previewTelefone">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="info-box full-box">
+
+                    <span>
+                        ENDEREÇO
+                    </span>
+
+                    <strong id="previewEnderecoCliente">
+                        -
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+            EVENTO
+            ================================= -->
+
+            <section class="modal-section">
+
+                <div class="section-title">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    Evento
+
+                </div>
+
+
+                <div class="info-grid">
+
+
+                    <div class="info-box">
+
+                        <span>
+                            DATA
+                        </span>
+
+                        <strong id="previewDataEvento">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            HORÁRIO
+                        </span>
+
+                        <strong id="previewHorario">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="info-box full-box">
+
+                    <span>
+                        LOCAL DO EVENTO
+                    </span>
+
+                    <strong id="previewEnderecoEvento">
+                        -
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+            BRINQUEDOS
+            ================================= -->
+
+            <section class="modal-section">
+
+                <div class="section-title">
+
+                    <i class="fa-solid fa-shapes"></i>
+
+                    Brinquedos
+
+                </div>
+
+
+                <div id="previewBrinquedos">
+
+                    <div class="empty-inline">
+                        Selecione uma reserva.
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+            FINANCEIRO
+            ================================= -->
+
+            <section class="modal-section">
+
+                <div class="section-title">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Valores
+
+                </div>
+
+
+                <div class="value-grid">
+
+
+                    <div class="value-box">
+
+                        <span>
+                            TOTAL
+                        </span>
+
+                        <strong id="previewTotal">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="value-box">
+
+                        <span>
+                            ENTRADA
+                        </span>
+
+                        <strong id="previewEntrada">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="value-box">
+
+                        <span>
+                            RESTANTE
+                        </span>
+
+                        <strong id="previewRestante">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+            DADOS DO CONTRATO
+            ================================= -->
+
+            <section class="modal-section">
+
+                <div class="section-title">
+
+                    <i class="fa-solid fa-file-signature"></i>
+
+                    Dados do Contrato
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Número do contrato
+                        </label>
+
+                        <input
+                        type="text"
+                        id="numeroContrato"
+                        placeholder="Ex.: EK-2026-001">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select id="statusContrato">
+
+                            <option value="Pendente">
+                                Pendente
+                            </option>
+
+                            <option value="Gerado">
+                                Gerado
+                            </option>
+
+                            <option value="Assinado">
+                                Assinado
+                            </option>
+
+                            <option value="Cancelado">
+                                Cancelado
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+        <div class="modal-footer">
+
+
+            <button
+            class="btn-secondary"
+            onclick="fecharModalContrato()">
+
+                Cancelar
+
+            </button>
+
+
+            <button
+            class="btn-primary"
+            id="btnSalvarContrato"
+            onclick="salvarContrato()">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Salvar Contrato
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+MODAL VISUALIZAR CONTRATO
+========================================= -->
+
+<div
+class="contract-overlay"
+id="contractOverlay">
+
+    <div class="contract-viewer">
+
+        <div class="viewer-top">
+
+            <div>
+
+                <span>
+                    VISUALIZAÇÃO
+                </span>
+
+                <h2 id="viewerTitulo">
+                    Contrato
+                </h2>
+
+            </div>
+
+
+            <div class="viewer-actions">
+
+                <button
+                class="viewer-btn"
+                onclick="imprimirContratoAtual()">
+
+                    <i class="fa-solid fa-print"></i>
+
+                    Imprimir
+
+                </button>
+
+
+                <button
+                class="viewer-btn pdf"
+                onclick="gerarPDFContratoAtual()">
+
+                    <i class="fa-solid fa-file-pdf"></i>
+
+                    PDF
+
+                </button>
+
+
+                <button
+                class="viewer-btn whatsapp"
+                onclick="whatsappContratoAtual()">
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    WhatsApp
+
+                </button>
+
+
+                <button
+                class="viewer-close"
+                onclick="fecharVisualizacaoContrato()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="contract-scroll">
+
+            <article
+            class="contract-paper"
+            id="contratoPapel">
+
+                <div class="paper-header">
+
+                    <img
+                    src="assets/logo.png"
+                    alt="Encanto Kids"
+                    onerror="this.style.display='none'">
+
+                    <div>
+
+                        <h1>
+                            ENCANTO KIDS INFLÁVEIS
+                        </h1>
+
+                        <p>
+                            Contrato de Locação de Brinquedos
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="paper-number">
+
+                    Contrato:
+                    <strong id="paperNumero">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <section class="paper-section">
+
+                    <h2>
+                        1. CONTRATANTE
+                    </h2>
+
+                    <p>
+
+                        <strong>Nome:</strong>
+                        <span id="paperCliente">-</span>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Telefone:</strong>
+                        <span id="paperTelefone">-</span>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Endereço:</strong>
+                        <span id="paperEnderecoCliente">-</span>
+
+                    </p>
+
+                </section>
+
+
+                <section class="paper-section">
+
+                    <h2>
+                        2. DADOS DO EVENTO
+                    </h2>
+
+                    <p>
+
+                        <strong>Data:</strong>
+                        <span id="paperData">-</span>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Horário:</strong>
+                        <span id="paperHorario">-</span>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Local:</strong>
+                        <span id="paperLocal">-</span>
+
+                    </p>
+
+                </section>
+
+
+                <section class="paper-section">
+
+                    <h2>
+                        3. BRINQUEDOS LOCADOS
+                    </h2>
+
+                    <div id="paperBrinquedos">
+                        -
+                    </div>
+
+                </section>
+
+
+                <section class="paper-section">
+
+                    <h2>
+                        4. VALORES
+                    </h2>
+
+                    <p>
+
+                        <strong>Valor total:</strong>
+                        <span id="paperTotal">
+                            R$ 0,00
+                        </span>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Entrada:</strong>
+                        <span id="paperEntrada">
+                            R$ 0,00
+                        </span>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Valor restante:</strong>
+                        <span id="paperRestante">
+                            R$ 0,00
+                        </span>
+
+                    </p>
+
+                </section>
+
+
+                <section class="paper-section">
+
+                    <h2>
+                        5. TERMOS DA LOCAÇÃO
+                    </h2>
+
+                    <p>
+                        O contratante declara estar ciente de que os brinquedos
+                        deverão ser utilizados de forma adequada e conforme as
+                        orientações fornecidas pela Encanto Kids Infláveis.
+                    </p>
+
+                    <p>
+                        Eventuais danos causados por uso inadequado poderão ser
+                        cobrados do contratante, mediante avaliação.
+                    </p>
+
+                    <p>
+                        O horário de montagem, utilização e retirada deverá
+                        respeitar o combinado entre as partes.
+                    </p>
+
+                    <p>
+                        O pagamento restante deverá ser realizado conforme
+                        acordado entre contratante e contratada.
+                    </p>
+
+                </section>
+
+
+                <section class="paper-section">
+
+                    <h2>
+                        6. ACEITE
+                    </h2>
+
+                    <p>
+                        Ao assinar este documento, ambas as partes concordam
+                        com os termos descritos neste contrato.
+                    </p>
+
+                </section>
+
+
+                <div class="signature-area">
+
+                    <div>
+
+                        <div class="signature-line"></div>
+
+                        <strong>
+                            CONTRATANTE
+                        </strong>
+
+                        <span id="paperAssinaturaCliente">
+                            Cliente
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="signature-line"></div>
+
+                        <strong>
+                            CONTRATADA
+                        </strong>
+
+                        <span>
+                            Encanto Kids Infláveis
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="paper-footer">
+
+                    Documento gerado pelo Painel Administrativo Encanto Kids.
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+CONFIRMAÇÃO EXCLUSÃO
+========================================= -->
+
+<div
+class="delete-overlay"
+id="deleteOverlay">
+
+    <div class="delete-modal">
+
+        <div class="delete-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <h2>
+            Excluir contrato?
+        </h2>
+
+
+        <p>
+            O contrato será removido do sistema.
+        </p>
+
+
+        <div class="delete-info">
+
+            <strong id="deleteContratoNumero">
+                Contrato
+            </strong>
+
+            <span id="deleteContratoCliente">
+                Cliente
+            </span>
+
+        </div>
+
+
+        <div class="delete-actions">
+
+            <button
+            class="btn-secondary"
+            onclick="fecharExclusaoContrato()">
+
+                Cancelar
+
+            </button>
+
+
+            <button
+            class="delete-confirm"
+            id="btnExcluirContrato"
+            onclick="confirmarExclusaoContrato()">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Excluir
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+TOAST
+========================================= -->
+
+<div
+class="toast"
+id="toast">
+
+    <div
+    class="toast-icon"
+    id="toastIcon">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+    </div>
+
+
+    <div>
+
+        <strong id="toastTitulo">
+            Sucesso
+        </strong>
+
+        <p id="toastTexto"></p>
+
+    </div>
+
+</div>
+
+
+<style>
+
+/* =========================================
+MODAL
+========================================= */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(7px);
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:5000;
+}
+
+.modal-overlay.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:780px;
+    max-height:92vh;
+
+    background:#111722;
+
+    border:1px solid #2a3344;
+
+    border-radius:18px;
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 35px 100px rgba(0,0,0,.65);
+}
+
+.modal-header{
+    padding:20px 22px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:1px solid var(--border);
+}
+
+.modal-kicker{
+    color:#657085;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+.modal-header h2{
+    font-size:18px;
+
+    margin-top:4px;
+}
+
+.modal-header p{
+    color:#748095;
+
+    font-size:10px;
+
+    margin-top:4px;
+}
+
+.close-modal{
+    width:38px;
+    height:38px;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#1b2230;
+
+    color:#a2adbe;
+
+    cursor:pointer;
+}
+
+.modal-content{
+    padding:22px;
+
+    overflow-y:auto;
+}
+
+.modal-section{
+    padding-bottom:22px;
+
+    margin-bottom:22px;
+
+    border-bottom:1px solid #202735;
+}
+
+.modal-section:last-child{
+    border-bottom:none;
+
+    margin-bottom:0;
+}
+
+.section-title{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#d0d7e2;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+    margin-bottom:14px;
+}
+
+.section-title i{
+    color:#7e899d;
+}
+
+.form-grid,
+.info-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+}
+
+.form-group{
+    margin-bottom:13px;
+}
+
+.form-group label{
+    display:block;
+
+    color:#7e899c;
+
+    font-size:9px;
+
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+
+    height:43px;
+
+    border:1px solid #293243;
+
+    border-radius:9px;
+
+    background:#0c1118;
+
+    color:white;
+
+    padding:0 12px;
+
+    outline:none;
+}
+
+.info-box,
+.value-box{
+    background:#0d121a;
+
+    border:1px solid #273040;
+
+    border-radius:10px;
+
+    padding:12px;
+}
+
+.info-box span,
+.value-box span{
+    display:block;
+
+    color:#697589;
+
+    font-size:8px;
+
+    letter-spacing:.7px;
+
+    margin-bottom:5px;
+}
+
+.info-box strong{
+    font-size:11px;
+
+    color:#d5dbe5;
+}
+
+.full-box{
+    margin-top:10px;
+}
+
+.value-grid{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:9px;
+}
+
+.value-box strong{
+    font-size:14px;
+}
+
+.contract-toy{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:10px;
+
+    background:#0d121a;
+
+    border:1px solid #273040;
+
+    border-radius:9px;
+
+    margin-bottom:7px;
+}
+
+.contract-toy strong{
+    font-size:10px;
+}
+
+.contract-toy span{
+    color:#788397;
+
+    font-size:9px;
+}
+
+.empty-inline{
+    color:#687386;
+
+    font-size:10px;
+
+    padding:10px 0;
+}
+
+.modal-footer{
+    padding:16px 22px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:9px;
+}
+
+.btn-secondary{
+    background:#1b2230;
+
+    color:white;
+
+    border:1px solid #30394a;
+
+    padding:11px 14px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+
+/* =========================================
+VISUALIZAÇÃO CONTRATO
+========================================= */
+
+.contract-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.82);
+
+    backdrop-filter:blur(7px);
+
+    display:none;
+
+    padding:20px;
+
+    z-index:6000;
+}
+
+.contract-overlay.show{
+    display:block;
+}
+
+.contract-viewer{
+    width:100%;
+
+    height:100%;
+
+    max-width:1100px;
+
+    margin:auto;
+
+    background:#0f141d;
+
+    border:1px solid #2b3445;
+
+    border-radius:17px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.viewer-top{
+    padding:15px 18px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.viewer-top span{
+    color:#657085;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+}
+
+.viewer-top h2{
+    font-size:16px;
+
+    margin-top:3px;
+}
+
+.viewer-actions{
+    display:flex;
+
+    gap:7px;
+}
+
+.viewer-btn,
+.viewer-close{
+    min-height:37px;
+
+    border:none;
+
+    border-radius:8px;
+
+    padding:0 11px;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    font-weight:bold;
+}
+
+.viewer-btn{
+    background:#1b2637;
+
+    color:#7db0ff;
+}
+
+.viewer-btn.pdf{
+    background:rgba(168,85,247,.12);
+
+    color:#c084fc;
+}
+
+.viewer-btn.whatsapp{
+    background:rgba(34,197,94,.12);
+
+    color:#4ade80;
+}
+
+.viewer-close{
+    width:37px;
+
+    background:#1b2230;
+
+    color:white;
+}
+
+.contract-scroll{
+    flex:1;
+
+    overflow:auto;
+
+    padding:30px;
+}
+
+.contract-paper{
+    width:794px;
+
+    min-height:1123px;
+
+    margin:0 auto;
+
+    background:white;
+
+    color:#111;
+
+    padding:55px 60px;
+
+    box-shadow:
+    0 20px 70px rgba(0,0,0,.35);
+
+    font-family:Arial,sans-serif;
+}
+
+.paper-header{
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    padding-bottom:20px;
+
+    border-bottom:2px solid #111;
+
+    margin-bottom:20px;
+}
+
+.paper-header img{
+    width:75px;
+    height:75px;
+
+    object-fit:contain;
+}
+
+.paper-header h1{
+    font-size:20px;
+}
+
+.paper-header p{
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:#555;
+}
+
+.paper-number{
+    text-align:right;
+
+    font-size:11px;
+
+    margin-bottom:25px;
+}
+
+.paper-section{
+    margin-bottom:20px;
+}
+
+.paper-section h2{
+    font-size:12px;
+
+    margin-bottom:8px;
+
+    border-bottom:1px solid #ddd;
+
+    padding-bottom:5px;
+}
+
+.paper-section p{
+    font-size:11px;
+
+    line-height:1.7;
+
+    margin-bottom:4px;
+}
+
+.paper-toy{
+    font-size:11px;
+
+    padding:6px 0;
+
+    border-bottom:1px solid #eee;
+
+    display:flex;
+
+    justify-content:space-between;
+}
+
+.signature-area{
+    margin-top:70px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:55px;
+
+    text-align:center;
+}
+
+.signature-line{
+    border-top:1px solid #111;
+
+    margin-bottom:7px;
+}
+
+.signature-area strong{
+    display:block;
+
+    font-size:10px;
+}
+
+.signature-area span{
+    display:block;
+
+    font-size:9px;
+
+    color:#555;
+
+    margin-top:3px;
+}
+
+.paper-footer{
+    margin-top:50px;
+
+    text-align:center;
+
+    font-size:8px;
+
+    color:#777;
+}
+
+
+/* =========================================
+EXCLUSÃO
+========================================= */
+
+.delete-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.8);
+
+    backdrop-filter:blur(6px);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:7000;
+
+    padding:20px;
+}
+
+.delete-overlay.show{
+    display:flex;
+}
+
+.delete-modal{
+    width:100%;
+
+    max-width:390px;
+
+    background:#121821;
+
+    border:1px solid #303949;
+
+    border-radius:17px;
+
+    padding:24px;
+
+    text-align:center;
+}
+
+.delete-icon{
+    width:55px;
+    height:55px;
+
+    margin:0 auto 14px;
+
+    border-radius:50%;
+
+    background:rgba(239,68,68,.12);
+
+    color:#f87171;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.delete-modal h2{
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+
+.delete-modal > p{
+    color:#768296;
+
+    font-size:10px;
+}
+
+.delete-info{
+    margin:17px 0;
+
+    padding:12px;
+
+    background:#0c1118;
+
+    border:1px solid #252d3a;
+
+    border-radius:9px;
+}
+
+.delete-info strong{
+    display:block;
+
+    font-size:11px;
+}
+
+.delete-info span{
+    display:block;
+
+    margin-top:4px;
+
+    color:#748095;
+
+    font-size:9px;
+}
+
+.delete-actions{
+    display:flex;
+
+    justify-content:center;
+
+    gap:8px;
+}
+
+.delete-confirm{
+    border:none;
+
+    background:#dc2626;
+
+    color:white;
+
+    padding:11px 14px;
+
+    border-radius:9px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+/* =========================================
+TOAST
+========================================= */
+
+.toast{
+    position:fixed;
+
+    right:25px;
+
+    bottom:25px;
+
+    width:310px;
+
+    max-width:calc(100% - 40px);
+
+    background:#151b25;
+
+    border:1px solid #30394a;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    display:flex;
+
+    gap:12px;
+
+    opacity:0;
+
+    transform:translateY(120px);
+
+    transition:.35s;
+
+    z-index:9000;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+.toast-icon{
+    color:#4ade80;
+
+    font-size:19px;
+}
+
+.toast.error .toast-icon{
+    color:#f87171;
+}
+
+.toast strong{
+    font-size:11px;
+}
+
+.toast p{
+    color:#7d899c;
+
+    font-size:9px;
+
+    margin-top:4px;
+}
+
+
+/* =========================================
+PRINT
+========================================= */
+
+@media print{
+
+    body *{
+        visibility:hidden;
+    }
+
+    #contratoPapel,
+    #contratoPapel *{
+        visibility:visible;
+    }
+
+    #contratoPapel{
+        position:absolute;
+
+        left:0;
+        top:0;
+
+        width:100%;
+
+        min-height:auto;
+
+        box-shadow:none;
+
+        padding:35px 45px;
+    }
+
+}
+
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media(max-width:700px){
+
+    .form-grid,
+    .info-grid,
+    .value-grid{
+        grid-template-columns:1fr;
+    }
+
+    .viewer-top{
+        align-items:flex-start;
+
+        flex-direction:column;
+    }
+
+    .viewer-actions{
+        width:100%;
+
+        flex-wrap:wrap;
+    }
+
+    .contract-scroll{
+        padding:15px;
+
+        overflow:auto;
+    }
+
+    .contract-paper{
+        transform-origin:top left;
+    }
+
+}
+
+</style>
+
+
+<!-- CONTINUA NA PARTE 3/5 -->
+  <script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+
+<script>
+
+/* =========================================
+PROTEÇÃO
+========================================= */
+
+if(
+    localStorage.getItem("adminLogado")
+    !== "true"
+){
+    window.location.href =
+    "login.html";
+}
+
+
+/* =========================================
+VARIÁVEIS
+========================================= */
+
+let contratos = [];
+
+let reservas = [];
+
+let contratoAtual = null;
+
+let contratoExcluirId = null;
+
+
+/* =========================================
+MENU MOBILE
+========================================= */
+
+function toggleMenu(){
+
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("open");
+
+}
+
+
+/* =========================================
+CARREGAR TUDO
+========================================= */
+
+async function carregarTudoContratos(){
+
+    try{
+
+        await carregarReservasContrato();
+
+        await carregarContratos();
+
+        verificarReservaNaURL();
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao carregar contratos:",
+            erro
+        );
+
+        mostrarToast(
+            "Erro",
+            erro.message
+            ||
+            "Não foi possível carregar o módulo de contratos.",
+            true
+        );
+
+    }
+
+}
+
+
+/* =========================================
+CARREGAR RESERVAS
+========================================= */
+
+async function carregarReservasContrato(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("reservas")
+    .select(`
+        *,
+        cliente:clientes(
+            id,
+            nome,
+            telefone,
+            endereco,
+            cidade,
+            estado
+        ),
+        itens:reserva_itens(
+            id,
+            quantidade,
+            valor_unitario,
+            subtotal,
+            brinquedo:brinquedos(
+                id,
+                nome,
+                valor
+            )
+        )
+    `)
+    .order(
+        "data_evento",
+        {
+            ascending:false
+        }
+    );
+
+
+    if(error){
+        throw error;
+    }
+
+
+    reservas =
+    data || [];
+
+
+    preencherSelectReservas();
+
+}
+
+
+/* =========================================
+SELECT DE RESERVAS
+========================================= */
+
+function preencherSelectReservas(){
+
+    const select =
+    document.getElementById(
+        "reservaContrato"
+    );
+
+
+    select.innerHTML = `
+
+        <option value="">
+            Selecione uma reserva
+        </option>
+
+    `;
+
+
+    reservas.forEach(
+        reserva => {
+
+            const cliente =
+            reserva.cliente?.nome
+            ||
+            "Cliente";
+
+
+            const option =
+            document.createElement(
+                "option"
+            );
+
+
+            option.value =
+            reserva.id;
+
+
+            option.textContent =
+            `#${reserva.id} - ${cliente} - ${formatarDataContrato(
+                reserva.data_evento
+            )}`;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+CARREGAR CONTRATOS
+========================================= */
+
+async function carregarContratos(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("contratos")
+    .select(`
+        *,
+        cliente:clientes(
+            id,
+            nome,
+            telefone,
+            endereco,
+            cidade,
+            estado
+        ),
+        reserva:reservas(
+            id,
+            data_evento,
+            horario_inicio,
+            horario_fim,
+            endereco_evento,
+            cidade_evento,
+            estado_evento,
+            valor_total,
+            valor_entrada,
+            valor_restante,
+            forma_pagamento,
+            status,
+            observacoes,
+            itens:reserva_itens(
+                id,
+                quantidade,
+                valor_unitario,
+                subtotal,
+                brinquedo:brinquedos(
+                    id,
+                    nome,
+                    valor
+                )
+            )
+        )
+    `)
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    );
+
+
+    if(error){
+        throw error;
+    }
+
+
+    contratos =
+    data || [];
+
+
+    atualizarResumoContratos();
+
+    filtrarContratos();
+
+}
+
+
+/* =========================================
+RESUMO
+========================================= */
+
+function atualizarResumoContratos(){
+
+    document.getElementById(
+        "totalContratos"
+    ).textContent =
+    contratos.length;
+
+
+    const gerados =
+    contratos.filter(
+        contrato =>
+        normalizarTextoContrato(
+            contrato.status
+        )
+        ===
+        "gerado"
+    ).length;
+
+
+    const assinados =
+    contratos.filter(
+        contrato =>
+        normalizarTextoContrato(
+            contrato.status
+        )
+        ===
+        "assinado"
+    ).length;
+
+
+    const pendentes =
+    contratos.filter(
+        contrato =>
+        normalizarTextoContrato(
+            contrato.status
+        )
+        ===
+        "pendente"
+    ).length;
+
+
+    document.getElementById(
+        "contratosGerados"
+    ).textContent =
+    gerados;
+
+
+    document.getElementById(
+        "contratosAssinados"
+    ).textContent =
+    assinados;
+
+
+    document.getElementById(
+        "contratosPendentes"
+    ).textContent =
+    pendentes;
+
+}
+
+
+/* =========================================
+FILTRAR
+========================================= */
+
+function filtrarContratos(){
+
+    const busca =
+    normalizarTextoContrato(
+        document.getElementById(
+            "buscaContrato"
+        ).value
+    );
+
+
+    const statusFiltro =
+    normalizarTextoContrato(
+        document.getElementById(
+            "filtroStatus"
+        ).value
+    );
+
+
+    const filtrados =
+    contratos.filter(
+        contrato => {
+
+            const texto = normalizarTextoContrato(`
+
+                ${contrato.numero_contrato || ""}
+
+                ${contrato.cliente?.nome || ""}
+
+                ${contrato.cliente?.telefone || ""}
+
+                ${contrato.reserva_id || ""}
+
+                ${contrato.status || ""}
+
+            `);
+
+
+            const bateBusca =
+            !busca
+            ||
+            texto.includes(
+                busca
+            );
+
+
+            const bateStatus =
+            !statusFiltro
+            ||
+            normalizarTextoContrato(
+                contrato.status
+            )
+            ===
+            statusFiltro;
+
+
+            return (
+                bateBusca
+                &&
+                bateStatus
+            );
+
+        }
+    );
+
+
+    renderizarContratos(
+        filtrados
+    );
+
+}
+
+
+/* =========================================
+RENDERIZAR TABELA
+========================================= */
+
+function renderizarContratos(
+    lista
+){
+
+    const tbody =
+    document.getElementById(
+        "tabelaContratos"
+    );
+
+
+    document.getElementById(
+        "quantidadeLista"
+    ).textContent =
+    `${lista.length} registro${
+        lista.length === 1
+        ?
+        ""
+        :
+        "s"
+    }`;
+
+
+    if(
+        lista.length === 0
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="7">
+
+                    <div class="empty-state">
+
+                        <i class="fa-regular fa-file-lines"></i>
+
+                        <strong>
+                            Nenhum contrato encontrado
+                        </strong>
+
+                        <p>
+                            Crie um novo contrato para uma reserva.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+    lista.map(
+        contrato =>
+        montarLinhaContrato(
+            contrato
+        )
+    )
+    .join("");
+
+}
+
+
+/* =========================================
+LINHA
+========================================= */
+
+function montarLinhaContrato(
+    contrato
+){
+
+    const cliente =
+    contrato.cliente
+    ||
+    {};
+
+
+    const reserva =
+    contrato.reserva
+    ||
+    {};
+
+
+    const numero =
+    contrato.numero_contrato
+    ||
+    `EK-${contrato.id}`;
+
+
+    const status =
+    contrato.status
+    ||
+    "Pendente";
+
+
+    const classeStatus =
+    classeStatusContrato(
+        status
+    );
+
+
+    return `
+
+        <tr>
+
+
+            <td>
+
+                <div class="contract-number">
+
+                    ${escapeHTMLContrato(
+                        numero
+                    )}
+
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <div class="client-cell">
+
+                    <strong>
+
+                        ${escapeHTMLContrato(
+                            cliente.nome
+                            ||
+                            "Cliente"
+                        )}
+
+                    </strong>
+
+                    <span>
+
+                        ${escapeHTMLContrato(
+                            cliente.telefone
+                            ||
+                            "-"
+                        )}
+
+                    </span>
+
+                </div>
+
+            </td>
+
+
+            <td>
+
+                #${contrato.reserva_id || "-"}
+
+            </td>
+
+
+            <td>
+
+                ${formatarDataContrato(
+                    reserva.data_evento
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${formatarMoedaContrato(
+                    reserva.valor_total
+                )}
+
+            </td>
+
+
+            <td>
+
+                <span class="
+                status
+                ${classeStatus}
+                ">
+
+                    ${escapeHTMLContrato(
+                        status
+                    )}
+
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <div class="actions">
+
+
+                    <button
+                    class="action-btn action-view"
+                    title="Visualizar"
+                    onclick="abrirContrato(
+                        ${contrato.id}
+                    )">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </button>
+
+
+                    <button
+                    class="action-btn action-pdf"
+                    title="PDF"
+                    onclick="abrirContrato(
+                        ${contrato.id},
+                        true
+                    )">
+
+                        <i class="fa-solid fa-file-pdf"></i>
+
+                    </button>
+
+
+                    <button
+                    class="action-btn action-whatsapp"
+                    title="WhatsApp"
+                    onclick="whatsappContrato(
+                        ${contrato.id}
+                    )">
+
+                        <i class="fa-brands fa-whatsapp"></i>
+
+                    </button>
+
+
+                    <button
+                    class="action-btn action-delete"
+                    title="Excluir"
+                    onclick="abrirExclusaoContrato(
+                        ${contrato.id}
+                    )">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+
+                </div>
+
+            </td>
+
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =========================================
+ABRIR NOVO CONTRATO
+========================================= */
+
+function abrirNovoContrato(){
+
+    limparFormularioContrato();
+
+
+    document.getElementById(
+        "modalContrato"
+    )
+    .classList
+    .add("show");
+
+
+    gerarNumeroContratoAutomatico();
+
+}
+
+
+/* =========================================
+FECHAR MODAL
+========================================= */
+
+function fecharModalContrato(){
+
+    document.getElementById(
+        "modalContrato"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+/* =========================================
+LIMPAR FORMULÁRIO
+========================================= */
+
+function limparFormularioContrato(){
+
+    document.getElementById(
+        "reservaContrato"
+    ).value = "";
+
+
+    document.getElementById(
+        "numeroContrato"
+    ).value = "";
+
+
+    document.getElementById(
+        "statusContrato"
+    ).value =
+    "Pendente";
+
+
+    limparPreviewContrato();
+
+}
+
+
+/* =========================================
+LIMPAR PREVIEW
+========================================= */
+
+function limparPreviewContrato(){
+
+    const ids = [
+
+        "previewCliente",
+
+        "previewTelefone",
+
+        "previewEnderecoCliente",
+
+        "previewDataEvento",
+
+        "previewHorario",
+
+        "previewEnderecoEvento"
+
+    ];
+
+
+    ids.forEach(
+        id => {
+
+            document.getElementById(
+                id
+            ).textContent =
+            "-";
+
+        }
+    );
+
+
+    document.getElementById(
+        "previewTotal"
+    ).textContent =
+    "R$ 0,00";
+
+
+    document.getElementById(
+        "previewEntrada"
+    ).textContent =
+    "R$ 0,00";
+
+
+    document.getElementById(
+        "previewRestante"
+    ).textContent =
+    "R$ 0,00";
+
+
+    document.getElementById(
+        "previewBrinquedos"
+    ).innerHTML = `
+
+        <div class="empty-inline">
+            Selecione uma reserva.
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+GERAR NÚMERO AUTOMÁTICO
+========================================= */
+
+function gerarNumeroContratoAutomatico(){
+
+    const ano =
+    new Date()
+    .getFullYear();
+
+
+    const proximo =
+    contratos.length
+    +
+    1;
+
+
+    const numero =
+    String(
+        proximo
+    )
+    .padStart(
+        4,
+        "0"
+    );
+
+
+    document.getElementById(
+        "numeroContrato"
+    ).value =
+    `EK-${ano}-${numero}`;
+
+}
+
+
+/* =========================================
+SELECIONAR RESERVA
+========================================= */
+
+function selecionarReservaContrato(){
+
+    const id =
+    Number(
+        document.getElementById(
+            "reservaContrato"
+        ).value
+        ||
+        0
+    );
+
+
+    if(!id){
+
+        limparPreviewContrato();
+
+        return;
+
+    }
+
+
+    const reserva =
+    reservas.find(
+        item =>
+        Number(item.id)
+        ===
+        id
+    );
+
+
+    if(!reserva){
+        return;
+    }
+
+
+    preencherPreviewReserva(
+        reserva
+    );
+
+}
+
+
+/* =========================================
+PREVIEW RESERVA
+========================================= */
+
+function preencherPreviewReserva(
+    reserva
+){
+
+    const cliente =
+    reserva.cliente
+    ||
+    {};
+
+
+    document.getElementById(
+        "previewCliente"
+    ).textContent =
+    cliente.nome
+    ||
+    "-";
+
+
+    document.getElementById(
+        "previewTelefone"
+    ).textContent =
+    cliente.telefone
+    ||
+    "-";
+
+
+    const enderecoCliente = [
+
+        cliente.endereco,
+
+        cliente.cidade,
+
+        cliente.estado
+
+    ]
+    .filter(Boolean)
+    .join(" - ");
+
+
+    document.getElementById(
+        "previewEnderecoCliente"
+    ).textContent =
+    enderecoCliente
+    ||
+    "-";
+
+
+    document.getElementById(
+        "previewDataEvento"
+    ).textContent =
+    formatarDataContrato(
+        reserva.data_evento
+    );
+
+
+    const inicio =
+    formatarHorarioContrato(
+        reserva.horario_inicio
+    );
+
+
+    const fim =
+    formatarHorarioContrato(
+        reserva.horario_fim
+    );
+
+
+    let horario =
+    "-";
+
+
+    if(inicio && fim){
+
+        horario =
+        `${inicio} às ${fim}`;
+
+    }
+    else if(inicio){
+
+        horario =
+        inicio;
+
+    }
+
+
+    document.getElementById(
+        "previewHorario"
+    ).textContent =
+    horario;
+
+
+    const localEvento = [
+
+        reserva.endereco_evento,
+
+        reserva.cidade_evento,
+
+        reserva.estado_evento
+
+    ]
+    .filter(Boolean)
+    .join(" - ");
+
+
+    document.getElementById(
+        "previewEnderecoEvento"
+    ).textContent =
+    localEvento
+    ||
+    "-";
+
+
+    document.getElementById(
+        "previewTotal"
+    ).textContent =
+    formatarMoedaContrato(
+        reserva.valor_total
+    );
+
+
+    document.getElementById(
+        "previewEntrada"
+    ).textContent =
+    formatarMoedaContrato(
+        reserva.valor_entrada
+    );
+
+
+    const restante =
+    reserva.valor_restante !== null
+    &&
+    reserva.valor_restante !== undefined
+
+    ?
+
+    Number(
+        reserva.valor_restante
+    )
+
+    :
+
+    Math.max(
+        Number(
+            reserva.valor_total
+            ||
+            0
+        )
+        -
+        Number(
+            reserva.valor_entrada
+            ||
+            0
+        ),
+        0
+    );
+
+
+    document.getElementById(
+        "previewRestante"
+    ).textContent =
+    formatarMoedaContrato(
+        restante
+    );
+
+
+    preencherBrinquedosPreview(
+        reserva.itens
+        ||
+        []
+    );
+
+}
+
+
+/* =========================================
+PREVIEW BRINQUEDOS
+========================================= */
+
+function preencherBrinquedosPreview(
+    itens
+){
+
+    const container =
+    document.getElementById(
+        "previewBrinquedos"
+    );
+
+
+    if(
+        itens.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div class="empty-inline">
+
+                Nenhum brinquedo cadastrado.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+    itens.map(
+        item => {
+
+            const nome =
+            item.brinquedo?.nome
+            ||
+            "Brinquedo";
+
+
+            const quantidade =
+            Number(
+                item.quantidade
+                ||
+                1
+            );
+
+
+            const subtotal =
+            Number(
+                item.subtotal
+                ||
+                0
+            );
+
+
+            return `
+
+                <div class="contract-toy">
+
+                    <div>
+
+                        <strong>
+
+                            ${escapeHTMLContrato(
+                                nome
+                            )}
+
+                        </strong>
+
+                        <span>
+
+                            ${quantidade} unidade(s)
+
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+
+                        ${formatarMoedaContrato(
+                            subtotal
+                        )}
+
+                    </strong>
+
+                </div>
+
+            `;
+
+        }
+    )
+    .join("");
+
+}
+
+
+/* =========================================
+SALVAR CONTRATO
+========================================= */
+
+async function salvarContrato(){
+
+    const reservaId =
+    Number(
+        document.getElementById(
+            "reservaContrato"
+        ).value
+        ||
+        0
+    );
+
+
+    if(!reservaId){
+
+        mostrarToast(
+            "Atenção",
+            "Selecione uma reserva.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const reserva =
+    reservas.find(
+        item =>
+        Number(item.id)
+        ===
+        reservaId
+    );
+
+
+    if(!reserva){
+
+        mostrarToast(
+            "Erro",
+            "Reserva não encontrada.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const contratoExistente =
+    contratos.find(
+        contrato =>
+        Number(
+            contrato.reserva_id
+        )
+        ===
+        reservaId
+    );
+
+
+    if(contratoExistente){
+
+        mostrarToast(
+            "Contrato existente",
+            "Essa reserva já possui um contrato.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const numero =
+    document.getElementById(
+        "numeroContrato"
+    )
+    .value
+    .trim();
+
+
+    const status =
+    document.getElementById(
+        "statusContrato"
+    )
+    .value;
+
+
+    const btn =
+    document.getElementById(
+        "btnSalvarContrato"
+    );
+
+
+    btn.disabled =
+    true;
+
+
+    btn.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        Salvando...
+
+    `;
+
+
+    try{
+
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .from("contratos")
+        .insert({
+
+            reserva_id:
+            reserva.id,
+
+            cliente_id:
+            reserva.cliente_id,
+
+            numero_contrato:
+            numero,
+
+            status:
+            status
+
+        })
+        .select()
+        .single();
+
+
+        if(error){
+            throw error;
+        }
+
+
+        fecharModalContrato();
+
+
+        mostrarToast(
+            "Contrato criado",
+            `Contrato ${numero} criado com sucesso.`,
+            false
+        );
+
+
+        await carregarContratos();
+
+
+        if(data){
+
+            setTimeout(
+                () => {
+
+                    abrirContrato(
+                        data.id
+                    );
+
+                },
+                400
+            );
+
+        }
+
+
+    }
+    catch(erro){
+
+        console.error(
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            erro.message
+            ||
+            "Não foi possível salvar o contrato.",
+            true
+        );
+
+    }
+    finally{
+
+        btn.disabled =
+        false;
+
+
+        btn.innerHTML = `
+
+            <i class="fa-solid fa-floppy-disk"></i>
+
+            Salvar Contrato
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+CLASSE DO STATUS
+========================================= */
+
+function classeStatusContrato(
+    status
+){
+
+    const texto =
+    normalizarTextoContrato(
+        status
+    );
+
+
+    if(
+        texto ===
+        "assinado"
+    ){
+        return "assinado";
+    }
+
+
+    if(
+        texto ===
+        "gerado"
+    ){
+        return "gerado";
+    }
+
+
+    if(
+        texto ===
+        "cancelado"
+    ){
+        return "cancelado";
+    }
+
+
+    return "pendente";
+
+}
+
+
+/* =========================================
+NORMALIZAR TEXTO
+========================================= */
+
+function normalizarTextoContrato(
+    valor
+){
+
+    return String(
+        valor
+        ||
+        ""
+    )
+    .normalize(
+        "NFD"
+    )
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    )
+    .toLowerCase()
+    .trim();
+
+}
+
+
+/* =========================================
+DATA
+========================================= */
+
+function formatarDataContrato(
+    data
+){
+
+    if(!data){
+        return "-";
+    }
+
+
+    const partes =
+    String(data)
+    .split("-");
+
+
+    if(
+        partes.length !== 3
+    ){
+        return data;
+    }
+
+
+    return (
+        partes[2]
+        +
+        "/"
+        +
+        partes[1]
+        +
+        "/"
+        +
+        partes[0]
+    );
+
+}
+
+
+/* =========================================
+HORÁRIO
+========================================= */
+
+function formatarHorarioContrato(
+    horario
+){
+
+    if(!horario){
+        return "";
+    }
+
+
+    return String(
+        horario
+    )
+    .slice(
+        0,
+        5
+    );
+
+}
+
+
+/* =========================================
+MOEDA
+========================================= */
+
+function formatarMoedaContrato(
+    valor
+){
+
+    return Number(
+        valor
+        ||
+        0
+    )
+    .toLocaleString(
+        "pt-BR",
+        {
+            style:"currency",
+            currency:"BRL"
+        }
+    );
+
+}
+
+
+/* =========================================
+SEGURANÇA HTML
+========================================= */
+
+function escapeHTMLContrato(
+    valor
+){
+
+    return String(
+        valor
+        ??
+        ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================
+CONTINUA NA PARTE 4/5
+========================================= */
+
+</script>
+<script>
+
+/* =========================================
+ABRIR CONTRATO
+========================================= */
+
+function abrirContrato(
+    id,
+    gerarPdfDepois = false
+){
+
+    const contrato =
+    contratos.find(
+        item =>
+        Number(item.id)
+        ===
+        Number(id)
+    );
+
+
+    if(!contrato){
+
+        mostrarToast(
+            "Erro",
+            "Contrato não encontrado.",
+            true
+        );
+
+        return;
+    }
+
+
+    contratoAtual =
+    contrato;
+
+
+    preencherContratoPapel(
+        contrato
+    );
+
+
+    document.getElementById(
+        "contractOverlay"
+    )
+    .classList
+    .add("show");
+
+
+    if(
+        gerarPdfDepois
+    ){
+
+        setTimeout(
+            gerarPDFContratoAtual,
+            500
+        );
+
+    }
+
+}
+
+
+/* =========================================
+FECHAR VISUALIZAÇÃO
+========================================= */
+
+function fecharVisualizacaoContrato(){
+
+    document.getElementById(
+        "contractOverlay"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+/* =========================================
+PREENCHER CONTRATO
+========================================= */
+
+function preencherContratoPapel(
+    contrato
+){
+
+    const cliente =
+    contrato.cliente
+    ||
+    {};
+
+
+    const reserva =
+    contrato.reserva
+    ||
+    {};
+
+
+    const numero =
+    contrato.numero_contrato
+    ||
+    `EK-${contrato.id}`;
+
+
+    document.getElementById(
+        "viewerTitulo"
+    ).textContent =
+    numero;
+
+
+    document.getElementById(
+        "paperNumero"
+    ).textContent =
+    numero;
+
+
+    document.getElementById(
+        "paperCliente"
+    ).textContent =
+    cliente.nome
+    ||
+    "-";
+
+
+    document.getElementById(
+        "paperTelefone"
+    ).textContent =
+    cliente.telefone
+    ||
+    "-";
+
+
+    const enderecoCliente = [
+
+        cliente.endereco,
+
+        cliente.cidade,
+
+        cliente.estado
+
+    ]
+    .filter(Boolean)
+    .join(" - ");
+
+
+    document.getElementById(
+        "paperEnderecoCliente"
+    ).textContent =
+    enderecoCliente
+    ||
+    "-";
+
+
+    document.getElementById(
+        "paperData"
+    ).textContent =
+    formatarDataContrato(
+        reserva.data_evento
+    );
+
+
+    const inicio =
+    formatarHorarioContrato(
+        reserva.horario_inicio
+    );
+
+
+    const fim =
+    formatarHorarioContrato(
+        reserva.horario_fim
+    );
+
+
+    let horario =
+    "-";
+
+
+    if(inicio && fim){
+
+        horario =
+        `${inicio} às ${fim}`;
+
+    }
+    else if(inicio){
+
+        horario =
+        inicio;
+
+    }
+
+
+    document.getElementById(
+        "paperHorario"
+    ).textContent =
+    horario;
+
+
+    const localEvento = [
+
+        reserva.endereco_evento,
+
+        reserva.cidade_evento,
+
+        reserva.estado_evento
+
+    ]
+    .filter(Boolean)
+    .join(" - ");
+
+
+    document.getElementById(
+        "paperLocal"
+    ).textContent =
+    localEvento
+    ||
+    "-";
+
+
+    /* BRINQUEDOS */
+
+    const containerBrinquedos =
+    document.getElementById(
+        "paperBrinquedos"
+    );
+
+
+    const itens =
+    reserva.itens
+    ||
+    [];
+
+
+    if(
+        itens.length === 0
+    ){
+
+        containerBrinquedos.innerHTML =
+        "<p>Nenhum brinquedo informado.</p>";
+
+    }
+    else{
+
+        containerBrinquedos.innerHTML =
+        itens.map(
+            item => {
+
+                const nome =
+                item.brinquedo?.nome
+                ||
+                "Brinquedo";
+
+
+                const quantidade =
+                Number(
+                    item.quantidade
+                    ||
+                    1
+                );
+
+
+                const subtotal =
+                Number(
+                    item.subtotal
+                    ||
+                    0
+                );
+
+
+                return `
+
+                    <div class="paper-toy">
+
+                        <span>
+                            ${quantidade}x ${escapeHTMLContrato(nome)}
+                        </span>
+
+                        <strong>
+                            ${formatarMoedaContrato(subtotal)}
+                        </strong>
+
+                    </div>
+
+                `;
+
+            }
+        )
+        .join("");
+
+    }
+
+
+    /* VALORES */
+
+    const total =
+    Number(
+        reserva.valor_total
+        ||
+        0
+    );
+
+
+    const entrada =
+    Number(
+        reserva.valor_entrada
+        ||
+        0
+    );
+
+
+    const restante =
+    reserva.valor_restante !== undefined
+    &&
+    reserva.valor_restante !== null
+
+    ?
+
+    Number(
+        reserva.valor_restante
+    )
+
+    :
+
+    Math.max(
+        total - entrada,
+        0
+    );
+
+
+    document.getElementById(
+        "paperTotal"
+    ).textContent =
+    formatarMoedaContrato(
+        total
+    );
+
+
+    document.getElementById(
+        "paperEntrada"
+    ).textContent =
+    formatarMoedaContrato(
+        entrada
+    );
+
+
+    document.getElementById(
+        "paperRestante"
+    ).textContent =
+    formatarMoedaContrato(
+        restante
+    );
+
+
+    document.getElementById(
+        "paperAssinaturaCliente"
+    ).textContent =
+    cliente.nome
+    ||
+    "Cliente";
+
+}
+
+
+/* =========================================
+IMPRIMIR
+========================================= */
+
+function imprimirContratoAtual(){
+
+    if(!contratoAtual){
+
+        mostrarToast(
+            "Atenção",
+            "Nenhum contrato selecionado.",
+            true
+        );
+
+        return;
+    }
+
+
+    window.print();
+
+}
+
+
+/* =========================================
+GERAR PDF
+========================================= */
+
+function gerarPDFContratoAtual(){
+
+    if(!contratoAtual){
+
+        mostrarToast(
+            "Atenção",
+            "Nenhum contrato selecionado.",
+            true
+        );
+
+        return;
+    }
+
+
+    /*
+    Por enquanto usamos a impressão do navegador,
+    que permite salvar como PDF.
+    */
+
+    mostrarToast(
+        "Gerar PDF",
+        "Na janela de impressão, selecione 'Salvar como PDF'.",
+        false
+    );
+
+
+    setTimeout(
+        () => {
+
+            window.print();
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================
+WHATSAPP DIRETO DA TABELA
+========================================= */
+
+function whatsappContrato(
+    id
+){
+
+    const contrato =
+    contratos.find(
+        item =>
+        Number(item.id)
+        ===
+        Number(id)
+    );
+
+
+    if(!contrato){
+        return;
+    }
+
+
+    contratoAtual =
+    contrato;
+
+
+    whatsappContratoAtual();
+
+}
+
+
+/* =========================================
+WHATSAPP CONTRATO ATUAL
+========================================= */
+
+function whatsappContratoAtual(){
+
+    if(!contratoAtual){
+
+        mostrarToast(
+            "Atenção",
+            "Nenhum contrato selecionado.",
+            true
+        );
+
+        return;
+    }
+
+
+    const cliente =
+    contratoAtual.cliente
+    ||
+    {};
+
+
+    const reserva =
+    contratoAtual.reserva
+    ||
+    {};
+
+
+    const telefone =
+    cliente.telefone;
+
+
+    if(!telefone){
+
+        mostrarToast(
+            "Sem telefone",
+            "Esse cliente não possui telefone cadastrado.",
+            true
+        );
+
+        return;
+    }
+
+
+    let numero =
+    String(
+        telefone
+    )
+    .replace(
+        /\D/g,
+        ""
+    );
+
+
+    if(
+        numero.length === 10
+        ||
+        numero.length === 11
+    ){
+
+        numero =
+        "55" + numero;
+
+    }
+
+
+    const numeroContrato =
+    contratoAtual.numero_contrato
+    ||
+    `EK-${contratoAtual.id}`;
+
+
+    const mensagem = `Olá, ${cliente.nome || "cliente"}! 🎈
+
+Aqui é da Encanto Kids Infláveis.
+
+Seu contrato ${numeroContrato} referente à reserva #${contratoAtual.reserva_id} está disponível.
+
+📅 Data do evento: ${formatarDataContrato(reserva.data_evento)}
+💰 Valor total: ${formatarMoedaContrato(reserva.valor_total)}
+
+Se precisar de alguma informação, estamos à disposição! 😊`;
+
+
+    window.open(
+        `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`,
+        "_blank"
+    );
+
+}
+
+
+/* =========================================
+EXCLUSÃO
+========================================= */
+
+function abrirExclusaoContrato(
+    id
+){
+
+    const contrato =
+    contratos.find(
+        item =>
+        Number(item.id)
+        ===
+        Number(id)
+    );
+
+
+    if(!contrato){
+        return;
+    }
+
+
+    contratoExcluirId =
+    contrato.id;
+
+
+    document.getElementById(
+        "deleteContratoNumero"
+    ).textContent =
+    contrato.numero_contrato
+    ||
+    `Contrato #${contrato.id}`;
+
+
+    document.getElementById(
+        "deleteContratoCliente"
+    ).textContent =
+    contrato.cliente?.nome
+    ||
+    "Cliente";
+
+
+    document.getElementById(
+        "deleteOverlay"
+    )
+    .classList
+    .add("show");
+
+}
+
+
+/* =========================================
+FECHAR EXCLUSÃO
+========================================= */
+
+function fecharExclusaoContrato(){
+
+    contratoExcluirId =
+    null;
+
+
+    document.getElementById(
+        "deleteOverlay"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+/* =========================================
+CONFIRMAR EXCLUSÃO
+========================================= */
+
+async function confirmarExclusaoContrato(){
+
+    if(!contratoExcluirId){
+        return;
+    }
+
+
+    const id =
+    contratoExcluirId;
+
+
+    const btn =
+    document.getElementById(
+        "btnExcluirContrato"
+    );
+
+
+    btn.disabled =
+    true;
+
+
+    btn.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        Excluindo...
+
+    `;
+
+
+    try{
+
+        const {
+            error
+        } =
+        await supabaseClient
+        .from("contratos")
+        .delete()
+        .eq(
+            "id",
+            id
+        );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        fecharExclusaoContrato();
+
+
+        mostrarToast(
+            "Contrato excluído",
+            `Contrato #${id} removido com sucesso.`,
+            false
+        );
+
+
+        contratoAtual =
+        null;
+
+
+        await carregarContratos();
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao excluir contrato:",
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            erro.message
+            ||
+            "Não foi possível excluir o contrato.",
+            true
+        );
+
+    }
+    finally{
+
+        btn.disabled =
+        false;
+
+
+        btn.innerHTML = `
+
+            <i class="fa-solid fa-trash"></i>
+
+            Excluir
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+VERIFICAR RESERVA NA URL
+========================================= */
+
+function verificarReservaNaURL(){
+
+    const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+    const reservaIdURL =
+    params.get(
+        "reserva"
+    )
+    ||
+    localStorage.getItem(
+        "reservaContratoId"
+    );
+
+
+    if(!reservaIdURL){
+        return;
+    }
+
+
+    const reserva =
+    reservas.find(
+        item =>
+        Number(item.id)
+        ===
+        Number(reservaIdURL)
+    );
+
+
+    if(!reserva){
+        return;
+    }
+
+
+    const contratoExistente =
+    contratos.find(
+        item =>
+        Number(
+            item.reserva_id
+        )
+        ===
+        Number(
+            reserva.id
+        )
+    );
+
+
+    if(contratoExistente){
+
+        abrirContrato(
+            contratoExistente.id
+        );
+
+
+        localStorage.removeItem(
+            "reservaContratoId"
+        );
+
+
+        return;
+    }
+
+
+    abrirNovoContrato();
+
+
+    document.getElementById(
+        "reservaContrato"
+    ).value =
+    reserva.id;
+
+
+    selecionarReservaContrato();
+
+
+    localStorage.removeItem(
+        "reservaContratoId"
+    );
+
+}
+
+
+/* =========================================
+TOAST
+========================================= */
+
+let timerToastContrato = null;
+
+
+function mostrarToast(
+    titulo,
+    texto,
+    erro = false
+){
+
+    const toast =
+    document.getElementById(
+        "toast"
+    );
+
+
+    document.getElementById(
+        "toastTitulo"
+    ).textContent =
+    titulo;
+
+
+    document.getElementById(
+        "toastTexto"
+    ).textContent =
+    texto;
+
+
+    document.getElementById(
+        "toastIcon"
+    ).innerHTML =
+    erro
+    ?
+    '<i class="fa-solid fa-circle-exclamation"></i>'
+    :
+    '<i class="fa-solid fa-circle-check"></i>';
+
+
+    toast.classList.toggle(
+        "error",
+        erro
+    );
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        timerToastContrato
+    );
+
+
+    timerToastContrato =
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        3500
+    );
+
+}
+
+
+/* =========================================
+CONTINUA NA PARTE 5/5
+========================================= */
+
+</script>
+<script>
+
+/* =========================================
+LOGOUT
+========================================= */
+
+function logout(){
+
+    const confirmar =
+    confirm(
+        "Deseja realmente sair do painel?"
+    );
+
+
+    if(!confirmar){
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "adminLogado"
+    );
+
+
+    localStorage.removeItem(
+        "adminUsuario"
+    );
+
+
+    window.location.href =
+    "login.html";
+
+}
+
+
+/* =========================================
+FECHAR MENU MOBILE
+========================================= */
+
+document
+.querySelectorAll(
+    ".sidebar .menu a"
+)
+.forEach(link => {
+
+    link.addEventListener(
+        "click",
+        function(){
+
+            const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+
+            if(sidebar){
+
+                sidebar
+                .classList
+                .remove("open");
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================
+CLIQUE FORA DO MODAL NOVO CONTRATO
+========================================= */
+
+document
+.getElementById(
+    "modalContrato"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target
+            ===
+            this
+        ){
+
+            fecharModalContrato();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+CLIQUE FORA DA VISUALIZAÇÃO
+========================================= */
+
+document
+.getElementById(
+    "contractOverlay"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target
+            ===
+            this
+        ){
+
+            fecharVisualizacaoContrato();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+CLIQUE FORA DA EXCLUSÃO
+========================================= */
+
+document
+.getElementById(
+    "deleteOverlay"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target
+            ===
+            this
+        ){
+
+            fecharExclusaoContrato();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+ATALHO ESC
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key
+            !==
+            "Escape"
+        ){
+            return;
+        }
+
+
+        /* EXCLUSÃO */
+
+        if(
+            document
+            .getElementById(
+                "deleteOverlay"
+            )
+            .classList
+            .contains("show")
+        ){
+
+            fecharExclusaoContrato();
+
+            return;
+
+        }
+
+
+        /* VISUALIZAÇÃO */
+
+        if(
+            document
+            .getElementById(
+                "contractOverlay"
+            )
+            .classList
+            .contains("show")
+        ){
+
+            fecharVisualizacaoContrato();
+
+            return;
+
+        }
+
+
+        /* NOVO CONTRATO */
+
+        if(
+            document
+            .getElementById(
+                "modalContrato"
+            )
+            .classList
+            .contains("show")
+        ){
+
+            fecharModalContrato();
+
+            return;
+
+        }
+
+
+        /* SIDEBAR */
+
+        const sidebar =
+        document.getElementById(
+            "sidebar"
+        );
+
+
+        if(sidebar){
+
+            sidebar
+            .classList
+            .remove("open");
+
+        }
+
+    }
+);
+
+
+/* =========================================
+AJUSTAR CONTRATO NO CELULAR
+========================================= */
+
+function ajustarContratoMobile(){
+
+    const papel =
+    document.getElementById(
+        "contratoPapel"
+    );
+
+
+    const scroll =
+    document.querySelector(
+        ".contract-scroll"
+    );
+
+
+    if(
+        !papel
+        ||
+        !scroll
+    ){
+        return;
+    }
+
+
+    /*
+    Desktop
+    */
+
+    if(
+        window.innerWidth
+        >
+        850
+    ){
+
+        papel.style.transform =
+        "none";
+
+
+        papel.style.marginBottom =
+        "0";
+
+
+        return;
+
+    }
+
+
+    /*
+    Mobile
+    */
+
+    const larguraDisponivel =
+    scroll.clientWidth
+    -
+    30;
+
+
+    const larguraPapel =
+    794;
+
+
+    let escala =
+    larguraDisponivel
+    /
+    larguraPapel;
+
+
+    /*
+    Nunca aumenta o documento.
+    */
+
+    if(
+        escala > 1
+    ){
+
+        escala = 1;
+
+    }
+
+
+    papel.style.transform =
+    `scale(${escala})`;
+
+
+    papel.style.transformOrigin =
+    "top left";
+
+
+    papel.style.marginBottom =
+    `${
+        1123 * escala
+    }px`;
+
+}
+
+
+/* =========================================
+REDIMENSIONAMENTO
+========================================= */
+
+window.addEventListener(
+    "resize",
+    function(){
+
+        ajustarContratoMobile();
+
+    }
+);
+
+
+/* =========================================
+ATUALIZAR AO VOLTAR PARA A ABA
+========================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    async function(){
+
+        if(
+            document.visibilityState
+            !==
+            "visible"
+        ){
+            return;
+        }
+
+
+        try{
+
+            await carregarReservasContrato();
+
+            await carregarContratos();
+
+        }
+        catch(erro){
+
+            console.error(
+                "Erro ao atualizar contratos:",
+                erro
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================
+ATUALIZAÇÃO MANUAL
+========================================= */
+
+async function atualizarContratos(){
+
+    try{
+
+        await carregarReservasContrato();
+
+        await carregarContratos();
+
+
+        mostrarToast(
+            "Atualizado",
+            "Lista de contratos atualizada.",
+            false
+        );
+
+    }
+    catch(erro){
+
+        mostrarToast(
+            "Erro",
+            erro.message
+            ||
+            "Não foi possível atualizar.",
+            true
+        );
+
+    }
+
+}
+
+
+/* =========================================
+ABRIR VISUALIZAÇÃO E AJUSTAR MOBILE
+========================================= */
+
+/*
+Guardamos a função original criada
+na Parte 4.
+*/
+
+const abrirContratoOriginal =
+abrirContrato;
+
+
+abrirContrato =
+function(
+    id,
+    gerarPdfDepois = false
+){
+
+    abrirContratoOriginal(
+        id,
+        gerarPdfDepois
+    );
+
+
+    setTimeout(
+        ajustarContratoMobile,
+        100
+    );
+
+};
+
+
+/* =========================================
+VERIFICAR SUPABASE
+========================================= */
+
+function verificarSupabaseContratos(){
+
+    if(
+        typeof supabaseClient
+        ===
+        "undefined"
+    ){
+
+        console.error(
+            "supabaseClient não encontrado."
+        );
+
+
+        mostrarToast(
+            "Erro de conexão",
+            "O arquivo js/supabase.js não foi carregado corretamente.",
+            true
+        );
+
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================
+INICIAR MÓDULO
+========================================= */
+
+async function iniciarContratos(){
+
+    console.log(
+        "Iniciando módulo de contratos..."
+    );
+
+
+    /* =====================================
+    LOGIN
+    ===================================== */
+
+    if(
+        localStorage.getItem(
+            "adminLogado"
+        )
+        !==
+        "true"
+    ){
+
+        window.location.href =
+        "login.html";
+
+        return;
+
+    }
+
+
+    /* =====================================
+    SUPABASE
+    ===================================== */
+
+    if(
+        !verificarSupabaseContratos()
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+
+        /* =================================
+        CARREGAR RESERVAS
+        ================================= */
+
+        await carregarReservasContrato();
+
+
+        /* =================================
+        CARREGAR CONTRATOS
+        ================================= */
+
+        await carregarContratos();
+
+
+        /* =================================
+        URL / CALENDÁRIO
+        ================================= */
+
+        verificarReservaNaURL();
+
+
+        console.log(
+            "Módulo de contratos carregado com sucesso."
+        );
+
+
+    }
+    catch(erro){
+
+
+        console.error(
+            "Erro ao iniciar contratos:",
+            erro
+        );
+
+
+        /*
+        Aqui mostramos o erro real do Supabase.
+        Isso ajuda bastante caso alguma coluna
+        ou tabela ainda não exista.
+        */
+
+        mostrarToast(
+            "Erro ao carregar",
+            erro.message
+            ||
+            "Não foi possível carregar os contratos.",
+            true
+        );
+
+    }
+
+}
+
+
+/* =========================================
+INICIAR
+========================================= */
+
+iniciarContratos();
+
+</script>
+
+</body>
+</html>
