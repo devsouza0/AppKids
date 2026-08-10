@@ -9,7 +9,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
@@ -29,6 +30,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     --border:#242b39;
     --text:#f5f7fa;
     --muted:#7f8999;
+
+    --green:#22c55e;
+    --blue:#3b82f6;
+    --orange:#f59e0b;
+    --red:#ef4444;
+    --purple:#a855f7;
 }
 
 body{
@@ -37,7 +44,10 @@ body{
     color:var(--text);
 }
 
-/* SIDEBAR */
+
+/* =========================================
+SIDEBAR
+========================================= */
 
 .sidebar{
     position:fixed;
@@ -48,6 +58,7 @@ body{
     height:100vh;
 
     background:var(--sidebar);
+
     border-right:1px solid var(--border);
 
     padding:24px 18px;
@@ -73,6 +84,7 @@ body{
     height:52px;
 
     border-radius:14px;
+
     object-fit:cover;
 }
 
@@ -139,6 +151,7 @@ body{
 
 .logout{
     width:100%;
+
     border:none;
 
     padding:13px;
@@ -146,76 +159,198 @@ body{
     border-radius:10px;
 
     background:#191116;
+
     color:#ff6363;
 
     cursor:pointer;
+
     font-weight:bold;
-
-    transition:.2s;
-}
-
-.logout:hover{
-    background:#271418;
 }
 
 
-/* MAIN */
+/* =========================================
+MAIN
+========================================= */
 
 .main{
     margin-left:260px;
+
     min-height:100vh;
+
     padding:30px;
 }
 
 .topbar{
     display:flex;
-    align-items:center;
     justify-content:space-between;
-
-    margin-bottom:30px;
-}
-
-.welcome p{
-    color:var(--muted);
-    font-size:13px;
-    margin-bottom:5px;
-}
-
-.welcome h1{
-    font-size:27px;
-}
-
-.top-actions{
-    display:flex;
     align-items:center;
-    gap:10px;
-}
 
-.date-box{
-    border:1px solid var(--border);
-    background:#10141d;
+    gap:20px;
 
-    padding:11px 14px;
-    border-radius:10px;
-
-    color:#aab3c2;
-    font-size:13px;
-}
-
-
-/* CARDS */
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-
-    gap:17px;
     margin-bottom:25px;
 }
 
-.card{
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.topbar h1{
+    font-size:27px;
+}
+
+.topbar p{
+    color:var(--muted);
+
+    font-size:13px;
+
+    margin-top:5px;
+}
+
+.mobile-menu{
+    display:none;
+
+    width:42px;
+    height:42px;
+
+    border:1px solid var(--border);
+
+    background:#151a24;
+
+    color:white;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:9px 12px;
+}
+
+.user-avatar{
+    width:36px;
+    height:36px;
+
+    border-radius:50%;
+
+    background:#202838;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#9ba7ba;
+}
+
+.user-info strong{
+    display:block;
+
+    font-size:11px;
+}
+
+.user-info span{
+    display:block;
+
+    color:#737f92;
+
+    font-size:9px;
+
+    margin-top:3px;
+}
+
+
+/* =========================================
+WELCOME
+========================================= */
+
+.welcome-box{
     position:relative;
 
+    overflow:hidden;
+
+    background:linear-gradient(
+        135deg,
+        #151c28,
+        #10151e
+    );
+
+    border:1px solid var(--border);
+
+    border-radius:17px;
+
+    padding:24px;
+
+    margin-bottom:20px;
+}
+
+.welcome-box::after{
+    content:"";
+
+    position:absolute;
+
+    right:-60px;
+    top:-60px;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.03);
+}
+
+.welcome-box span{
+    color:#7d899c;
+
+    font-size:10px;
+
+    letter-spacing:.5px;
+}
+
+.welcome-box h2{
+    margin-top:6px;
+
+    font-size:24px;
+}
+
+.welcome-box p{
+    margin-top:8px;
+
+    color:#8792a5;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+
+/* =========================================
+STATS
+========================================= */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+.stat-card{
     background:linear-gradient(
         145deg,
         var(--card2),
@@ -224,85 +359,96 @@ body{
 
     border:1px solid var(--border);
 
-    border-radius:16px;
+    border-radius:15px;
 
-    padding:21px;
+    padding:18px;
 
-    min-height:150px;
+    min-height:130px;
+
+    position:relative;
 
     overflow:hidden;
 
-    transition:.25s;
+    transition:.2s;
 }
 
-.card:hover{
-    transform:translateY(-3px);
-    border-color:#394255;
+.stat-card:hover{
+    transform:translateY(-2px);
+
+    border-color:#394457;
 }
 
-.card-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+.stat-icon{
+    width:40px;
+    height:40px;
 
-.card-icon{
-    width:43px;
-    height:43px;
-
-    border-radius:12px;
+    border-radius:11px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    font-size:18px;
+    margin-bottom:15px;
 }
 
-.icon-blue{
-    background:rgba(59,130,246,.13);
+.stat-icon.blue{
+    background:rgba(59,130,246,.12);
     color:#60a5fa;
 }
 
-.icon-green{
-    background:rgba(34,197,94,.13);
+.stat-icon.green{
+    background:rgba(34,197,94,.12);
     color:#4ade80;
 }
 
-.icon-orange{
-    background:rgba(245,158,11,.13);
+.stat-icon.orange{
+    background:rgba(245,158,11,.12);
     color:#fbbf24;
 }
 
-.icon-purple{
-    background:rgba(168,85,247,.13);
+.stat-icon.purple{
+    background:rgba(168,85,247,.12);
     color:#c084fc;
 }
 
-.card-label{
-    color:#838da0;
-    font-size:12px;
-    margin-top:20px;
+.stat-label{
+    display:block;
+
+    color:#7b8799;
+
+    font-size:9px;
+
+    letter-spacing:.7px;
 }
 
-.card-value{
-    font-size:27px;
-    font-weight:bold;
+.stat-value{
+    display:block;
+
+    margin-top:6px;
+
+    font-size:24px;
+}
+
+.stat-small{
+    display:block;
+
+    color:#687386;
+
+    font-size:9px;
+
     margin-top:5px;
 }
 
-.card-detail{
-    color:#626d80;
-    font-size:11px;
-    margin-top:5px;
-}
 
+/* =========================================
+DASHBOARD GRID
+========================================= */
 
-/* GRID */
-
-.content-grid{
+.dashboard-grid{
     display:grid;
-    grid-template-columns:2fr 1fr;
+
+    grid-template-columns:1.4fr .8fr;
 
     gap:20px;
 }
@@ -312,265 +458,344 @@ body{
 
     border:1px solid var(--border);
 
-    border-radius:16px;
+    border-radius:15px;
 
     overflow:hidden;
+
+    margin-bottom:20px;
 }
 
 .panel-header{
-    padding:20px;
+    padding:17px 19px;
 
     display:flex;
-    align-items:center;
+
     justify-content:space-between;
+
+    align-items:center;
 
     border-bottom:1px solid var(--border);
 }
 
 .panel-header h3{
-    font-size:15px;
+    font-size:14px;
 }
 
 .panel-header a{
-    color:#8aa4ff;
     text-decoration:none;
-    font-size:12px;
+
+    color:#8aa4ca;
+
+    font-size:10px;
+}
+
+.panel-body{
+    padding:17px;
 }
 
 
-/* RESERVAS */
+/* =========================================
+RESERVAS
+========================================= */
 
-.reserva{
-    padding:17px 20px;
-
+.reserva-item{
     display:flex;
-    justify-content:space-between;
+
     align-items:center;
 
-    border-bottom:1px solid #1d2330;
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:13px 0;
+
+    border-bottom:1px solid #1d2430;
 }
 
-.reserva:last-child{
+.reserva-item:last-child{
     border-bottom:none;
 }
 
-.reserva-info{
+.reserva-left{
     display:flex;
+
     align-items:center;
-    gap:13px;
+
+    gap:12px;
 }
 
-.reserva-data{
-    width:47px;
-    min-width:47px;
-    height:47px;
+.reserva-date{
+    min-width:45px;
 
-    border-radius:11px;
+    text-align:center;
 
-    background:#1d2431;
+    background:#0d121a;
 
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-}
-
-.reserva-data strong{
-    font-size:16px;
-}
-
-.reserva-data span{
-    font-size:9px;
-    color:#808b9d;
-    text-transform:uppercase;
-}
-
-.reserva-nome{
-    font-weight:bold;
-    font-size:13px;
-}
-
-.reserva-sub{
-    color:#747e90;
-    font-size:11px;
-    margin-top:4px;
-}
-
-.status{
-    font-size:10px;
-    padding:6px 9px;
-    border-radius:20px;
-
-    font-weight:bold;
-}
-
-.status-pendente{
-    background:rgba(245,158,11,.12);
-    color:#fbbf24;
-}
-
-.status-confirmada{
-    background:rgba(34,197,94,.12);
-    color:#4ade80;
-}
-
-.status-cancelada{
-    background:rgba(239,68,68,.12);
-    color:#f87171;
-}
-
-
-/* QUICK ACTIONS */
-
-.quick-actions{
-    padding:16px;
-}
-
-.quick{
-    display:flex;
-    align-items:center;
-    gap:13px;
-
-    padding:14px;
-
-    color:#d7dce4;
-    text-decoration:none;
-
-    border-radius:11px;
-
-    margin-bottom:7px;
-
-    transition:.2s;
-}
-
-.quick:hover{
-    background:#1a202c;
-}
-
-.quick-icon{
-    width:38px;
-    height:38px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    border:1px solid #283142;
 
     border-radius:10px;
 
-    background:#202735;
+    padding:8px;
 }
 
-.quick strong{
-    font-size:12px;
+.reserva-date strong{
+    display:block;
+
+    font-size:16px;
 }
 
-.quick p{
-    color:#687386;
-    font-size:10px;
-    margin-top:3px;
+.reserva-date span{
+    display:block;
+
+    margin-top:2px;
+
+    color:#748095;
+
+    font-size:8px;
+
+    text-transform:uppercase;
 }
 
+.reserva-info strong{
+    display:block;
 
-/* EMPTY */
-
-.empty{
-    text-align:center;
-    color:#596477;
-    padding:40px 20px;
-}
-
-.empty i{
-    font-size:30px;
-    margin-bottom:13px;
-}
-
-.loading{
-    padding:35px;
-    text-align:center;
-    color:#697487;
-}
-
-
-/* TOAST */
-
-.toast{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-
-    width:310px;
-
-    background:#151b25;
-    border:1px solid #30394a;
-
-    padding:16px;
-
-    border-radius:13px;
-
-    box-shadow:0 20px 60px rgba(0,0,0,.5);
-
-    display:flex;
-    gap:13px;
-
-    transform:translateY(150px);
-    opacity:0;
-
-    transition:.4s;
-
-    z-index:5000;
-}
-
-.toast.show{
-    transform:translateY(0);
-    opacity:1;
-}
-
-.toast i{
-    color:#4ade80;
-    font-size:21px;
-}
-
-.toast strong{
-    font-size:12px;
-}
-
-.toast p{
-    color:#798497;
     font-size:11px;
+}
+
+.reserva-info span{
+    display:block;
+
+    color:#748095;
+
+    font-size:9px;
+
     margin-top:4px;
 }
 
-
-/* MOBILE */
-
-.mobile-menu{
-    display:none;
-
-    background:#151a24;
-    color:white;
-
-    border:1px solid var(--border);
-
-    width:42px;
-    height:42px;
-
-    border-radius:9px;
-
-    cursor:pointer;
+.reserva-value{
+    text-align:right;
 }
+
+.reserva-value strong{
+    display:block;
+
+    font-size:11px;
+}
+
+.reserva-value span{
+    display:block;
+
+    margin-top:4px;
+
+    color:#7a8699;
+
+    font-size:9px;
+}
+
+
+/* =========================================
+STATUS
+========================================= */
+
+.status{
+    display:inline-flex;
+
+    padding:5px 8px;
+
+    border-radius:20px;
+
+    font-size:8px;
+
+    font-weight:bold;
+}
+
+.status.confirmada{
+    color:#4ade80;
+
+    background:rgba(34,197,94,.12);
+}
+
+.status.pendente{
+    color:#fbbf24;
+
+    background:rgba(245,158,11,.12);
+}
+
+.status.cancelada{
+    color:#f87171;
+
+    background:rgba(239,68,68,.12);
+}
+
+.status.concluida{
+    color:#60a5fa;
+
+    background:rgba(59,130,246,.12);
+}
+
+
+/* =========================================
+FINANCEIRO
+========================================= */
+
+.finance-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #1d2430;
+}
+
+.finance-row:last-child{
+    border-bottom:none;
+}
+
+.finance-row span{
+    color:#7b8799;
+
+    font-size:10px;
+}
+
+.finance-row strong{
+    font-size:12px;
+}
+
+.finance-row strong.green{
+    color:#4ade80;
+}
+
+.finance-row strong.red{
+    color:#f87171;
+}
+
+.finance-row strong.orange{
+    color:#fbbf24;
+}
+
+
+/* =========================================
+ASSISTENTE
+========================================= */
+
+.assistant-card{
+    background:linear-gradient(
+        145deg,
+        #151b26,
+        #111721
+    );
+
+    border:1px solid #293244;
+
+    border-radius:14px;
+
+    padding:16px;
+}
+
+.assistant-top{
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+    margin-bottom:13px;
+}
+
+.assistant-icon{
+    width:38px;
+    height:38px;
+
+    border-radius:10px;
+
+    background:#202839;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:#b1bdd0;
+}
+
+.assistant-top strong{
+    display:block;
+
+    font-size:11px;
+}
+
+.assistant-top span{
+    display:block;
+
+    color:#748095;
+
+    font-size:9px;
+
+    margin-top:3px;
+}
+
+.assistant-message{
+    color:#aab4c4;
+
+    font-size:10px;
+
+    line-height:1.7;
+}
+
+.assistant-message strong{
+    color:white;
+}
+
+
+/* =========================================
+EMPTY
+========================================= */
+
+.empty{
+    text-align:center;
+
+    padding:35px 15px;
+
+    color:#657084;
+}
+
+.empty i{
+    font-size:27px;
+
+    margin-bottom:10px;
+}
+
+.empty p{
+    font-size:9px;
+}
+
+
+/* =========================================
+RESPONSIVO
+========================================= */
 
 @media(max-width:1150px){
 
-    .cards{
+    .stats{
         grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
     }
 
 }
 
-@media(max-width:850px){
+@media(max-width:900px){
 
     .sidebar{
         transform:translateX(-100%);
+
         transition:.3s;
     }
 
@@ -580,6 +805,7 @@ body{
 
     .main{
         margin-left:0;
+
         padding:20px;
     }
 
@@ -587,40 +813,34 @@ body{
         display:block;
     }
 
-    .content-grid{
-        grid-template-columns:1fr;
-    }
-
 }
 
-@media(max-width:560px){
-
-    .cards{
-        grid-template-columns:1fr;
-    }
+@media(max-width:600px){
 
     .topbar{
         align-items:flex-start;
     }
 
-    .date-box{
+    .user-box{
         display:none;
     }
 
-    .welcome h1{
-        font-size:22px;
+    .stats{
+        grid-template-columns:1fr 1fr;
     }
 
 }
 
 </style>
-</head>
 
+</head>
 
 <body>
 
 
-<aside class="sidebar" id="sidebar">
+<aside
+class="sidebar"
+id="sidebar">
 
     <div class="logo-area">
 
@@ -630,8 +850,15 @@ body{
         onerror="this.style.display='none'">
 
         <div>
-            <h2>Encanto Kids</h2>
-            <p>Painel Administrativo</p>
+
+            <h2>
+                Encanto Kids
+            </h2>
+
+            <p>
+                Painel Administrativo
+            </p>
+
         </div>
 
     </div>
@@ -644,29 +871,50 @@ body{
 
     <nav class="menu">
 
-        <a href="dashboard.html" class="active">
+        <a
+        href="dashboard.html"
+        class="active">
+
             <i class="fa-solid fa-chart-pie"></i>
+
             Dashboard
+
         </a>
+
 
         <a href="reservas.html">
+
             <i class="fa-solid fa-calendar-check"></i>
+
             Reservas
+
         </a>
+
 
         <a href="clientes.html">
+
             <i class="fa-solid fa-users"></i>
+
             Clientes
+
         </a>
+
 
         <a href="calendario.html">
+
             <i class="fa-solid fa-calendar-days"></i>
+
             Calendário
+
         </a>
 
+
         <a href="contratos.html">
+
             <i class="fa-solid fa-file-signature"></i>
+
             Contratos
+
         </a>
 
     </nav>
@@ -680,18 +928,29 @@ body{
     <nav class="menu">
 
         <a href="brinquedos.html">
+
             <i class="fa-solid fa-shapes"></i>
+
             Brinquedos
+
         </a>
+
 
         <a href="financeiro.html">
+
             <i class="fa-solid fa-wallet"></i>
+
             Financeiro
+
         </a>
 
+
         <a href="configuracoes.html">
+
             <i class="fa-solid fa-gear"></i>
+
             Configurações
+
         </a>
 
     </nav>
@@ -699,9 +958,12 @@ body{
 
     <div class="sidebar-bottom">
 
-        <button class="logout" onclick="logout()">
+        <button
+        class="logout"
+        onclick="logout()">
 
             <i class="fa-solid fa-right-from-bracket"></i>
+
             &nbsp; Sair
 
         </button>
@@ -711,756 +973,449 @@ body{
 </aside>
 
 
-
 <main class="main">
 
 
-    <header class="topbar">
+<header class="topbar">
 
-        <div style="display:flex;gap:15px;align-items:center;">
+    <div class="topbar-left">
 
-            <button
-            class="mobile-menu"
-            onclick="toggleMenu()">
+        <button
+        class="mobile-menu"
+        onclick="toggleMenu()">
 
-                <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-bars"></i>
 
-            </button>
-
-            <div class="welcome">
-
-                <p id="saudacao">
-                    Bem-vindo ao seu painel
-                </p>
-
-                <h1 id="nomeAdmin">
-                    Administrador
-                </h1>
-
-            </div>
-
-        </div>
+        </button>
 
 
-        <div class="top-actions">
+        <div>
 
-            <div class="date-box" id="dataAtual">
-            </div>
+            <h1>
+                Dashboard
+            </h1>
+
+            <p>
+                Visão geral da Encanto Kids.
+            </p>
 
         </div>
-
-    </header>
-
-
-
-    <section class="cards">
-
-
-        <article class="card">
-
-            <div class="card-top">
-
-                <div class="card-icon icon-blue">
-                    <i class="fa-solid fa-calendar-check"></i>
-                </div>
-
-            </div>
-
-            <div class="card-label">
-                TOTAL DE RESERVAS
-            </div>
-
-            <div class="card-value" id="totalReservas">
-                0
-            </div>
-
-            <div class="card-detail">
-                Reservas cadastradas
-            </div>
-
-        </article>
-
-
-
-        <article class="card">
-
-            <div class="card-top">
-
-                <div class="card-icon icon-green">
-                    <i class="fa-solid fa-money-bill-trend-up"></i>
-                </div>
-
-            </div>
-
-            <div class="card-label">
-                FATURAMENTO
-            </div>
-
-            <div class="card-value" id="faturamento">
-                R$ 0,00
-            </div>
-
-            <div class="card-detail">
-                Valor das reservas
-            </div>
-
-        </article>
-
-
-
-        <article class="card">
-
-            <div class="card-top">
-
-                <div class="card-icon icon-orange">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-
-            </div>
-
-            <div class="card-label">
-                CLIENTES
-            </div>
-
-            <div class="card-value" id="totalClientes">
-                0
-            </div>
-
-            <div class="card-detail">
-                Clientes cadastrados
-            </div>
-
-        </article>
-
-
-
-        <article class="card">
-
-            <div class="card-top">
-
-                <div class="card-icon icon-purple">
-                    <i class="fa-solid fa-file-signature"></i>
-                </div>
-
-            </div>
-
-            <div class="card-label">
-                CONTRATOS
-            </div>
-
-            <div class="card-value" id="totalContratos">
-                0
-            </div>
-
-            <div class="card-detail">
-                Contratos gerados
-            </div>
-
-        </article>
-
-
-    </section>
-
-
-
-    <section class="content-grid">
-
-
-        <div class="panel">
-
-            <div class="panel-header">
-
-                <h3>
-                    <i class="fa-regular fa-calendar"></i>
-                    &nbsp; Próximas Reservas
-                </h3>
-
-                <a href="reservas.html">
-                    Ver todas →
-                </a>
-
-            </div>
-
-            <div id="listaReservas">
-
-                <div class="loading">
-                    Carregando reservas...
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="panel">
-
-            <div class="panel-header">
-
-                <h3>
-                    Acesso rápido
-                </h3>
-
-            </div>
-
-
-            <div class="quick-actions">
-
-
-                <a href="reservas.html" class="quick">
-
-                    <div class="quick-icon">
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
-
-                    <div>
-                        <strong>Nova reserva</strong>
-                        <p>Cadastrar uma nova locação</p>
-                    </div>
-
-                </a>
-
-
-                <a href="clientes.html" class="quick">
-
-                    <div class="quick-icon">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </div>
-
-                    <div>
-                        <strong>Novo cliente</strong>
-                        <p>Cadastrar cliente</p>
-                    </div>
-
-                </a>
-
-
-                <a href="calendario.html" class="quick">
-
-                    <div class="quick-icon">
-                        <i class="fa-solid fa-calendar-days"></i>
-                    </div>
-
-                    <div>
-                        <strong>Abrir calendário</strong>
-                        <p>Consultar próximas datas</p>
-                    </div>
-
-                </a>
-
-
-                <a href="contratos.html" class="quick">
-
-                    <div class="quick-icon">
-                        <i class="fa-solid fa-file-signature"></i>
-                    </div>
-
-                    <div>
-                        <strong>Contratos</strong>
-                        <p>Gerenciar documentos</p>
-                    </div>
-
-                </a>
-
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-</main>
-
-
-
-<div class="toast" id="toast">
-
-    <i class="fa-solid fa-circle-check"></i>
-
-    <div>
-
-        <strong>Login realizado com sucesso</strong>
-
-        <p>
-            Bem-vindo ao Painel Administrativo.
-        </p>
 
     </div>
 
-</div>
 
+    <div class="user-box">
 
+        <div class="user-avatar">
 
-<script>
-
-/* ==============================
-   PROTEÇÃO DO PAINEL
-================================ */
-
-if(
-    localStorage.getItem("adminLogado")
-    !== "true"
-){
-    window.location.href = "login.html";
-}
-
-
-/* ==============================
-   SUPABASE
-================================ */
-
-const SUPABASE_URL =
-"https://stnjpquafragqjwxyjza.supabase.co";
-
-const SUPABASE_ANON_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0bmpwcXVhZnJhZ3Fqd3h5anphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzI2MzAsImV4cCI6MjEwMDUwODYzMH0.r3YlozqWb2h96TLomC-VOfeQNLknio8x5xaiNVlQOkE"
-
-const supabaseClient =
-window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
-
-
-/* ==============================
-   ADMIN
-================================ */
-
-const usuario =
-localStorage.getItem("adminUsuario")
-|| "Administrador";
-
-document.getElementById(
-    "nomeAdmin"
-).textContent =
-formatarNome(usuario);
-
-
-function formatarNome(nome){
-
-    if(!nome){
-        return "Administrador";
-    }
-
-    return nome
-    .trim()
-    .split(" ")
-    .map(parte =>
-        parte.charAt(0).toUpperCase()
-        +
-        parte.slice(1).toLowerCase()
-    )
-    .join(" ");
-}
-
-
-/* ==============================
-   SAUDAÇÃO
-================================ */
-
-const hora =
-new Date().getHours();
-
-let saudacao =
-"Bem-vindo ao seu painel";
-
-if(hora >= 5 && hora < 12){
-
-    saudacao =
-    "Bom dia, tenha um excelente trabalho";
-
-}
-else if(hora >= 12 && hora < 18){
-
-    saudacao =
-    "Boa tarde, acompanhe sua operação";
-
-}
-else{
-
-    saudacao =
-    "Boa noite, acompanhe sua operação";
-
-}
-
-document.getElementById(
-    "saudacao"
-).textContent =
-saudacao;
-
-
-/* ==============================
-   DATA
-================================ */
-
-document.getElementById(
-    "dataAtual"
-).textContent =
-new Date().toLocaleDateString(
-    "pt-BR",
-    {
-        weekday:"long",
-        day:"2-digit",
-        month:"long"
-    }
-);
-
-
-/* ==============================
-   DASHBOARD
-================================ */
-
-async function carregarDashboard(){
-
-    await Promise.all([
-
-        carregarClientes(),
-        carregarReservas(),
-        carregarContratos()
-
-    ]);
-
-}
-
-
-async function carregarClientes(){
-
-    const { count, error } =
-    await supabaseClient
-    .from("clientes")
-    .select("*",{
-        count:"exact",
-        head:true
-    });
-
-    if(error){
-        console.error(error);
-        return;
-    }
-
-    document.getElementById(
-        "totalClientes"
-    ).textContent =
-    count || 0;
-
-}
-
-
-async function carregarContratos(){
-
-    const { count, error } =
-    await supabaseClient
-    .from("contratos")
-    .select("*",{
-        count:"exact",
-        head:true
-    });
-
-    if(error){
-        console.error(error);
-        return;
-    }
-
-    document.getElementById(
-        "totalContratos"
-    ).textContent =
-    count || 0;
-
-}
-
-
-async function carregarReservas(){
-
-    const { data, error } =
-    await supabaseClient
-    .from("reservas")
-    .select(`
-        id,
-        data_evento,
-        valor_total,
-        status,
-        cliente:clientes(
-            nome
-        )
-    `)
-    .order(
-        "data_evento",
-        {ascending:true}
-    );
-
-    if(error){
-
-        console.error(
-            "Erro reservas:",
-            error
-        );
-
-        document.getElementById(
-            "listaReservas"
-        ).innerHTML = `
-
-        <div class="empty">
-
-            <i class="fa-solid fa-triangle-exclamation"></i>
-
-            <p>
-                Não foi possível carregar as reservas.
-            </p>
+            <i class="fa-solid fa-user"></i>
 
         </div>
 
-        `;
 
-        return;
-    }
+        <div class="user-info">
 
+            <strong id="nomeUsuarioTop">
+                Administrador
+            </strong>
 
-    const reservas =
-    data || [];
-
-
-    document.getElementById(
-        "totalReservas"
-    ).textContent =
-    reservas.length;
-
-
-    let total = 0;
-
-    reservas.forEach(reserva => {
-
-        total +=
-        Number(
-            reserva.valor_total || 0
-        );
-
-    });
-
-
-    document.getElementById(
-        "faturamento"
-    ).textContent =
-    total.toLocaleString(
-        "pt-BR",
-        {
-            style:"currency",
-            currency:"BRL"
-        }
-    );
-
-
-    mostrarProximasReservas(
-        reservas
-    );
-
-}
-
-
-/* ==============================
-   PRÓXIMAS RESERVAS
-================================ */
-
-function mostrarProximasReservas(
-    reservas
-){
-
-    const hoje =
-    new Date();
-
-    hoje.setHours(
-        0,0,0,0
-    );
-
-
-    const proximas =
-    reservas
-    .filter(reserva => {
-
-        const data =
-        new Date(
-            reserva.data_evento
-            + "T12:00:00"
-        );
-
-        return data >= hoje;
-
-    })
-    .slice(0,6);
-
-
-    const lista =
-    document.getElementById(
-        "listaReservas"
-    );
-
-
-    if(proximas.length === 0){
-
-        lista.innerHTML = `
-
-        <div class="empty">
-
-            <i class="fa-regular fa-calendar-check"></i>
-
-            <p>
-                Nenhuma reserva futura cadastrada.
-            </p>
+            <span>
+                Administrador
+            </span>
 
         </div>
 
-        `;
+    </div>
 
-        return;
-    }
-
-
-    lista.innerHTML =
-    proximas.map(reserva => {
-
-        const data =
-        new Date(
-            reserva.data_evento
-            + "T12:00:00"
-        );
-
-        const dia =
-        String(
-            data.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-        const mes =
-        data
-        .toLocaleDateString(
-            "pt-BR",
-            {month:"short"}
-        )
-        .replace(".","");
+</header>
 
 
-        const cliente =
-        reserva.cliente?.nome
-        || "Cliente";
+<section class="welcome-box">
+
+    <span>
+        PAINEL ADMINISTRATIVO
+    </span>
+
+    <h2 id="saudacaoDashboard">
+        Bem-vindo!
+    </h2>
+
+    <p id="resumoDashboard">
+        Carregando informações do seu negócio...
+    </p>
+
+</section>
 
 
-        const statusOriginal =
-        reserva.status
-        || "Pendente";
-
-        const status =
-        statusOriginal
-        .toLowerCase();
+<section class="stats">
 
 
-        let classeStatus =
-        "status-pendente";
+    <div class="stat-card">
 
-        if(
-            status.includes(
-                "confirm"
-            )
-        ){
-            classeStatus =
-            "status-confirmada";
-        }
+        <div class="stat-icon blue">
 
-        if(
-            status.includes(
-                "cancel"
-            )
-        ){
-            classeStatus =
-            "status-cancelada";
-        }
+            <i class="fa-solid fa-calendar-check"></i>
+
+        </div>
+
+        <span class="stat-label">
+            RESERVAS
+        </span>
+
+        <strong
+        class="stat-value"
+        id="totalReservas">
+
+            0
+
+        </strong>
+
+        <span
+        class="stat-small"
+        id="reservasMesTexto">
+
+            0 neste mês
+
+        </span>
+
+    </div>
 
 
-        return `
+    <div class="stat-card">
 
-        <div class="reserva">
+        <div class="stat-icon green">
 
-            <div class="reserva-info">
+            <i class="fa-solid fa-users"></i>
 
-                <div class="reserva-data">
+        </div>
 
-                    <strong>
-                        ${dia}
-                    </strong>
+        <span class="stat-label">
+            CLIENTES
+        </span>
+
+        <strong
+        class="stat-value"
+        id="totalClientes">
+
+            0
+
+        </strong>
+
+        <span class="stat-small">
+            cadastrados
+        </span>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon purple">
+
+            <i class="fa-solid fa-money-bill-trend-up"></i>
+
+        </div>
+
+        <span class="stat-label">
+            FATURAMENTO
+        </span>
+
+        <strong
+        class="stat-value"
+        id="faturamentoTotal">
+
+            R$ 0,00
+
+        </strong>
+
+        <span
+        class="stat-small"
+        id="faturamentoMesTexto">
+
+            R$ 0,00 neste mês
+
+        </span>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon orange">
+
+            <i class="fa-solid fa-clock"></i>
+
+        </div>
+
+        <span class="stat-label">
+            A RECEBER
+        </span>
+
+        <strong
+        class="stat-value"
+        id="totalReceber">
+
+            R$ 0,00
+
+        </strong>
+
+        <span class="stat-small">
+            reservas pendentes
+        </span>
+
+    </div>
+
+</section>
+
+
+<div class="dashboard-grid">
+
+
+    <div>
+
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <h3>
+                    Próximas Reservas
+                </h3>
+
+                <a href="reservas.html">
+                    Ver todas
+                </a>
+
+            </div>
+
+
+            <div
+            class="panel-body"
+            id="proximasReservas">
+
+                <div class="empty">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <p>
+                        Carregando reservas...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <h3>
+                    Últimas Movimentações
+                </h3>
+
+                <a href="financeiro.html">
+                    Abrir financeiro
+                </a>
+
+            </div>
+
+
+            <div
+            class="panel-body"
+            id="ultimasMovimentacoes">
+
+                <div class="empty">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <p>
+                        Carregando financeiro...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+    <div>
+
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <h3>
+                    Resumo Financeiro
+                </h3>
+
+            </div>
+
+
+            <div class="panel-body">
+
+
+                <div class="finance-row">
 
                     <span>
-                        ${mes}
+                        Receitas
                     </span>
+
+                    <strong
+                    class="green"
+                    id="dashboardReceitas">
+
+                        R$ 0,00
+
+                    </strong>
+
+                </div>
+
+
+                <div class="finance-row">
+
+                    <span>
+                        Despesas
+                    </span>
+
+                    <strong
+                    class="red"
+                    id="dashboardDespesas">
+
+                        R$ 0,00
+
+                    </strong>
+
+                </div>
+
+
+                <div class="finance-row">
+
+                    <span>
+                        Saldo
+                    </span>
+
+                    <strong
+                    id="dashboardSaldo">
+
+                        R$ 0,00
+
+                    </strong>
+
+                </div>
+
+
+                <div class="finance-row">
+
+                    <span>
+                        A receber
+                    </span>
+
+                    <strong
+                    class="orange"
+                    id="dashboardReceber">
+
+                        R$ 0,00
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <section class="assistant-card">
+
+            <div class="assistant-top">
+
+                <div class="assistant-icon">
+
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
 
                 </div>
 
 
                 <div>
 
-                    <div class="reserva-nome">
-                        ${escapeHTML(cliente)}
-                    </div>
+                    <strong>
+                        Assistente Encanto
+                    </strong>
 
-                    <div class="reserva-sub">
-
-                        ${Number(
-                            reserva.valor_total || 0
-                        ).toLocaleString(
-                            "pt-BR",
-                            {
-                                style:"currency",
-                                currency:"BRL"
-                            }
-                        )}
-
-                    </div>
+                    <span>
+                        Resumo automático
+                    </span>
 
                 </div>
 
             </div>
 
 
-            <span class="
-            status
-            ${classeStatus}
-            ">
+            <div
+            class="assistant-message"
+            id="assistenteMensagem">
 
-                ${escapeHTML(
-                    statusOriginal
-                )}
+                Analisando o painel...
 
-            </span>
+            </div>
 
-        </div>
+        </section>
 
-        `;
 
-    }).join("");
+    </div>
 
+
+</div>
+
+
+</main>
+
+
+<!-- CONTINUA NA PARTE 2/5 -->
+    <script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+
+<script>
+
+/* =========================================
+PROTEÇÃO
+========================================= */
+
+if(
+    localStorage.getItem("adminLogado")
+    !== "true"
+){
+    window.location.href =
+    "login.html";
 }
 
 
-/* ==============================
-   SEGURANÇA HTML
-================================ */
+/* =========================================
+VARIÁVEIS
+========================================= */
 
-function escapeHTML(valor){
+let dashboardReservas = [];
 
-    return String(valor)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+let dashboardClientes = [];
 
-}
+let dashboardFinanceiro = [];
+
+let dashboardContratos = [];
 
 
-/* ==============================
-   MENU MOBILE
-================================ */
+/* =========================================
+MENU MOBILE
+========================================= */
 
 function toggleMenu(){
 
@@ -1472,19 +1427,1819 @@ function toggleMenu(){
 }
 
 
-/* ==============================
-   LOGOUT
-================================ */
+/* =========================================
+CARREGAR DASHBOARD
+========================================= */
+
+async function carregarDashboard(){
+
+    try{
+
+        await Promise.all([
+
+            carregarReservasDashboard(),
+
+            carregarClientesDashboard(),
+
+            carregarFinanceiroDashboard(),
+
+            carregarContratosDashboard()
+
+        ]);
+
+
+        atualizarCardsDashboard();
+
+        renderizarProximasReservas();
+
+        renderizarUltimasMovimentacoes();
+
+        atualizarResumoFinanceiroDashboard();
+
+        atualizarAssistente();
+
+        atualizarSaudacao();
+
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao carregar dashboard:",
+            erro
+        );
+
+    }
+
+}
+
+
+/* =========================================
+RESERVAS
+========================================= */
+
+async function carregarReservasDashboard(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("reservas")
+    .select(`
+        *,
+        cliente:clientes(
+            id,
+            nome,
+            telefone
+        ),
+        itens:reserva_itens(
+            id,
+            quantidade,
+            subtotal,
+            brinquedo:brinquedos(
+                id,
+                nome
+            )
+        )
+    `)
+    .order(
+        "data_evento",
+        {
+            ascending:true
+        }
+    );
+
+
+    if(error){
+        throw error;
+    }
+
+
+    dashboardReservas =
+    data || [];
+
+}
+
+
+/* =========================================
+CLIENTES
+========================================= */
+
+async function carregarClientesDashboard(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("clientes")
+    .select(
+        "id,nome,telefone,created_at"
+    )
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    );
+
+
+    if(error){
+        throw error;
+    }
+
+
+    dashboardClientes =
+    data || [];
+
+}
+
+
+/* =========================================
+FINANCEIRO
+========================================= */
+
+async function carregarFinanceiroDashboard(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("financeiro")
+    .select("*")
+    .order(
+        "data_movimento",
+        {
+            ascending:false
+        }
+    )
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    );
+
+
+    if(error){
+        throw error;
+    }
+
+
+    dashboardFinanceiro =
+    data || [];
+
+}
+
+
+/* =========================================
+CONTRATOS
+========================================= */
+
+async function carregarContratosDashboard(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("contratos")
+    .select(`
+        id,
+        reserva_id,
+        cliente_id,
+        numero_contrato,
+        status,
+        created_at
+    `)
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    );
+
+
+    if(error){
+        throw error;
+    }
+
+
+    dashboardContratos =
+    data || [];
+
+}
+
+
+/* =========================================
+ATUALIZAR CARDS
+========================================= */
+
+function atualizarCardsDashboard(){
+
+    const totalReservas =
+    dashboardReservas.length;
+
+
+    const totalClientes =
+    dashboardClientes.length;
+
+
+    const agora =
+    new Date();
+
+
+    const anoAtual =
+    agora.getFullYear();
+
+
+    const mesAtual =
+    agora.getMonth();
+
+
+    const reservasMes =
+    dashboardReservas.filter(
+        reserva => {
+
+            if(
+                !reserva.data_evento
+            ){
+                return false;
+            }
+
+
+            const data =
+            new Date(
+                reserva.data_evento
+                +
+                "T12:00:00"
+            );
+
+
+            return (
+                data.getFullYear()
+                ===
+                anoAtual
+                &&
+                data.getMonth()
+                ===
+                mesAtual
+            );
+
+        }
+    );
+
+
+    const faturamentoTotal =
+    dashboardReservas
+    .filter(
+        reserva =>
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    )
+    .reduce(
+        (soma,reserva) =>
+        soma +
+        Number(
+            reserva.valor_total
+            || 0
+        ),
+        0
+    );
+
+
+    const faturamentoMes =
+    reservasMes
+    .filter(
+        reserva =>
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    )
+    .reduce(
+        (soma,reserva) =>
+        soma +
+        Number(
+            reserva.valor_total
+            || 0
+        ),
+        0
+    );
+
+
+    const totalReceber =
+    dashboardReservas
+    .filter(
+        reserva =>
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    )
+    .reduce(
+        (soma,reserva) => {
+
+            let restante = 0;
+
+
+            if(
+                reserva.valor_restante
+                !== null
+                &&
+                reserva.valor_restante
+                !== undefined
+            ){
+
+                restante =
+                Number(
+                    reserva.valor_restante
+                    || 0
+                );
+
+            }
+            else{
+
+                restante =
+                Math.max(
+                    Number(
+                        reserva.valor_total
+                        || 0
+                    )
+                    -
+                    Number(
+                        reserva.valor_entrada
+                        || 0
+                    ),
+                    0
+                );
+
+            }
+
+
+            return soma + restante;
+
+        },
+        0
+    );
+
+
+    document.getElementById(
+        "totalReservas"
+    ).textContent =
+    totalReservas;
+
+
+    document.getElementById(
+        "totalClientes"
+    ).textContent =
+    totalClientes;
+
+
+    document.getElementById(
+        "faturamentoTotal"
+    ).textContent =
+    formatarMoedaDashboard(
+        faturamentoTotal
+    );
+
+
+    document.getElementById(
+        "totalReceber"
+    ).textContent =
+    formatarMoedaDashboard(
+        totalReceber
+    );
+
+
+    document.getElementById(
+        "reservasMesTexto"
+    ).textContent =
+    `${reservasMes.length} neste mês`;
+
+
+    document.getElementById(
+        "faturamentoMesTexto"
+    ).textContent =
+    `${formatarMoedaDashboard(
+        faturamentoMes
+    )} neste mês`;
+
+}
+
+
+/* =========================================
+PRÓXIMAS RESERVAS
+========================================= */
+
+function renderizarProximasReservas(){
+
+    const container =
+    document.getElementById(
+        "proximasReservas"
+    );
+
+
+    const hoje =
+    obterDataHojeDashboard();
+
+
+    const proximas =
+    dashboardReservas
+    .filter(
+        reserva => {
+
+            if(
+                !reserva.data_evento
+            ){
+                return false;
+            }
+
+
+            if(
+                reserva.data_evento
+                <
+                hoje
+            ){
+                return false;
+            }
+
+
+            const status =
+            normalizarTextoDashboard(
+                reserva.status
+            );
+
+
+            return (
+                !status.includes(
+                    "cancel"
+                )
+            );
+
+        }
+    )
+    .sort(
+        (a,b) =>
+        String(
+            a.data_evento
+        )
+        .localeCompare(
+            String(
+                b.data_evento
+            )
+        )
+    )
+    .slice(
+        0,
+        6
+    );
+
+
+    if(
+        proximas.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <p>
+                    Nenhuma reserva futura.
+                </p>
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+    proximas
+    .map(
+        reserva =>
+        montarReservaDashboard(
+            reserva
+        )
+    )
+    .join("");
+
+}
+
+
+/* =========================================
+MONTAR RESERVA
+========================================= */
+
+function montarReservaDashboard(
+    reserva
+){
+
+    const cliente =
+    reserva.cliente?.nome
+    ||
+    "Cliente";
+
+
+    const data =
+    new Date(
+        reserva.data_evento
+        +
+        "T12:00:00"
+    );
+
+
+    const dia =
+    String(
+        data.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    const mes =
+    data
+    .toLocaleDateString(
+        "pt-BR",
+        {
+            month:"short"
+        }
+    )
+    .replace(
+        ".",
+        ""
+    );
+
+
+    const brinquedos =
+    (
+        reserva.itens
+        ||
+        []
+    )
+    .map(
+        item =>
+        item.brinquedo?.nome
+        ||
+        "Brinquedo"
+    )
+    .slice(
+        0,
+        2
+    )
+    .join(", ");
+
+
+    const status =
+    reserva.status
+    ||
+    "Pendente";
+
+
+    return `
+
+        <div
+        class="reserva-item"
+        onclick="window.location.href='calendario.html?reserva=${reserva.id}'"
+        style="cursor:pointer;">
+
+
+            <div class="reserva-left">
+
+
+                <div class="reserva-date">
+
+                    <strong>
+                        ${dia}
+                    </strong>
+
+                    <span>
+                        ${escapeHTMLDashboard(mes)}
+                    </span>
+
+                </div>
+
+
+                <div class="reserva-info">
+
+                    <strong>
+                        ${escapeHTMLDashboard(cliente)}
+                    </strong>
+
+                    <span>
+
+                        ${escapeHTMLDashboard(
+                            brinquedos
+                            ||
+                            "Sem brinquedo"
+                        )}
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="reserva-value">
+
+                <strong>
+
+                    ${formatarMoedaDashboard(
+                        reserva.valor_total
+                    )}
+
+                </strong>
+
+                <span
+                class="status ${classeStatusDashboard(status)}">
+
+                    ${escapeHTMLDashboard(status)}
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+CONTINUA NA PARTE 3/5
+========================================= */
+
+</script>
+<script>
+
+/* =========================================
+RESUMO FINANCEIRO
+========================================= */
+
+function atualizarResumoFinanceiroDashboard(){
+
+    const receitas =
+    dashboardFinanceiro
+    .filter(
+        item =>
+        normalizarTextoDashboard(
+            item.tipo
+        )
+        ===
+        "receita"
+    )
+    .reduce(
+        (soma,item) =>
+        soma +
+        Number(
+            item.valor || 0
+        ),
+        0
+    );
+
+
+    const despesas =
+    dashboardFinanceiro
+    .filter(
+        item =>
+        normalizarTextoDashboard(
+            item.tipo
+        )
+        ===
+        "despesa"
+    )
+    .reduce(
+        (soma,item) =>
+        soma +
+        Number(
+            item.valor || 0
+        ),
+        0
+    );
+
+
+    const saldo =
+    receitas -
+    despesas;
+
+
+    const aReceber =
+    dashboardReservas
+    .filter(
+        reserva =>
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    )
+    .reduce(
+        (soma,reserva) => {
+
+            let restante = 0;
+
+
+            if(
+                reserva.valor_restante
+                !== null
+                &&
+                reserva.valor_restante
+                !== undefined
+            ){
+
+                restante =
+                Number(
+                    reserva.valor_restante
+                    || 0
+                );
+
+            }
+            else{
+
+                restante =
+                Math.max(
+                    Number(
+                        reserva.valor_total
+                        || 0
+                    )
+                    -
+                    Number(
+                        reserva.valor_entrada
+                        || 0
+                    ),
+                    0
+                );
+
+            }
+
+
+            return soma + restante;
+
+        },
+        0
+    );
+
+
+    document.getElementById(
+        "dashboardReceitas"
+    ).textContent =
+    formatarMoedaDashboard(
+        receitas
+    );
+
+
+    document.getElementById(
+        "dashboardDespesas"
+    ).textContent =
+    formatarMoedaDashboard(
+        despesas
+    );
+
+
+    document.getElementById(
+        "dashboardSaldo"
+    ).textContent =
+    formatarMoedaDashboard(
+        saldo
+    );
+
+
+    document.getElementById(
+        "dashboardReceber"
+    ).textContent =
+    formatarMoedaDashboard(
+        aReceber
+    );
+
+}
+
+
+/* =========================================
+ÚLTIMAS MOVIMENTAÇÕES
+========================================= */
+
+function renderizarUltimasMovimentacoes(){
+
+    const container =
+    document.getElementById(
+        "ultimasMovimentacoes"
+    );
+
+
+    const ultimas =
+    [...dashboardFinanceiro]
+    .sort(
+        (a,b) => {
+
+            const dataA =
+            new Date(
+                (
+                    a.data_movimento
+                    ||
+                    "2000-01-01"
+                )
+                +
+                "T12:00:00"
+            );
+
+
+            const dataB =
+            new Date(
+                (
+                    b.data_movimento
+                    ||
+                    "2000-01-01"
+                )
+                +
+                "T12:00:00"
+            );
+
+
+            return dataB - dataA;
+
+        }
+    )
+    .slice(
+        0,
+        6
+    );
+
+
+    if(
+        ultimas.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-wallet"></i>
+
+                <p>
+                    Nenhuma movimentação registrada.
+                </p>
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+    ultimas
+    .map(
+        item =>
+        montarMovimentacaoDashboard(
+            item
+        )
+    )
+    .join("");
+
+}
+
+
+/* =========================================
+MONTAR MOVIMENTAÇÃO
+========================================= */
+
+function montarMovimentacaoDashboard(
+    item
+){
+
+    const tipo =
+    normalizarTextoDashboard(
+        item.tipo
+    );
+
+
+    const classe =
+    tipo ===
+    "despesa"
+    ?
+    "red"
+    :
+    "green";
+
+
+    const sinal =
+    tipo ===
+    "despesa"
+    ?
+    "-"
+    :
+    "+";
+
+
+    return `
+
+        <div class="finance-row">
+
+
+            <div>
+
+                <strong style="
+                    display:block;
+                    font-size:10px;
+                    color:white;
+                ">
+
+                    ${escapeHTMLDashboard(
+                        item.descricao
+                        ||
+                        "Movimentação"
+                    )}
+
+                </strong>
+
+
+                <span>
+
+                    ${formatarDataDashboard(
+                        item.data_movimento
+                    )}
+
+                    ${
+                        item.categoria
+                        ?
+                        " • "
+                        +
+                        escapeHTMLDashboard(
+                            item.categoria
+                        )
+                        :
+                        ""
+                    }
+
+                </span>
+
+            </div>
+
+
+            <strong class="${classe}">
+
+                ${sinal}
+
+                ${formatarMoedaDashboard(
+                    item.valor
+                )}
+
+            </strong>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+ASSISTENTE ENCANTO
+========================================= */
+
+function atualizarAssistente(){
+
+    const hoje =
+    obterDataHojeDashboard();
+
+
+    const amanhaDate =
+    new Date();
+
+    amanhaDate.setDate(
+        amanhaDate.getDate() + 1
+    );
+
+
+    const amanha =
+    montarDataISODashboard(
+        amanhaDate
+    );
+
+
+    const reservasHoje =
+    dashboardReservas.filter(
+        reserva =>
+        reserva.data_evento
+        ===
+        hoje
+        &&
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    );
+
+
+    const reservasAmanha =
+    dashboardReservas.filter(
+        reserva =>
+        reserva.data_evento
+        ===
+        amanha
+        &&
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    );
+
+
+    const contratosPendentes =
+    dashboardContratos.filter(
+        contrato =>
+        normalizarTextoDashboard(
+            contrato.status
+        )
+        ===
+        "pendente"
+    ).length;
+
+
+    const totalReceber =
+    dashboardReservas
+    .filter(
+        reserva =>
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    )
+    .reduce(
+        (soma,reserva) => {
+
+            const total =
+            Number(
+                reserva.valor_total || 0
+            );
+
+
+            const entrada =
+            Number(
+                reserva.valor_entrada || 0
+            );
+
+
+            const restante =
+            reserva.valor_restante
+            !== null
+            &&
+            reserva.valor_restante
+            !== undefined
+            ?
+            Number(
+                reserva.valor_restante || 0
+            )
+            :
+            Math.max(
+                total - entrada,
+                0
+            );
+
+
+            return soma + restante;
+
+        },
+        0
+    );
+
+
+    const mensagens = [];
+
+
+    if(
+        reservasHoje.length > 0
+    ){
+
+        mensagens.push(
+            `Você possui <strong>${reservasHoje.length}</strong> reserva${
+                reservasHoje.length === 1
+                ?
+                ""
+                :
+                "s"
+            } para hoje.`
+        );
+
+    }
+
+
+    if(
+        reservasAmanha.length > 0
+    ){
+
+        mensagens.push(
+            `Há <strong>${reservasAmanha.length}</strong> evento${
+                reservasAmanha.length === 1
+                ?
+                ""
+                :
+                "s"
+            } agendado${
+                reservasAmanha.length === 1
+                ?
+                ""
+                :
+                "s"
+            } para amanhã.`
+        );
+
+    }
+
+
+    if(
+        totalReceber > 0
+    ){
+
+        mensagens.push(
+            `Ainda existem <strong>${formatarMoedaDashboard(totalReceber)}</strong> para receber das reservas.`
+        );
+
+    }
+
+
+    if(
+        contratosPendentes > 0
+    ){
+
+        mensagens.push(
+            `<strong>${contratosPendentes}</strong> contrato${
+                contratosPendentes === 1
+                ?
+                ""
+                :
+                "s"
+            } está${
+                contratosPendentes === 1
+                ?
+                ""
+                :
+                "ão"
+            } pendente${
+                contratosPendentes === 1
+                ?
+                ""
+                :
+                "s"
+            }.`
+        );
+
+    }
+
+
+    if(
+        mensagens.length === 0
+    ){
+
+        mensagens.push(
+            "Nenhuma pendência importante foi encontrada no momento."
+        );
+
+    }
+
+
+    document.getElementById(
+        "assistenteMensagem"
+    ).innerHTML =
+    mensagens.join(
+        "<br><br>"
+    );
+
+}
+
+
+/* =========================================
+SAUDAÇÃO
+========================================= */
+
+function atualizarSaudacao(){
+
+    const agora =
+    new Date();
+
+
+    const hora =
+    agora.getHours();
+
+
+    let saudacao =
+    "Boa noite";
+
+
+    if(
+        hora >= 5
+        &&
+        hora < 12
+    ){
+
+        saudacao =
+        "Bom dia";
+
+    }
+    else if(
+        hora >= 12
+        &&
+        hora < 18
+    ){
+
+        saudacao =
+        "Boa tarde";
+
+    }
+
+
+    const usuario =
+    localStorage.getItem(
+        "adminUsuario"
+    )
+    ||
+    "Administrador";
+
+
+    const primeiroNome =
+    String(usuario)
+    .trim()
+    .split(" ")[0]
+    ||
+    "Administrador";
+
+
+    document.getElementById(
+        "saudacaoDashboard"
+    ).textContent =
+    `${saudacao}, ${primeiroNome}!`;
+
+
+    document.getElementById(
+        "nomeUsuarioTop"
+    ).textContent =
+    primeiroNome;
+
+
+    const hoje =
+    obterDataHojeDashboard();
+
+
+    const reservasHoje =
+    dashboardReservas.filter(
+        reserva =>
+        reserva.data_evento
+        ===
+        hoje
+        &&
+        !normalizarTextoDashboard(
+            reserva.status
+        )
+        .includes("cancel")
+    ).length;
+
+
+    if(
+        reservasHoje > 0
+    ){
+
+        document.getElementById(
+            "resumoDashboard"
+        ).textContent =
+        `Você possui ${reservasHoje} reserva${
+            reservasHoje === 1
+            ?
+            ""
+            :
+            "s"
+        } agendada${
+            reservasHoje === 1
+            ?
+            ""
+            :
+            "s"
+        } para hoje.`;
+
+    }
+    else{
+
+        document.getElementById(
+            "resumoDashboard"
+        ).textContent =
+        "Confira abaixo as principais informações e próximos eventos da empresa.";
+
+    }
+
+}
+
+
+/* =========================================
+NORMALIZAR TEXTO
+========================================= */
+
+function normalizarTextoDashboard(
+    valor
+){
+
+    return String(
+        valor || ""
+    )
+    .normalize("NFD")
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    )
+    .toLowerCase()
+    .trim();
+
+}
+
+
+/* =========================================
+STATUS
+========================================= */
+
+function classeStatusDashboard(
+    status
+){
+
+    const texto =
+    normalizarTextoDashboard(
+        status
+    );
+
+
+    if(
+        texto.includes(
+            "confirm"
+        )
+    ){
+        return "confirmada";
+    }
+
+
+    if(
+        texto.includes(
+            "cancel"
+        )
+    ){
+        return "cancelada";
+    }
+
+
+    if(
+        texto.includes(
+            "conclu"
+        )
+    ){
+        return "concluida";
+    }
+
+
+    return "pendente";
+
+}
+
+
+/* =========================================
+DATA DE HOJE
+========================================= */
+
+function obterDataHojeDashboard(){
+
+    return montarDataISODashboard(
+        new Date()
+    );
+
+}
+
+
+/* =========================================
+DATA ISO
+========================================= */
+
+function montarDataISODashboard(
+    data
+){
+
+    const ano =
+    data.getFullYear();
+
+
+    const mes =
+    String(
+        data.getMonth() + 1
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    const dia =
+    String(
+        data.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    return `${ano}-${mes}-${dia}`;
+
+}
+
+
+/* =========================================
+FORMATAR DATA
+========================================= */
+
+function formatarDataDashboard(
+    data
+){
+
+    if(!data){
+        return "-";
+    }
+
+
+    const partes =
+    String(data)
+    .split("-");
+
+
+    if(
+        partes.length !== 3
+    ){
+        return data;
+    }
+
+
+    return (
+        partes[2]
+        +
+        "/"
+        +
+        partes[1]
+        +
+        "/"
+        +
+        partes[0]
+    );
+
+}
+
+
+/* =========================================
+MOEDA
+========================================= */
+
+function formatarMoedaDashboard(
+    valor
+){
+
+    return Number(
+        valor || 0
+    )
+    .toLocaleString(
+        "pt-BR",
+        {
+            style:"currency",
+            currency:"BRL"
+        }
+    );
+
+}
+
+
+/* =========================================
+ESCAPE HTML
+========================================= */
+
+function escapeHTMLDashboard(
+    valor
+){
+
+    return String(
+        valor ?? ""
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================
+CONTINUA NA PARTE 4/5
+========================================= */
+
+</script>
+<script>
+
+/* =========================================
+CONFIGURAÇÕES DA EMPRESA
+========================================= */
+
+async function carregarConfiguracoesDashboard(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .from("configuracoes")
+        .select("*")
+        .order(
+            "id",
+            {
+                ascending:true
+            }
+        )
+        .limit(1)
+        .maybeSingle();
+
+
+        if(error){
+
+            console.warn(
+                "Configurações não carregadas:",
+                error
+            );
+
+            return;
+        }
+
+
+        if(!data){
+            return;
+        }
+
+
+        aplicarConfiguracoesDashboard(
+            data
+        );
+
+    }
+    catch(erro){
+
+        console.warn(
+            "Erro configurações dashboard:",
+            erro
+        );
+
+    }
+
+}
+
+
+/* =========================================
+APLICAR CONFIGURAÇÕES
+========================================= */
+
+function aplicarConfiguracoesDashboard(
+    config
+){
+
+    const nomeEmpresa =
+    config.nome_empresa
+    ||
+    "Encanto Kids Infláveis";
+
+
+    const nomeCurto =
+    nomeEmpresa.replace(
+        " Infláveis",
+        ""
+    );
+
+
+    document
+    .querySelectorAll(
+        ".logo-area h2"
+    )
+    .forEach(
+        elemento => {
+
+            elemento.textContent =
+            nomeCurto;
+
+        }
+    );
+
+
+    if(
+        config.logo_url
+    ){
+
+        document
+        .querySelectorAll(
+            ".logo-area img"
+        )
+        .forEach(
+            imagem => {
+
+                imagem.src =
+                config.logo_url;
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================
+RECARREGAR DASHBOARD
+========================================= */
+
+async function atualizarDashboard(){
+
+    const resumo =
+    document.getElementById(
+        "resumoDashboard"
+    );
+
+
+    if(resumo){
+
+        resumo.textContent =
+        "Atualizando informações...";
+
+    }
+
+
+    try{
+
+        await carregarDashboard();
+
+        await carregarConfiguracoesDashboard();
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao atualizar dashboard:",
+            erro
+        );
+
+    }
+
+}
+
+
+/* =========================================
+ATUALIZAÇÃO AO VOLTAR PARA ABA
+========================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState
+            ===
+            "visible"
+        ){
+
+            atualizarDashboard();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+ATUALIZAÇÃO AUTOMÁTICA
+========================================= */
+
+/*
+Atualiza a cada 2 minutos enquanto
+o Dashboard estiver aberto.
+*/
+
+setInterval(
+    function(){
+
+        if(
+            document.visibilityState
+            ===
+            "visible"
+        ){
+
+            carregarDashboard();
+
+        }
+
+    },
+    120000
+);
+
+
+/* =========================================
+MENU MOBILE
+========================================= */
+
+document
+.querySelectorAll(
+    ".sidebar .menu a"
+)
+.forEach(
+    link => {
+
+        link.addEventListener(
+            "click",
+            function(){
+
+                document
+                .getElementById(
+                    "sidebar"
+                )
+                .classList
+                .remove("open");
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================
+ESC FECHA MENU
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key
+            !==
+            "Escape"
+        ){
+            return;
+        }
+
+
+        document
+        .getElementById(
+            "sidebar"
+        )
+        .classList
+        .remove("open");
+
+    }
+);
+
+
+/* =========================================
+LOGOUT
+========================================= */
 
 function logout(){
+
+    const confirmar =
+    confirm(
+        "Deseja realmente sair do painel?"
+    );
+
+
+    if(!confirmar){
+        return;
+    }
+
 
     localStorage.removeItem(
         "adminLogado"
     );
 
+
     localStorage.removeItem(
         "adminUsuario"
     );
+
 
     window.location.href =
     "login.html";
@@ -1492,45 +3247,204 @@ function logout(){
 }
 
 
-/* ==============================
-   NOTIFICAÇÃO
-================================ */
+/* =========================================
+ATALHO NOVA RESERVA
+========================================= */
 
-function mostrarToast(){
+function novaReservaDashboard(){
 
-    const toast =
-    document.getElementById(
-        "toast"
-    );
-
-    toast.classList.add(
-        "show"
-    );
-
-    setTimeout(() => {
-
-        toast.classList.remove(
-            "show"
-        );
-
-    },3500);
+    window.location.href =
+    "reservas.html?nova=1";
 
 }
 
 
-/* ==============================
-   INICIAR
-================================ */
+/* =========================================
+ATALHO NOVO CLIENTE
+========================================= */
 
-carregarDashboard();
+function novoClienteDashboard(){
 
-setTimeout(
-    mostrarToast,
-    500
-);
+    window.location.href =
+    "clientes.html?novo=1";
+
+}
+
+
+/* =========================================
+ATALHO CALENDÁRIO
+========================================= */
+
+function abrirCalendarioHoje(){
+
+    const hoje =
+    obterDataHojeDashboard();
+
+
+    window.location.href =
+    `calendario.html?data=${hoje}`;
+
+}
+
+
+/* =========================================
+ATALHO FINANCEIRO
+========================================= */
+
+function abrirFinanceiroDashboard(){
+
+    window.location.href =
+    "financeiro.html";
+
+}
+
+
+/* =========================================
+CONTINUA NA PARTE 5/5
+========================================= */
 
 </script>
+<script>
 
+/* =========================================
+VERIFICAR SUPABASE
+========================================= */
+
+function verificarSupabaseDashboard(){
+
+    if(
+        typeof supabaseClient ===
+        "undefined"
+    ){
+
+        console.error(
+            "supabaseClient não encontrado."
+        );
+
+        document.getElementById(
+            "resumoDashboard"
+        ).textContent =
+        "Não foi possível conectar ao banco de dados.";
+
+        return false;
+    }
+
+    return true;
+
+}
+
+
+/* =========================================
+INICIALIZAÇÃO
+========================================= */
+
+async function iniciarDashboard(){
+
+    console.log(
+        "Iniciando Dashboard V4..."
+    );
+
+
+    /* LOGIN */
+
+    if(
+        localStorage.getItem(
+            "adminLogado"
+        )
+        !==
+        "true"
+    ){
+
+        window.location.href =
+        "login.html";
+
+        return;
+    }
+
+
+    /* SUPABASE */
+
+    if(
+        !verificarSupabaseDashboard()
+    ){
+
+        return;
+    }
+
+
+    try{
+
+        await carregarDashboard();
+
+        await carregarConfiguracoesDashboard();
+
+
+        console.log(
+            "Dashboard carregado com sucesso."
+        );
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao iniciar dashboard:",
+            erro
+        );
+
+
+        document.getElementById(
+            "resumoDashboard"
+        ).textContent =
+        erro.message
+        ||
+        "Não foi possível carregar as informações do painel.";
+
+
+        document.getElementById(
+            "proximasReservas"
+        ).innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <p>
+                    Erro ao carregar reservas.
+                </p>
+
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "ultimasMovimentacoes"
+        ).innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <p>
+                    Erro ao carregar o financeiro.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+INICIAR
+========================================= */
+
+iniciarDashboard();
+
+</script>
 
 </body>
 </html>
