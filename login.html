@@ -1,411 +1,1064 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <link rel="icon" type="image/jpeg" href="assets/favicon.jpeg">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Encanto Kids | Painel Administrativo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Encanto Kids | Painel Administrativo</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+<link
+rel="icon"
+type="image/jpeg"
+href="assets/favicon.jpeg">
 
-        body {
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at top right, #252525, transparent 40%),
-                #090909;
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-            padding: 20px;
-            color: #fff;
-        }
+<style>
 
-        .login-container {
-            width: 100%;
-            max-width: 420px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
 
-        .login-card {
-            background: #141414;
-            border: 1px solid #292929;
-            border-radius: 20px;
-            padding: 35px;
+body{
+    min-height:100vh;
 
-            box-shadow:
-                0 30px 80px rgba(0,0,0,.55);
-        }
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-        .marca {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    padding:25px;
 
-        .logo {
-            width: 90px;
-            height: 90px;
+    color:white;
 
-            object-fit: cover;
-            border-radius: 50%;
+    overflow:hidden;
 
-            border: 3px solid #fff;
+    background:
+        linear-gradient(
+            rgba(3,8,18,.40),
+            rgba(3,8,18,.58)
+        ),
+        url("assets/login-bg.png");
 
-            margin-bottom: 15px;
-        }
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+}
 
-        .marca h1 {
-            font-size: 23px;
-            margin-bottom: 5px;
-        }
 
-        .marca p {
-            color: #888;
-            font-size: 14px;
-        }
+/* ========================================
+CAMADA AMBIENTE
+======================================== */
 
-        .campo {
-            margin-bottom: 18px;
-        }
+body::before{
+    content:"";
 
-        .campo label {
-            display: block;
-            font-size: 13px;
-            color: #aaa;
-            margin-bottom: 7px;
-        }
+    position:fixed;
 
-        .campo input {
-            width: 100%;
-            height: 50px;
+    inset:0;
 
-            background: #0c0c0c;
-            color: white;
+    pointer-events:none;
 
-            border: 1px solid #333;
-            border-radius: 10px;
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(249,115,22,.11),
+            transparent 35%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(2,6,23,.45),
+            transparent 25%,
+            transparent 75%,
+            rgba(2,6,23,.45)
+        );
 
-            outline: none;
+    z-index:0;
+}
 
-            padding: 0 15px;
 
-            font-size: 15px;
+/* ========================================
+CONTAINER
+======================================== */
 
-            transition: .2s;
-        }
+.login-container{
+    width:100%;
+    max-width:610px;
 
-        .campo input:focus {
-            border-color: #fff;
-        }
+    position:relative;
 
-        .btn-login {
-            width: 100%;
-            height: 50px;
+    z-index:2;
 
-            border: 0;
-            border-radius: 10px;
+    animation:entradaLogin .7s ease;
+}
 
-            background: white;
-            color: black;
 
-            font-size: 15px;
-            font-weight: 700;
+/* ========================================
+CARD
+======================================== */
 
-            cursor: pointer;
+.login-card{
+    position:relative;
 
-            transition: .2s;
-        }
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,18,32,.96),
+            rgba(5,12,23,.97)
+        );
 
-        .btn-login:hover {
-            transform: translateY(-2px);
-            background: #e9e9e9;
-        }
+    border:1px solid rgba(249,115,22,.55);
 
-        .btn-login:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-            transform: none;
-        }
+    border-radius:32px;
 
-        #mensagem {
-            display: none;
+    padding:42px 55px 35px;
 
-            margin-top: 18px;
-            padding: 12px;
+    box-shadow:
+        0 40px 100px rgba(0,0,0,.65),
+        0 0 45px rgba(249,115,22,.10),
+        inset 0 1px 0 rgba(255,255,255,.06);
 
-            border-radius: 8px;
+    backdrop-filter:blur(12px);
 
-            font-size: 14px;
-            text-align: center;
-        }
+    overflow:hidden;
+}
 
-        .erro {
-            display: block !important;
-            background: rgba(239,68,68,.12);
-            border: 1px solid rgba(239,68,68,.4);
-            color: #ff7979;
-        }
+.login-card::before{
+    content:"";
 
-        .sucesso {
-            display: block !important;
-            background: rgba(34,197,94,.12);
-            border: 1px solid rgba(34,197,94,.4);
-            color: #6ee7a0;
-        }
+    position:absolute;
 
-        .rodape {
-            text-align: center;
-            color: #555;
-            margin-top: 20px;
-            font-size: 12px;
-        }
+    top:-100px;
+    left:50%;
 
-        @media(max-width:500px) {
-            .login-card {
-                padding: 27px 22px;
-            }
-        }
-    </style>
+    width:360px;
+    height:180px;
+
+    transform:translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(249,115,22,.16),
+            transparent 68%
+        );
+
+    pointer-events:none;
+}
+
+
+/* ========================================
+MARCA
+======================================== */
+
+.marca{
+    position:relative;
+
+    text-align:center;
+
+    margin-bottom:30px;
+}
+
+.logo{
+    width:110px;
+    height:110px;
+
+    object-fit:cover;
+
+    border-radius:25px;
+
+    margin-bottom:17px;
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.45),
+        0 0 25px rgba(249,115,22,.15);
+}
+
+.marca h1{
+    font-size:30px;
+
+    margin-bottom:7px;
+
+    font-weight:800;
+
+    letter-spacing:-.5px;
+}
+
+.marca h1 span{
+    color:#ff7a00;
+}
+
+.marca p{
+    color:#a0a9b7;
+
+    font-size:14px;
+
+    line-height:1.6;
+}
+
+.marca p strong{
+    color:#ff7a00;
+}
+
+
+/* ========================================
+FORM
+======================================== */
+
+.campo{
+    margin-bottom:19px;
+}
+
+.campo label{
+    display:block;
+
+    font-size:14px;
+
+    color:#edf1f6;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+}
+
+.input-box{
+    position:relative;
+}
+
+.input-icon{
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:58px;
+    height:54px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#ff7a00;
+
+    font-size:18px;
+
+    border-right:1px solid #313a4b;
+
+    z-index:2;
+}
+
+.campo input{
+    width:100%;
+    height:54px;
+
+    background:rgba(7,14,26,.85);
+
+    color:white;
+
+    border:1px solid #344055;
+
+    border-radius:14px;
+
+    outline:none;
+
+    padding:0 52px 0 75px;
+
+    font-size:15px;
+
+    transition:.25s;
+
+    box-shadow:
+        inset 0 0 12px rgba(0,0,0,.18);
+}
+
+.campo input::placeholder{
+    color:#6f7b8e;
+}
+
+.campo input:focus{
+    border-color:#ff7a00;
+
+    box-shadow:
+        0 0 0 3px rgba(249,115,22,.10),
+        0 0 20px rgba(249,115,22,.10);
+}
+
+
+/* ========================================
+MOSTRAR SENHA
+======================================== */
+
+.toggle-senha{
+    position:absolute;
+
+    right:15px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:35px;
+    height:35px;
+
+    border:none;
+
+    background:transparent;
+
+    color:#8995a8;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    z-index:3;
+}
+
+.toggle-senha:hover{
+    color:white;
+}
+
+
+/* ========================================
+BOTÃO
+======================================== */
+
+.btn-login{
+    width:100%;
+    height:56px;
+
+    margin-top:5px;
+
+    border:0;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f15a00,
+            #ff8a00
+        );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    letter-spacing:.3px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    box-shadow:
+        0 14px 30px rgba(249,115,22,.20),
+        inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+.btn-login:hover{
+    transform:translateY(-2px);
+
+    filter:brightness(1.07);
+
+    box-shadow:
+        0 18px 38px rgba(249,115,22,.28);
+}
+
+.btn-login:disabled{
+    opacity:.65;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+
+/* ========================================
+MENSAGEM
+======================================== */
+
+#mensagem{
+    display:none;
+
+    margin-top:17px;
+
+    padding:12px 14px;
+
+    border-radius:10px;
+
+    font-size:12px;
+
+    text-align:center;
+}
+
+.erro{
+    display:block !important;
+
+    background:rgba(239,68,68,.12);
+
+    border:1px solid rgba(239,68,68,.35);
+
+    color:#ff8c8c;
+}
+
+.sucesso{
+    display:block !important;
+
+    background:rgba(34,197,94,.12);
+
+    border:1px solid rgba(34,197,94,.35);
+
+    color:#68e49a;
+}
+
+
+/* ========================================
+SEGURANÇA
+======================================== */
+
+.security{
+    margin-top:25px;
+
+    text-align:center;
+
+    color:#6f7a8c;
+
+    font-size:11px;
+}
+
+.security i{
+    margin-right:6px;
+}
+
+
+/* ========================================
+RODAPÉ
+======================================== */
+
+.rodape{
+    text-align:center;
+
+    color:#667185;
+
+    margin-top:13px;
+
+    font-size:10px;
+}
+
+
+/* ========================================
+INTRO LOGIN
+======================================== */
+
+.login-intro{
+    position:fixed;
+
+    inset:0;
+
+    background:#080d16;
+
+    z-index:9999;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    padding:20px;
+}
+
+.login-intro.show{
+    display:flex;
+}
+
+.intro-content{
+    animation:introIn .55s ease;
+}
+
+.intro-logo{
+    width:100px;
+    height:100px;
+
+    border-radius:24px;
+
+    object-fit:cover;
+
+    margin-bottom:22px;
+
+    box-shadow:
+        0 0 45px rgba(249,115,22,.18);
+}
+
+.intro-content span{
+    display:block;
+
+    color:#ff7a00;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+
+    margin-bottom:8px;
+}
+
+.intro-content h2{
+    font-size:34px;
+
+    margin-bottom:10px;
+}
+
+.intro-content p{
+    color:#7d899b;
+
+    font-size:13px;
+}
+
+.intro-loader{
+    width:230px;
+    height:4px;
+
+    background:#171e2a;
+
+    border-radius:10px;
+
+    margin:27px auto 0;
+
+    overflow:hidden;
+}
+
+.intro-loader div{
+    height:100%;
+
+    width:0;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f15a00,
+            #ff9a19
+        );
+
+    animation:carregarIntro 2s forwards;
+}
+
+
+/* ========================================
+ANIMAÇÕES
+======================================== */
+
+@keyframes entradaLogin{
+
+    from{
+        opacity:0;
+        transform:translateY(18px) scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+}
+
+@keyframes introIn{
+
+    from{
+        opacity:0;
+        transform:scale(.96);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+@keyframes carregarIntro{
+
+    from{
+        width:0;
+    }
+
+    to{
+        width:100%;
+    }
+
+}
+
+
+/* ========================================
+RESPONSIVO
+======================================== */
+
+@media(max-width:650px){
+
+    body{
+        padding:15px;
+
+        background-position:center;
+    }
+
+    .login-card{
+        padding:32px 23px 27px;
+
+        border-radius:23px;
+    }
+
+    .logo{
+        width:90px;
+        height:90px;
+    }
+
+    .marca h1{
+        font-size:24px;
+    }
+
+    .marca p{
+        font-size:12px;
+    }
+
+    .campo input{
+        height:51px;
+    }
+
+    .input-icon{
+        height:51px;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
+
 <div class="login-container">
 
-    <div class="login-card">
 
-        <div class="marca">
+<div class="login-card">
 
-            <img
-                src="assets/logo.png"
-                alt="Encanto Kids"
-                class="logo"
-                onerror="this.style.display='none'"
-            >
 
-            <h1>Encanto Kids Infláveis</h1>
+    <div class="marca">
 
-            <p>Painel Administrativo</p>
+        <img
+        src="assets/favicon.jpeg"
+        alt="Encanto Kids"
+        class="logo"
+        onerror="this.src='assets/logo.png'">
+
+
+        <h1>
+            Encanto <span>Kids</span>
+        </h1>
+
+
+        <p>
+            Bem-vindo de volta!<br>
+            Faça login para acessar o
+            <strong>painel administrativo.</strong>
+        </p>
+
+    </div>
+
+
+    <form id="formLogin">
+
+
+        <div class="campo">
+
+            <label for="usuario">
+                Usuário
+            </label>
+
+
+            <div class="input-box">
+
+                <div class="input-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+
+                <input
+                type="text"
+                id="usuario"
+                autocomplete="username"
+                placeholder="Digite seu usuário"
+                required>
+
+            </div>
 
         </div>
 
 
-        <form id="formLogin">
+        <div class="campo">
 
-            <div class="campo">
+            <label for="senha">
+                Senha
+            </label>
 
-                <label for="usuario">
-                    Usuário
-                </label>
+
+            <div class="input-box">
+
+                <div class="input-icon">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
 
                 <input
-                    type="text"
-                    id="usuario"
-                    autocomplete="username"
-                    placeholder="Digite seu usuário"
-                    required
-                >
+                type="password"
+                id="senha"
+                autocomplete="current-password"
+                placeholder="Digite sua senha"
+                required>
+
+
+                <button
+                type="button"
+                class="toggle-senha"
+                onclick="alternarSenha()">
+
+                    <i
+                    class="fa-solid fa-eye"
+                    id="iconeSenha"></i>
+
+                </button>
 
             </div>
 
-
-            <div class="campo">
-
-                <label for="senha">
-                    Senha
-                </label>
-
-                <input
-                    type="password"
-                    id="senha"
-                    autocomplete="current-password"
-                    placeholder="Digite sua senha"
-                    required
-                >
-
-            </div>
+        </div>
 
 
-            <button
-                type="submit"
-                class="btn-login"
-                id="btnLogin"
-            >
-                Entrar
-            </button>
+        <button
+        type="submit"
+        class="btn-login"
+        id="btnLogin">
 
-            <div id="mensagem"></div>
+            ENTRAR
 
-        </form>
+        </button>
+
+
+        <div id="mensagem"></div>
+
+
+    </form>
+
+
+    <div class="security">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        Acesso seguro e restrito
 
     </div>
 
 
     <div class="rodape">
+
         Encanto Kids Infláveis • Sistema Administrativo
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+<!-- ========================================
+INTRO
+======================================== -->
+
+<div
+class="login-intro"
+id="loginIntro">
+
+    <div class="intro-content">
+
+
+        <img
+        src="assets/favicon.jpeg"
+        class="intro-logo"
+        alt="Encanto Kids">
+
+
+        <span>
+            ENCANTO KIDS ADM
+        </span>
+
+
+        <h2 id="introTitulo">
+            Bem-vindo!
+        </h2>
+
+
+        <p>
+            Login realizado! Abrindo painel...
+        </p>
+
+
+        <div class="intro-loader">
+
+            <div></div>
+
+        </div>
+
+
     </div>
 
 </div>
 
 
+<script src="js/supabase.js"></script>
+
 <script>
 
-const SUPABASE_URL =
-    'https://stnjpquafragqjwxyjza.supabase.co';
+/* ========================================
+MOSTRAR / OCULTAR SENHA
+======================================== */
 
-const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0bmpwcXVhZnJhZ3Fqd3h5anphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzI2MzAsImV4cCI6MjEwMDUwODYzMH0.r3YlozqWb2h96TLomC-VOfeQNLknio8x5xaiNVlQOkE'
+function alternarSenha(){
 
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
+    const senha =
+    document.getElementById(
+        "senha"
     );
 
 
-const formLogin =
-    document.getElementById('formLogin');
-
-const btnLogin =
-    document.getElementById('btnLogin');
-
-const mensagem =
-    document.getElementById('mensagem');
+    const icone =
+    document.getElementById(
+        "iconeSenha"
+    );
 
 
-function mostrarMensagem(texto, tipo) {
+    if(
+        senha.type ===
+        "password"
+    ){
 
-    mensagem.textContent = texto;
+        senha.type =
+        "text";
 
-    mensagem.className = '';
 
-    mensagem.classList.add(tipo);
+        icone.className =
+        "fa-solid fa-eye-slash";
+
+    }
+    else{
+
+        senha.type =
+        "password";
+
+
+        icone.className =
+        "fa-solid fa-eye";
+
+    }
 
 }
 
 
-formLogin.addEventListener('submit', async function(event) {
+/* ========================================
+LOGIN
+======================================== */
 
-    event.preventDefault();
+document
+.getElementById(
+    "formLogin"
+)
+.addEventListener(
+    "submit",
+    async function(event){
 
-    const usuario =
-        document.getElementById('usuario')
+        event.preventDefault();
+
+
+        const usuario =
+        document.getElementById(
+            "usuario"
+        )
         .value
         .trim();
 
-    const senha =
-        document.getElementById('senha')
+
+        const senha =
+        document.getElementById(
+            "senha"
+        )
         .value;
 
 
-    if (!usuario || !senha) {
-
-        mostrarMensagem(
-            'Preencha usuário e senha.',
-            'erro'
+        const mensagem =
+        document.getElementById(
+            "mensagem"
         );
 
-        return;
-    }
+
+        const btn =
+        document.getElementById(
+            "btnLogin"
+        );
 
 
-    btnLogin.disabled = true;
-
-    btnLogin.textContent =
-        'Entrando...';
+        mensagem.style.display =
+        "none";
 
 
-    try {
+        mensagem.className =
+        "";
 
-        const { data, error } =
+
+        btn.disabled =
+        true;
+
+
+        btn.innerHTML = `
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            Entrando...
+
+        `;
+
+
+        try{
+
+
+            const {
+                data,
+                error
+            } =
             await supabaseClient
-            .from('administradores')
-            .select('id, usuario')
-            .eq('usuario', usuario)
-            .eq('senha', senha)
+            .from(
+                "administradores"
+            )
+            .select("*")
+            .eq(
+                "usuario",
+                usuario
+            )
+            .eq(
+                "senha",
+                senha
+            )
             .maybeSingle();
 
 
-        if (error) {
+            if(error){
+
+                throw error;
+
+            }
+
+
+            if(!data){
+
+                mensagem.textContent =
+                "Usuário ou senha inválidos.";
+
+
+                mensagem.className =
+                "erro";
+
+
+                return;
+
+            }
+
+
+            /* SALVAR LOGIN */
+
+            localStorage.setItem(
+                "adminLogado",
+                "true"
+            );
+
+
+            localStorage.setItem(
+                "adminUsuario",
+                data.usuario
+                ||
+                usuario
+            );
+
+
+            /* INTRO */
+
+            document.getElementById(
+                "introTitulo"
+            ).textContent =
+            `Bem-vindo, Sr. ${
+                data.usuario || usuario
+            }`;
+
+
+            document.getElementById(
+                "loginIntro"
+            )
+            .classList
+            .add("show");
+
+
+            setTimeout(
+                function(){
+
+                    window.location.href =
+                    "dashboard.html";
+
+                },
+                2100
+            );
+
+
+        }
+        catch(erro){
 
             console.error(
-                'Erro Supabase:',
-                error
+                "Erro login:",
+                erro
             );
 
-            mostrarMensagem(
-                'Erro ao conectar com o banco: ' +
-                error.message,
-                'erro'
-            );
 
-            return;
+            mensagem.textContent =
+            erro.message
+            ||
+            "Não foi possível realizar o login.";
+
+
+            mensagem.className =
+            "erro";
+
         }
+        finally{
+
+            btn.disabled =
+            false;
 
 
-        if (!data) {
+            btn.innerHTML =
+            "ENTRAR";
 
-            mostrarMensagem(
-                'Usuário ou senha incorretos.',
-                'erro'
-            );
-
-            return;
         }
-
-
-        localStorage.setItem(
-            'adminLogado',
-            'true'
-        );
-
-        localStorage.setItem(
-            'adminUsuario',
-            data.usuario
-        );
-
-
-        mostrarMensagem(
-    'Login realizado! Abrindo painel...',
-    'sucesso'
-);
-
-setTimeout(function() {
-    window.location.href =
-        'loading.html';
-}, 700);
-
-
-    } catch (erro) {
-
-        console.error(erro);
-
-        mostrarMensagem(
-            'Não foi possível realizar o login.',
-            'erro'
-        );
-
-
-    } finally {
-
-        btnLogin.disabled = false;
-
-        btnLogin.textContent =
-            'Entrar';
 
     }
-
-});
+);
 
 </script>
 
