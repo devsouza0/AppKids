@@ -15,6 +15,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <style>
 
+
 *{
     margin:0;
     padding:0;
@@ -3136,6 +3137,234 @@ RESPONSIVO MODAIS
 
 }
 
+.payment-overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.80);
+
+    backdrop-filter:blur(7px);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:8000;
+}
+
+.payment-overlay.show{
+    display:flex;
+}
+
+.payment-modal{
+    width:100%;
+    max-width:620px;
+
+    background:#111722;
+
+    border:1px solid #2c3546;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.65);
+}
+
+.payment-header{
+    padding:20px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:1px solid #242b39;
+}
+
+.payment-header span{
+    display:block;
+
+    color:#677286;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+.payment-header h2{
+    margin-top:4px;
+
+    font-size:19px;
+}
+
+.payment-header p{
+    margin-top:4px;
+
+    color:#7d899c;
+
+    font-size:10px;
+}
+
+.payment-close{
+    width:38px;
+    height:38px;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#1b2230;
+
+    color:#aab4c4;
+
+    cursor:pointer;
+}
+
+.payment-body{
+    padding:20px;
+}
+
+.payment-summary{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+    margin-bottom:20px;
+}
+
+.payment-summary div{
+    background:#0d121a;
+
+    border:1px solid #293243;
+
+    border-radius:10px;
+
+    padding:12px;
+}
+
+.payment-summary span{
+    display:block;
+
+    color:#697589;
+
+    font-size:8px;
+
+    margin-bottom:5px;
+}
+
+.payment-summary strong{
+    font-size:14px;
+}
+
+.payment-form-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+}
+
+.payment-field{
+    margin-bottom:14px;
+}
+
+.payment-field label{
+    display:block;
+
+    color:#7e899c;
+
+    font-size:9px;
+
+    margin-bottom:6px;
+}
+
+.payment-field input,
+.payment-field select,
+.payment-field textarea{
+    width:100%;
+
+    background:#0c1118;
+
+    color:white;
+
+    border:1px solid #293243;
+
+    border-radius:9px;
+
+    outline:none;
+}
+
+.payment-field input,
+.payment-field select{
+    height:43px;
+
+    padding:0 12px;
+}
+
+.payment-field textarea{
+    min-height:85px;
+
+    padding:12px;
+
+    resize:vertical;
+}
+
+.payment-footer{
+    padding:15px 20px;
+
+    border-top:1px solid #242b39;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:9px;
+}
+
+.payment-cancel{
+    background:#1b2230;
+
+    color:white;
+
+    border:1px solid #30394a;
+
+    padding:11px 14px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+.payment-save{
+    background:#16a34a;
+
+    color:white;
+
+    border:none;
+
+    padding:11px 15px;
+
+    border-radius:9px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+@media(max-width:650px){
+
+    .payment-summary,
+    .payment-form-grid{
+        grid-template-columns:1fr;
+    }
+
+} 
 </style>
 
 
