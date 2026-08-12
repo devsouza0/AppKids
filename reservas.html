@@ -8078,9 +8078,8 @@ function abrirContratoReserva(id){
 
     localStorage.setItem(
         "reservaContratoId",
-        String(id)
+        id
     );
-
 
     window.location.href =
     `contratos.html?reserva=${id}`;
