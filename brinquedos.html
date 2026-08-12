@@ -2394,6 +2394,93 @@ item.observacao_manutencao || "";
 SALVAR
 ========================================= */
 
+    /* =========================================
+TOAST
+========================================= */
+
+let timerToastBrinquedo = null;
+
+function mostrarToast(
+    titulo,
+    texto,
+    erro = false
+){
+
+    const toast =
+    document.getElementById("toast");
+
+    const tituloEl =
+    document.getElementById("toastTitulo");
+
+    const textoEl =
+    document.getElementById("toastTexto");
+
+    const iconeEl =
+    document.getElementById("toastIcon");
+
+
+    if(
+        !toast ||
+        !tituloEl ||
+        !textoEl ||
+        !iconeEl
+    ){
+
+        console.log(
+            titulo,
+            texto
+        );
+
+        return;
+    }
+
+
+    tituloEl.textContent =
+    titulo;
+
+
+    textoEl.textContent =
+    texto;
+
+
+    iconeEl.innerHTML =
+    erro
+    ?
+    '<i class="fa-solid fa-circle-exclamation"></i>'
+    :
+    '<i class="fa-solid fa-circle-check"></i>';
+
+
+    toast.classList.toggle(
+        "error",
+        erro
+    );
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        timerToastBrinquedo
+    );
+
+
+    timerToastBrinquedo =
+    setTimeout(
+        function(){
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        3500
+    );
+
+}
+
 async function salvarBrinquedo(){
 
     const nome =
