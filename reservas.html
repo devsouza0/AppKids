@@ -9056,6 +9056,300 @@ function fecharPagamentoReserva(){
     .remove("show");
 
 }
+    async function salvarPagamentoReserva(){
+
+    if(!pagamentoReservaAtual){
+
+        mostrarToast(
+            "Erro",
+            "Nenhuma reserva selecionada.",
+            true
+        );
+
+        return;
+    }
+
+
+    const reserva =
+    pagamentoReservaAtual;
+
+
+    const valor =
+    Number(
+        document.getElementById(
+            "paymentValor"
+        ).value || 0
+    );
+
+
+    const forma =
+    document.getElementById(
+        "paymentForma"
+    ).value;
+
+
+    const data =
+    document.getElementById(
+        "paymentData"
+    ).value;
+
+
+    const status =
+    document.getElementById(
+        "paymentStatus"
+    ).value;
+
+
+    const observacoes =
+    document.getElementById(
+        "paymentObservacoes"
+    ).value
+    .trim();
+
+
+    const total =
+    Number(
+        reserva.valor_total || 0
+    );
+
+
+    const restanteAtual =
+    reserva.valor_restante !== null
+    &&
+    reserva.valor_restante !== undefined
+    ?
+    Number(
+        reserva.valor_restante || 0
+    )
+    :
+    Math.max(
+        total -
+        Number(
+            reserva.valor_entrada || 0
+        ),
+        0
+    );
+
+
+    /* VALIDAÇÕES */
+
+    if(valor <= 0){
+
+        mostrarToast(
+            "Atenção",
+            "Informe um valor maior que zero.",
+            true
+        );
+
+        return;
+    }
+
+
+    if(valor > restanteAtual){
+
+        mostrarToast(
+            "Valor inválido",
+            `O valor máximo é ${moeda(restanteAtual)}.`,
+            true
+        );
+
+        return;
+    }
+
+
+    if(!forma){
+
+        mostrarToast(
+            "Atenção",
+            "Selecione a forma de pagamento.",
+            true
+        );
+
+        return;
+    }
+
+
+    if(!data){
+
+        mostrarToast(
+            "Atenção",
+            "Informe a data do pagamento.",
+            true
+        );
+
+        return;
+    }
+
+
+    const novoRestante =
+    Math.max(
+        restanteAtual - valor,
+        0
+    );
+
+
+    const btn =
+    document.getElementById(
+        "btnSalvarPagamento"
+    );
+
+
+    btn.disabled = true;
+
+    btn.innerHTML = `
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Registrando...
+    `;
+
+
+    try{
+
+
+        /* =====================================
+        1. REGISTRAR NO FINANCEIRO
+        ===================================== */
+
+        const cliente =
+        reserva.cliente?.nome
+        ||
+        "Cliente";
+
+
+        const {
+            error: erroFinanceiro
+        } =
+        await supabaseClient
+        .from("financeiro")
+        .insert({
+
+            tipo:
+            "Receita",
+
+            descricao:
+            `Pagamento da reserva #${reserva.id} - ${cliente}`,
+
+            categoria:
+            "Reserva",
+
+            valor:
+            valor,
+
+            data_movimento:
+            data,
+
+            forma_pagamento:
+            forma,
+
+            status:
+            status,
+
+            reserva_id:
+            reserva.id,
+
+            observacoes:
+            observacoes
+            ||
+            `Pagamento referente à reserva #${reserva.id}`,
+
+            origem:
+            "pagamento"
+
+        });
+
+
+        if(erroFinanceiro){
+            throw erroFinanceiro;
+        }
+
+
+        /* =====================================
+        2. ATUALIZAR RESTANTE DA RESERVA
+        ===================================== */
+
+        const dadosReserva = {
+
+            valor_restante:
+            novoRestante
+
+        };
+
+
+        /*
+        Se quitou tudo, podemos marcar
+        o pagamento como concluído sem
+        mexer no status da locação.
+        */
+
+        const {
+            error: erroReserva
+        } =
+        await supabaseClient
+        .from("reservas")
+        .update(
+            dadosReserva
+        )
+        .eq(
+            "id",
+            reserva.id
+        );
+
+
+        if(erroReserva){
+            throw erroReserva;
+        }
+
+
+        /* =====================================
+        3. ATUALIZAR TELA
+        ===================================== */
+
+        fecharPagamentoReserva();
+
+
+        mostrarToast(
+            "Pagamento registrado",
+            novoRestante <= 0
+            ?
+            "Reserva quitada com sucesso."
+            :
+            `Pagamento registrado. Restam ${moeda(novoRestante)}.`,
+            false
+        );
+
+
+        await carregarReservas();
+
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao registrar pagamento:",
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            erro.message
+            ||
+            "Não foi possível registrar o pagamento.",
+            true
+        );
+
+    }
+    finally{
+
+        btn.disabled = false;
+
+        btn.innerHTML = `
+            <i class="fa-solid fa-check"></i>
+            Registrar Pagamento
+        `;
+
+    }
+
+}
 
 async function iniciarSistemaReservas(){
 
