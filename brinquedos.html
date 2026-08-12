@@ -2320,7 +2320,33 @@ function editarBrinquedo(id){
     "true"
     :
     "false";
+    
+document.getElementById(
+    "manutencaoBrinquedo"
+).value =
+item.em_manutencao === true
+?
+"true"
+:
+"false";
 
+
+document.getElementById(
+    "ultimaManutencao"
+).value =
+item.ultima_manutencao || "";
+
+
+document.getElementById(
+    "proximaManutencao"
+).value =
+item.proxima_manutencao || "";
+
+
+document.getElementById(
+    "observacaoManutencao"
+).value =
+item.observacao_manutencao || "";
 
     document.getElementById(
         "imagemBrinquedo"
