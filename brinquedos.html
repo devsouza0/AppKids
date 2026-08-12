@@ -2461,6 +2461,28 @@ async function salvarBrinquedo(){
         disponivel:
 
         disponivel,
+        em_manutencao:
+document.getElementById(
+    "manutencaoBrinquedo"
+).value === "true",
+
+ultima_manutencao:
+document.getElementById(
+    "ultimaManutencao"
+).value || null,
+
+proxima_manutencao:
+document.getElementById(
+    "proximaManutencao"
+).value || null,
+
+observacao_manutencao:
+document.getElementById(
+    "observacaoManutencao"
+).value.trim() || null,
+
+ativo:
+status !== "inativo",
 
         imagem:
 
