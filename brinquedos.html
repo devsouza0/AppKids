@@ -2588,63 +2588,83 @@ if(emManutencao){
     }
 
 
-    const dados = {
-
-        nome:
-
-        nome,
-
-        descricao:
-
-        document.getElementById(
-            "descricaoBrinquedo"
-        )
-        .value
-        .trim(),
-
-        valor:
-
-        valor,
-
-        quantidade:
-
-        quantidade,
-
-        disponivel:
-
-        disponivel,
-        em_manutencao:
+    const emManutencao =
 document.getElementById(
     "manutencaoBrinquedo"
-).value === "true",
+).value === "true";
 
-ultima_manutencao:
-document.getElementById(
-    "ultimaManutencao"
-).value || null,
 
-proxima_manutencao:
-document.getElementById(
-    "proximaManutencao"
-).value || null,
+let statusFinal =
+status;
 
-observacao_manutencao:
-document.getElementById(
-    "observacaoManutencao"
-).value.trim() || null,
 
-ativo:
-status !== "inativo",
+let disponivelFinal =
+disponivel;
 
-        imagem:
 
-        document.getElementById(
-            "imagemBrinquedo"
-        )
-        .value
-        .trim()
+/* MANUTENÇÃO TEM PRIORIDADE */
 
-    };
+if(emManutencao){
+
+    statusFinal =
+    "manutencao";
+
+    disponivelFinal =
+    false;
+
+}
+
+
+const dados = {
+
+    nome:
+    nome,
+
+    descricao:
+    document.getElementById(
+        "descricaoBrinquedo"
+    )
+    .value
+    .trim(),
+
+    valor:
+    valor,
+
+    quantidade:
+    quantidade,
+
+    disponivel:
+    disponivelFinal,
+
+    em_manutencao:
+    emManutencao,
+
+    ultima_manutencao:
+    document.getElementById(
+        "ultimaManutencao"
+    ).value || null,
+
+    proxima_manutencao:
+    document.getElementById(
+        "proximaManutencao"
+    ).value || null,
+
+    observacao_manutencao:
+    document.getElementById(
+        "observacaoManutencao"
+    ).value.trim() || null,
+
+    ativo:
+    statusFinal !== "inativo",
+
+    imagem:
+    document.getElementById(
+        "imagemBrinquedo"
+    )
+    .value
+    .trim()
+
+};
 
 
     /*
@@ -2683,7 +2703,7 @@ status !== "inativo",
             await atualizarBrinquedoBanco(
                 brinquedoEditandoId,
                 dados,
-                status
+                statusFinal
             );
 
         }
@@ -2691,7 +2711,7 @@ status !== "inativo",
 
             await criarBrinquedoBanco(
                 dados,
-                status
+                statusFinal
             );
 
         }
