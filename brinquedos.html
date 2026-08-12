@@ -2555,6 +2555,23 @@ async function salvarBrinquedo(){
     "true";
 
 
+    const emManutencao =
+document.getElementById(
+    "manutencaoBrinquedo"
+).value === "true";
+
+
+/* MANUTENÇÃO TEM PRIORIDADE */
+
+let statusFinal = status;
+let disponivelFinal = disponivel;
+
+if(emManutencao){
+
+    statusFinal = "manutencao";
+    disponivelFinal = false;
+
+}
     /*
     Se estiver em manutenção,
     força indisponibilidade.
