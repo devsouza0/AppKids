@@ -2491,6 +2491,10 @@ async function salvarBrinquedo(){
     .trim();
 
 
+    /* ==============================
+    VALIDAR NOME
+    ============================== */
+
     if(!nome){
 
         mostrarToast(
@@ -2503,43 +2507,47 @@ async function salvarBrinquedo(){
     }
 
 
+    /* ==============================
+    QUANTIDADE
+    ============================== */
+
     let quantidade =
     Number(
         document.getElementById(
             "quantidadeBrinquedo"
-        ).value
-        ||
-        1
+        ).value || 1
     );
 
 
-    if(
-        quantidade < 1
-    ){
+    if(quantidade < 1){
 
         quantidade = 1;
 
     }
 
 
+    /* ==============================
+    VALOR
+    ============================== */
+
     let valor =
     Number(
         document.getElementById(
             "valorBrinquedo"
-        ).value
-        ||
-        0
+        ).value || 0
     );
 
 
-    if(
-        valor < 0
-    ){
+    if(valor < 0){
 
         valor = 0;
 
     }
 
+
+    /* ==============================
+    STATUS
+    ============================== */
 
     const status =
     document.getElementById(
@@ -2550,15 +2558,197 @@ async function salvarBrinquedo(){
     let disponivel =
     document.getElementById(
         "disponivelBrinquedo"
-    ).value
-    ===
-    "true";
+    ).value === "true";
 
 
     const emManutencao =
-document.getElementById(
-    "manutencaoBrinquedo"
-).value === "true";
+    document.getElementById(
+        "manutencaoBrinquedo"
+    ).value === "true";
+
+
+    /* ==============================
+    STATUS FINAL
+    ============================== */
+
+    let statusFinal =
+    status;
+
+
+    let disponivelFinal =
+    disponivel;
+
+
+    /*
+    Se estiver em manutenção,
+    manutenção tem prioridade.
+    */
+
+    if(
+        emManutencao ||
+        status === "manutencao"
+    ){
+
+        statusFinal =
+        "manutencao";
+
+        disponivelFinal =
+        false;
+
+    }
+
+
+    /* ==============================
+    DADOS
+    ============================== */
+
+    const dados = {
+
+        nome:
+        nome,
+
+        descricao:
+        document.getElementById(
+            "descricaoBrinquedo"
+        )
+        .value
+        .trim(),
+
+        valor:
+        valor,
+
+        quantidade:
+        quantidade,
+
+        disponivel:
+        disponivelFinal,
+
+        em_manutencao:
+        emManutencao,
+
+        ultima_manutencao:
+        document.getElementById(
+            "ultimaManutencao"
+        ).value || null,
+
+        proxima_manutencao:
+        document.getElementById(
+            "proximaManutencao"
+        ).value || null,
+
+        observacao_manutencao:
+        document.getElementById(
+            "observacaoManutencao"
+        )
+        .value
+        .trim() || null,
+
+        ativo:
+        statusFinal !== "inativo",
+
+        imagem:
+        document.getElementById(
+            "imagemBrinquedo"
+        )
+        .value
+        .trim()
+
+    };
+
+
+    /* ==============================
+    BOTÃO SALVAR
+    ============================== */
+
+    const btn =
+    document.getElementById(
+        "btnSalvarBrinquedo"
+    );
+
+
+    btn.disabled =
+    true;
+
+
+    btn.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        Salvando...
+
+    `;
+
+
+    /* ==============================
+    SALVAR NO SUPABASE
+    ============================== */
+
+    try{
+
+
+        if(brinquedoEditandoId){
+
+            await atualizarBrinquedoBanco(
+                brinquedoEditandoId,
+                dados,
+                statusFinal
+            );
+
+        }
+        else{
+
+            await criarBrinquedoBanco(
+                dados,
+                statusFinal
+            );
+
+        }
+
+
+        fecharModalBrinquedo();
+
+
+        await carregarBrinquedos();
+
+
+    }
+    catch(erro){
+
+
+        console.error(
+            "Erro salvar brinquedo:",
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            erro.message ||
+            "Não foi possível salvar o brinquedo.",
+            true
+        );
+
+
+    }
+    finally{
+
+
+        btn.disabled =
+        false;
+
+
+        btn.innerHTML = `
+
+            <i class="fa-solid fa-floppy-disk"></i>
+
+            Salvar Brinquedo
+
+        `;
+
+
+    }
+
+}
 
 
 /* MANUTENÇÃO TEM PRIORIDADE */
