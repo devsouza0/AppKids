@@ -3628,6 +3628,61 @@ async function carregarClientes(){
 }
 
 
+    function statusFinanceiro(reserva){
+
+    const total =
+        Number(reserva.valor_total || 0);
+
+    const entrada =
+        Number(reserva.valor_entrada || 0);
+
+    const restante =
+        reserva.valor_restante !== null &&
+        reserva.valor_restante !== undefined
+        ? Number(reserva.valor_restante || 0)
+        : Math.max(total - entrada, 0);
+
+
+    // Sem valor definido
+    if(total <= 0){
+
+        return {
+            texto: "—",
+            classe: "financeiro-neutro"
+        };
+
+    }
+
+
+    // Quitado
+    if(restante <= 0){
+
+        return {
+            texto: "PAGO",
+            classe: "financeiro-pago"
+        };
+
+    }
+
+
+    // Recebeu alguma coisa
+    if(restante < total){
+
+        return {
+            texto: "PARCIAL",
+            classe: "financeiro-parcial"
+        };
+
+    }
+
+
+    // Não recebeu nada
+    return {
+        texto: "PENDENTE",
+        classe: "financeiro-pendente"
+    };
+
+}
 /* ==========================================
 SELECT CLIENTES
 ========================================== */
