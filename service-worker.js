@@ -15,7 +15,7 @@ const ARQUIVOS_CACHE = [
     "./assets/favicon.jpeg",
     "./assets/logo.png",
     "./assets/icon-192.png",
-    "./assets/icon-512.png"
+    "./assets/icon-512.png",
 ];
 
 
