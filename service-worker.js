@@ -1,4 +1,4 @@
-const CACHE_NAME = "encanto-kids-adm-v2";
+const CACHE_NAME = "encanto-kids-adm-v3";
 
 const ARQUIVOS_CACHE = [
     "./",
@@ -13,9 +13,9 @@ const ARQUIVOS_CACHE = [
     "./configuracoes.html",
     "./manifest.json",
     "./assets/favicon.jpeg",
-    "./assets/logo.png"
+    "./assets/logo.png",
     "./assets/icon-192.png",
-"./assets/icon-512.png",
+    "./assets/icon-512.png"
 ];
 
 
@@ -102,7 +102,7 @@ self.addEventListener(
         event.request;
 
 
-        /* Não mexer nas requisições do Supabase */
+        /* NÃO INTERFERIR NO SUPABASE */
 
         if(
             requisicao.url.includes(
@@ -115,7 +115,7 @@ self.addEventListener(
         }
 
 
-        /* Somente GET */
+        /* SOMENTE REQUISIÇÕES GET */
 
         if(
             requisicao.method !== "GET"
@@ -132,31 +132,67 @@ self.addEventListener(
 
             .then(resposta => {
 
-                const copia =
-                resposta.clone();
+                /*
+                Só salva respostas válidas.
+                */
+
+                if(
+                    resposta &&
+                    resposta.status === 200 &&
+                    resposta.type !== "opaque"
+                ){
+
+                    const copia =
+                    resposta.clone();
 
 
-                caches
-                .open(CACHE_NAME)
-                .then(cache => {
+                    caches
+                    .open(CACHE_NAME)
+                    .then(cache => {
 
-                    cache.put(
-                        requisicao,
-                        copia
-                    );
+                        cache.put(
+                            requisicao,
+                            copia
+                        );
 
-                });
+                    });
+
+                }
 
 
                 return resposta;
 
             })
 
-            .catch(() => {
+            .catch(async () => {
 
-                return caches.match(
+                const respostaCache =
+                await caches.match(
                     requisicao
                 );
+
+
+                if(respostaCache){
+
+                    return respostaCache;
+
+                }
+
+
+                /*
+                Se for navegação e estiver offline,
+                tenta abrir o login.
+                */
+
+                if(
+                    requisicao.mode === "navigate"
+                ){
+
+                    return caches.match(
+                        "./login.html"
+                    );
+
+                }
 
             })
 
