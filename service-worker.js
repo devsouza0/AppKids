@@ -1,7 +1,6 @@
-const CACHE_NAME = "encanto-kids-adm-v4";
+const CACHE_NAME = "encanto-kids-adm-v5";
 
 const ARQUIVOS_CACHE = [
-    "./",
     "./login.html",
     "./dashboard.html",
     "./reservas.html",
