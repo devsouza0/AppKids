@@ -4911,67 +4911,9 @@ async function gerarLinkAssinaturaAtual(){
         VERIFICAR SE JÁ EXISTE TOKEN
         ===================================== */
 
-        const {
-            data: assinaturaExistente,
-            error: erroConsulta
-        } =
-        await supabaseClient
-        .from("assinaturas_contratos")
-        .select("*")
-        .eq(
-            "contrato_id",
-            contratoAtual.id
-        )
-        .maybeSingle();
-
-
-        if(erroConsulta){
-
-            throw erroConsulta;
-
-        }
-
-
-        let assinatura =
-        assinaturaExistente;
-
-
         /* =====================================
         CRIAR TOKEN SE NÃO EXISTIR
         ===================================== */
-
-        if(!assinatura){
-
-            const {
-                data,
-                error
-            } =
-            await supabaseClient
-            .from("assinaturas_contratos")
-            .insert({
-
-                contrato_id:
-                contratoAtual.id,
-
-                status:
-                "pendente"
-
-            })
-            .select()
-            .single();
-
-
-            if(error){
-
-                throw error;
-
-            }
-
-
-            assinatura =
-            data;
-
-        }
 
 
         /* =====================================
