@@ -1,1 +1,2181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Assinar Contrato | Encanto Kids</title>
+
+<link
+rel="icon"
+href="assets/logo.png">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+    background:#080b10;
+    color:#e5e7eb;
+
+    min-height:100vh;
+}
+
+.header{
+    min-height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-bottom:1px solid #202733;
+
+    background:#0d1117;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand img{
+    width:44px;
+    height:44px;
+
+    object-fit:cover;
+    border-radius:50%;
+
+    border:2px solid #f59e0b;
+}
+
+.brand h1{
+    font-size:15px;
+    color:white;
+}
+
+.brand p{
+    margin-top:3px;
+
+    color:#758195;
+    font-size:10px;
+}
+
+.container{
+    width:calc(100% - 30px);
+    max-width:850px;
+
+    margin:35px auto 60px;
+}
+
+.loading{
+    padding:70px 20px;
+
+    text-align:center;
+
+    color:#7c8799;
+}
+
+.loading i{
+    display:block;
+
+    margin-bottom:15px;
+
+    font-size:30px;
+    color:#f59e0b;
+}
+
+.erro-pagina{
+    display:none;
+
+    padding:50px 25px;
+
+    text-align:center;
+
+    border:1px solid #2a313d;
+    border-radius:15px;
+
+    background:#10151d;
+}
+
+.erro-pagina i{
+    font-size:40px;
+    color:#ef4444;
+
+    margin-bottom:18px;
+}
+
+.erro-pagina h2{
+    color:white;
+
+    margin-bottom:8px;
+}
+
+.erro-pagina p{
+    color:#7d899a;
+
+    font-size:13px;
+}
+
+.contrato{
+    display:none;
+}
+
+.top-card{
+    padding:24px;
+
+    border:1px solid #252d39;
+    border-radius:16px;
+
+    background:#10151d;
+
+    margin-bottom:18px;
+}
+
+.label{
+    color:#f59e0b;
+
+    font-size:9px;
+    font-weight:800;
+
+    letter-spacing:1px;
+}
+
+.top-card h2{
+    margin-top:7px;
+
+    color:white;
+
+    font-size:22px;
+}
+
+.status{
+    display:inline-flex;
+
+    align-items:center;
+    gap:6px;
+
+    margin-top:12px;
+
+    padding:7px 10px;
+
+    border-radius:20px;
+
+    background:rgba(245,158,11,.10);
+
+    color:#fbbf24;
+
+    font-size:9px;
+    font-weight:800;
+}
+
+.section{
+    padding:22px;
+
+    margin-bottom:15px;
+
+    border:1px solid #252d39;
+    border-radius:14px;
+
+    background:#10151d;
+}
+
+.section h3{
+    display:flex;
+
+    align-items:center;
+    gap:8px;
+
+    margin-bottom:18px;
+
+    color:white;
+
+    font-size:12px;
+}
+
+.section h3 i{
+    color:#f59e0b;
+}
+
+.grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:12px;
+}
+
+.info{
+    padding:12px;
+
+    border-radius:9px;
+
+    background:#0b1017;
+
+    border:1px solid #202834;
+}
+
+.info span{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#687486;
+
+    font-size:8px;
+
+    font-weight:bold;
+
+    letter-spacing:.5px;
+}
+
+.info strong{
+    color:#dce2ea;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+.toy{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #202733;
+
+    font-size:11px;
+}
+
+.toy:last-child{
+    border-bottom:0;
+}
+
+.toy strong{
+    color:#fbbf24;
+}
+
+.termos{
+    color:#9aa5b5;
+
+    font-size:11px;
+
+    line-height:1.8;
+}
+
+.termos p{
+    margin-bottom:12px;
+}
+
+.campo{
+    margin-bottom:15px;
+}
+
+.campo label{
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#8995a6;
+
+    font-size:10px;
+    font-weight:bold;
+}
+
+.campo input{
+    width:100%;
+    height:48px;
+
+    padding:0 14px;
+
+    border-radius:9px;
+
+    border:1px solid #293240;
+
+    outline:none;
+
+    background:#0b1017;
+    color:white;
+
+    font-size:13px;
+}
+
+.campo input:focus{
+    border-color:#f59e0b;
+}
+
+.aceite{
+    display:flex;
+
+    align-items:flex-start;
+    gap:10px;
+
+    margin:20px 0;
+
+    color:#aab3c1;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+.aceite input{
+    margin-top:3px;
+
+    accent-color:#f59e0b;
+}
+
+.signature-label{
+    margin-bottom:8px;
+
+    color:#8995a6;
+
+    font-size:10px;
+    font-weight:bold;
+}
+
+.signature-box{
+    position:relative;
+
+    width:100%;
+    height:230px;
+
+    overflow:hidden;
+
+    background:white;
+
+    border:2px dashed #485365;
+
+    border-radius:12px;
+
+    touch-action:none;
+}
+
+.signature-box canvas{
+    display:block;
+
+    width:100%;
+    height:100%;
+
+    cursor:crosshair;
+
+    touch-action:none;
+}
+
+.signature-placeholder{
+    position:absolute;
+
+    left:0;
+    right:0;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    text-align:center;
+
+    pointer-events:none;
+
+    color:#9ca3af;
+
+    font-size:12px;
+}
+
+.signature-placeholder i{
+    display:block;
+
+    margin-bottom:7px;
+
+    font-size:22px;
+}
+
+.signature-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    margin-top:10px;
+}
+
+.btn-clear{
+    border:1px solid #303947;
+
+    background:#151b24;
+    color:#aab3c1;
+
+    padding:9px 14px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:10px;
+}
+
+.btn-confirm{
+    width:100%;
+    height:52px;
+
+    margin-top:20px;
+
+    border:0;
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#f59e0b;
+    color:#111827;
+
+    font-size:12px;
+    font-weight:900;
+
+    transition:.2s;
+}
+
+.btn-confirm:hover{
+    transform:translateY(-1px);
+
+    background:#fbbf24;
+}
+
+.btn-confirm:disabled{
+    opacity:.55;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+.sucesso{
+    display:none;
+
+    padding:60px 25px;
+
+    text-align:center;
+
+    border:1px solid rgba(34,197,94,.25);
+
+    border-radius:16px;
+
+    background:#10151d;
+}
+
+.sucesso-icon{
+    width:70px;
+    height:70px;
+
+    margin:0 auto 20px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:rgba(34,197,94,.12);
+
+    color:#4ade80;
+
+    font-size:30px;
+}
+
+.sucesso h2{
+    color:white;
+
+    margin-bottom:10px;
+}
+
+.sucesso p{
+    color:#8793a5;
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+.footer{
+    padding:25px;
+
+    text-align:center;
+
+    color:#515c6c;
+
+    font-size:9px;
+}
+
+@media(max-width:600px){
+
+    .container{
+        margin-top:20px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .section,
+    .top-card{
+        padding:18px;
+    }
+
+    .signature-box{
+        height:200px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<header class="header">
+
+    <div class="brand">
+
+        <img
+        src="assets/logo.png"
+        alt="Encanto Kids"
+        onerror="this.style.display='none'">
+
+        <div>
+
+            <h1>
+                Encanto Kids Infláveis
+            </h1>
+
+            <p>
+                Assinatura Digital de Contrato
+            </p>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+    <div
+    class="loading"
+    id="loading">
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        Carregando contrato...
+
+    </div>
+
+
+    <div
+    class="erro-pagina"
+    id="erroPagina">
+
+        <i class="fa-solid fa-circle-exclamation"></i>
+
+        <h2>
+            Não foi possível abrir o contrato
+        </h2>
+
+        <p id="erroTexto">
+            Verifique se o link recebido está correto.
+        </p>
+
+    </div>
+
+
+    <div
+    class="sucesso"
+    id="sucesso">
+
+        <div class="sucesso-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+        <h2>
+            Contrato assinado!
+        </h2>
+
+        <p>
+            Sua assinatura foi registrada com sucesso.
+            <br>
+            Obrigado por escolher a Encanto Kids Infláveis.
+        </p>
+
+        <p
+        id="dataSucesso"
+        style="margin-top:15px;">
+        </p>
+
+    </div>
+
+
+    <div
+    class="contrato"
+    id="contrato">
+
+
+        <div class="top-card">
+
+            <span class="label">
+                CONTRATO DE LOCAÇÃO
+            </span>
+
+            <h2 id="numeroContrato">
+                -
+            </h2>
+
+            <div class="status">
+
+                <i class="fa-solid fa-pen-nib"></i>
+
+                AGUARDANDO ASSINATURA
+
+            </div>
+
+        </div>
+
+
+        <section class="section">
+
+            <h3>
+
+                <i class="fa-solid fa-user"></i>
+
+                CONTRATANTE
+
+            </h3>
+
+            <div class="grid">
+
+                <div class="info">
+
+                    <span>
+                        NOME
+                    </span>
+
+                    <strong id="clienteNome">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span>
+                        TELEFONE
+                    </span>
+
+                    <strong id="clienteTelefone">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span>
+                        ENDEREÇO
+                    </span>
+
+                    <strong id="clienteEndereco">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span>
+                        CIDADE
+                    </span>
+
+                    <strong id="clienteCidade">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <h3>
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                DADOS DO EVENTO
+
+            </h3>
+
+            <div class="grid">
+
+                <div class="info">
+
+                    <span>
+                        DATA
+                    </span>
+
+                    <strong id="eventoData">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span>
+                        HORÁRIO
+                    </span>
+
+                    <strong id="eventoHorario">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span>
+                        LOCAL
+                    </span>
+
+                    <strong id="eventoLocal">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span>
+                        VALOR TOTAL
+                    </span>
+
+                    <strong id="eventoValor">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <h3>
+
+                <i class="fa-solid fa-shapes"></i>
+
+                BRINQUEDOS LOCADOS
+
+            </h3>
+
+            <div id="listaBrinquedos">
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <h3>
+
+                <i class="fa-solid fa-file-contract"></i>
+
+                TERMOS DO CONTRATO
+
+            </h3>
+
+            <div class="termos">
+
+                <p>
+                    O contratante declara estar ciente
+                    de que os brinquedos deverão ser
+                    utilizados de forma adequada e
+                    conforme as orientações fornecidas
+                    pela Encanto Kids Infláveis.
+                </p>
+
+                <p>
+                    Eventuais danos causados por uso
+                    inadequado poderão ser cobrados do
+                    contratante, mediante avaliação.
+                </p>
+
+                <p>
+                    O horário de montagem, utilização
+                    e retirada deverá respeitar o
+                    combinado entre as partes.
+                </p>
+
+                <p>
+                    O pagamento restante deverá ser
+                    realizado conforme acordado entre
+                    contratante e contratada.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <h3>
+
+                <i class="fa-solid fa-signature"></i>
+
+                ASSINATURA DO CONTRATANTE
+
+            </h3>
+
+
+            <div class="campo">
+
+                <label>
+                    Nome completo
+                </label>
+
+                <input
+                type="text"
+                id="nomeAssinante"
+                placeholder="Digite seu nome completo">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>
+                    CPF
+                </label>
+
+                <input
+                type="text"
+                id="cpfAssinante"
+                maxlength="14"
+                inputmode="numeric"
+                placeholder="000.000.000-00">
+
+            </div>
+
+
+            <label class="signature-label">
+                Assine no espaço abaixo
+            </label>
+
+
+            <div class="signature-box">
+
+                <canvas id="canvasAssinatura">
+                </canvas>
+
+                <div
+                class="signature-placeholder"
+                id="signaturePlaceholder">
+
+                    <i class="fa-solid fa-pen-nib"></i>
+
+                    Assine aqui com o dedo ou mouse
+
+                </div>
+
+            </div>
+
+
+            <div class="signature-actions">
+
+                <button
+                type="button"
+                class="btn-clear"
+                onclick="limparAssinatura()">
+
+                    <i class="fa-solid fa-eraser"></i>
+
+                    Limpar assinatura
+
+                </button>
+
+            </div>
+
+
+            <label class="aceite">
+
+                <input
+                type="checkbox"
+                id="aceiteTermos">
+
+                <span>
+                    Declaro que li o contrato,
+                    compreendi as condições apresentadas
+                    e concordo com os termos da locação.
+                </span>
+
+            </label>
+
+
+            <button
+            type="button"
+            class="btn-confirm"
+            id="btnConfirmar"
+            onclick="confirmarAssinatura()">
+
+                <i class="fa-solid fa-shield-check"></i>
+
+                CONFIRMAR ASSINATURA
+
+            </button>
+
+        </section>
+
+
+    </div>
+
+
+</main>
+
+
+<footer class="footer">
+
+    Encanto Kids Infláveis • Assinatura Digital
+
+</footer>
+
+
+<!--
+Use o MESMO arquivo supabase.js do painel.
+Ele já contém sua URL e anon key.
+-->
+
+<script src="js/supabase.js"></script>
+
+
+<script>
+
+/* =========================================
+VARIÁVEIS
+========================================= */
+
+let tokenAssinatura =
+null;
+
+let dadosContrato =
+null;
+
+let canvas =
+null;
+
+let ctx =
+null;
+
+let desenhando =
+false;
+
+let assinaturaRealizada =
+false;
+
+
+/* =========================================
+INICIAR
+========================================= */
+
+async function iniciarPagina(){
+
+    try{
+
+        const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+        tokenAssinatura =
+        parametros.get("t");
+
+
+        if(!tokenAssinatura){
+
+            throw new Error(
+                "O link de assinatura não possui um token válido."
+            );
+
+        }
+
+
+        if(
+            typeof supabaseClient
+            ===
+            "undefined"
+        ){
+
+            throw new Error(
+                "Não foi possível conectar ao sistema."
+            );
+
+        }
+
+
+        await carregarContrato();
+
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro:",
+            erro
+        );
+
+
+        mostrarErro(
+            erro.message
+            ||
+            "Não foi possível carregar o contrato."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+CARREGAR CONTRATO
+========================================= */
+
+async function carregarContrato(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .rpc(
+        "buscar_contrato_assinatura",
+        {
+            p_token:
+            tokenAssinatura
+        }
+    );
+
+
+    if(error){
+
+        throw error;
+
+    }
+
+
+    if(!data){
+
+        throw new Error(
+            "Contrato não encontrado ou link inválido."
+        );
+
+    }
+
+
+    dadosContrato =
+    data;
+
+
+    /*
+    Se já foi assinado, não mostramos
+    novamente o campo de assinatura.
+    */
+
+    if(
+        String(
+            data.status_assinatura
+        ).toLowerCase()
+        ===
+        "assinado"
+    ){
+
+        mostrarJaAssinado(
+            data
+        );
+
+        return;
+
+    }
+
+
+    preencherContrato(
+        data
+    );
+
+
+    document.getElementById(
+        "loading"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "contrato"
+    ).style.display =
+    "block";
+
+
+    prepararCanvas();
+
+}
+
+
+/* =========================================
+PREENCHER CONTRATO
+========================================= */
+
+function preencherContrato(
+    dados
+){
+
+    const cliente =
+    dados.cliente || {};
+
+
+    const reserva =
+    dados.reserva || {};
+
+
+    document.getElementById(
+        "numeroContrato"
+    ).textContent =
+    dados.numero_contrato
+    ||
+    `Contrato #${dados.contrato_id}`;
+
+
+    document.getElementById(
+        "clienteNome"
+    ).textContent =
+    cliente.nome || "-";
+
+
+    document.getElementById(
+        "clienteTelefone"
+    ).textContent =
+    cliente.telefone || "-";
+
+
+    document.getElementById(
+        "clienteEndereco"
+    ).textContent =
+    cliente.endereco || "-";
+
+
+    document.getElementById(
+        "clienteCidade"
+    ).textContent =
+    [
+        cliente.cidade,
+        cliente.estado
+    ]
+    .filter(Boolean)
+    .join(" / ")
+    ||
+    "-";
+
+
+    document.getElementById(
+        "eventoData"
+    ).textContent =
+    formatarData(
+        reserva.data_evento
+    );
+
+
+    const horario =
+    [
+        formatarHorario(
+            reserva.horario_inicio
+        ),
+
+        formatarHorario(
+            reserva.horario_fim
+        )
+    ]
+    .filter(Boolean)
+    .join(" às ");
+
+
+    document.getElementById(
+        "eventoHorario"
+    ).textContent =
+    horario || "-";
+
+
+    document.getElementById(
+        "eventoLocal"
+    ).textContent =
+    [
+        reserva.endereco_evento,
+        reserva.cidade_evento,
+        reserva.estado_evento
+    ]
+    .filter(Boolean)
+    .join(" - ")
+    ||
+    "-";
+
+
+    document.getElementById(
+        "eventoValor"
+    ).textContent =
+    formatarMoeda(
+        reserva.valor_total
+    );
+
+
+    document.getElementById(
+        "nomeAssinante"
+    ).value =
+    cliente.nome || "";
+
+
+    montarBrinquedos(
+        dados.brinquedos || []
+    );
+
+}
+
+
+/* =========================================
+BRINQUEDOS
+========================================= */
+
+function montarBrinquedos(
+    brinquedos
+){
+
+    const container =
+    document.getElementById(
+        "listaBrinquedos"
+    );
+
+
+    if(
+        !Array.isArray(brinquedos)
+        ||
+        brinquedos.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div class="toy">
+
+                <span>
+                    Nenhum brinquedo informado.
+                </span>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+    brinquedos.map(
+
+        item => {
+
+            return `
+
+                <div class="toy">
+
+                    <span>
+
+                        ${
+                            Number(
+                                item.quantidade || 1
+                            )
+                        }x
+
+                        ${
+                            escaparHTML(
+                                item.nome
+                                ||
+                                "Brinquedo"
+                            )
+                        }
+
+                    </span>
+
+
+                    <strong>
+
+                        ${
+                            formatarMoeda(
+                                item.subtotal
+                            )
+                        }
+
+                    </strong>
+
+                </div>
+
+            `;
+
+        }
+
+    )
+    .join("");
+
+}
+
+
+/* =========================================
+CANVAS
+========================================= */
+
+function prepararCanvas(){
+
+    canvas =
+    document.getElementById(
+        "canvasAssinatura"
+    );
+
+
+    ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+    redimensionarCanvas();
+
+
+    ctx.lineWidth =
+    2.5;
+
+
+    ctx.lineCap =
+    "round";
+
+
+    ctx.lineJoin =
+    "round";
+
+
+    ctx.strokeStyle =
+    "#111827";
+
+
+    canvas.addEventListener(
+        "pointerdown",
+        iniciarDesenho
+    );
+
+
+    canvas.addEventListener(
+        "pointermove",
+        desenhar
+    );
+
+
+    window.addEventListener(
+        "pointerup",
+        finalizarDesenho
+    );
+
+
+    window.addEventListener(
+        "resize",
+        redimensionarCanvas
+    );
+
+}
+
+
+/* =========================================
+REDIMENSIONAR CANVAS
+========================================= */
+
+function redimensionarCanvas(){
+
+    if(!canvas){
+        return;
+    }
+
+
+    const imagemAnterior =
+    assinaturaRealizada
+    ?
+    canvas.toDataURL()
+    :
+    null;
+
+
+    const largura =
+    canvas.clientWidth;
+
+
+    const altura =
+    canvas.clientHeight;
+
+
+    const escala =
+    window.devicePixelRatio
+    ||
+    1;
+
+
+    canvas.width =
+    largura * escala;
+
+
+    canvas.height =
+    altura * escala;
+
+
+    ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+    ctx.scale(
+        escala,
+        escala
+    );
+
+
+    ctx.lineWidth =
+    2.5;
+
+
+    ctx.lineCap =
+    "round";
+
+
+    ctx.lineJoin =
+    "round";
+
+
+    ctx.strokeStyle =
+    "#111827";
+
+
+    if(imagemAnterior){
+
+        const imagem =
+        new Image();
+
+
+        imagem.onload =
+        function(){
+
+            ctx.drawImage(
+                imagem,
+                0,
+                0,
+                largura,
+                altura
+            );
+
+        };
+
+
+        imagem.src =
+        imagemAnterior;
+
+    }
+
+}
+
+
+/* =========================================
+POSIÇÃO DO PONTEIRO
+========================================= */
+
+function pegarPosicao(
+    evento
+){
+
+    const rect =
+    canvas.getBoundingClientRect();
+
+
+    return {
+
+        x:
+        evento.clientX
+        -
+        rect.left,
+
+        y:
+        evento.clientY
+        -
+        rect.top
+
+    };
+
+}
+
+
+/* =========================================
+COMEÇAR ASSINATURA
+========================================= */
+
+function iniciarDesenho(
+    evento
+){
+
+    desenhando =
+    true;
+
+
+    assinaturaRealizada =
+    true;
+
+
+    document.getElementById(
+        "signaturePlaceholder"
+    ).style.display =
+    "none";
+
+
+    const pos =
+    pegarPosicao(
+        evento
+    );
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        pos.x,
+        pos.y
+    );
+
+
+    evento.preventDefault();
+
+}
+
+
+/* =========================================
+DESENHAR
+========================================= */
+
+function desenhar(
+    evento
+){
+
+    if(!desenhando){
+        return;
+    }
+
+
+    const pos =
+    pegarPosicao(
+        evento
+    );
+
+
+    ctx.lineTo(
+        pos.x,
+        pos.y
+    );
+
+
+    ctx.stroke();
+
+
+    evento.preventDefault();
+
+}
+
+
+/* =========================================
+FINALIZAR
+========================================= */
+
+function finalizarDesenho(){
+
+    if(!desenhando){
+        return;
+    }
+
+
+    desenhando =
+    false;
+
+
+    ctx.closePath();
+
+}
+
+
+/* =========================================
+LIMPAR
+========================================= */
+
+function limparAssinatura(){
+
+    if(!canvas){
+        return;
+    }
+
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    assinaturaRealizada =
+    false;
+
+
+    document.getElementById(
+        "signaturePlaceholder"
+    ).style.display =
+    "block";
+
+}
+
+
+/* =========================================
+CONFIRMAR
+========================================= */
+
+async function confirmarAssinatura(){
+
+    const nome =
+    document.getElementById(
+        "nomeAssinante"
+    )
+    .value
+    .trim();
+
+
+    const cpf =
+    document.getElementById(
+        "cpfAssinante"
+    )
+    .value
+    .trim();
+
+
+    const aceite =
+    document.getElementById(
+        "aceiteTermos"
+    )
+    .checked;
+
+
+    if(
+        nome.length < 3
+    ){
+
+        alert(
+            "Informe seu nome completo."
+        );
+
+        return;
+
+    }
+
+
+    if(!assinaturaRealizada){
+
+        alert(
+            "Faça sua assinatura no espaço indicado."
+        );
+
+        return;
+
+    }
+
+
+    if(!aceite){
+
+        alert(
+            "Você precisa confirmar que leu e concorda com os termos."
+        );
+
+        return;
+
+    }
+
+
+    const btn =
+    document.getElementById(
+        "btnConfirmar"
+    );
+
+
+    btn.disabled =
+    true;
+
+
+    btn.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        REGISTRANDO...
+
+    `;
+
+
+    try{
+
+        const assinaturaBase64 =
+        canvas.toDataURL(
+            "image/png"
+        );
+
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .rpc(
+            "assinar_contrato_publico",
+            {
+
+                p_token:
+                tokenAssinatura,
+
+                p_nome:
+                nome,
+
+                p_cpf:
+                cpf,
+
+                p_assinatura:
+                assinaturaBase64
+
+            }
+        );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        if(
+            !data
+            ||
+            data.sucesso !== true
+        ){
+
+            throw new Error(
+                "Não foi possível registrar a assinatura."
+            );
+
+        }
+
+
+        mostrarSucesso(
+            data.data_assinatura
+        );
+
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao assinar:",
+            erro
+        );
+
+
+        alert(
+            erro.message
+            ||
+            "Não foi possível registrar sua assinatura."
+        );
+
+
+        btn.disabled =
+        false;
+
+
+        btn.innerHTML = `
+
+            <i class="fa-solid fa-shield-check"></i>
+
+            CONFIRMAR ASSINATURA
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+SUCESSO
+========================================= */
+
+function mostrarSucesso(
+    data
+){
+
+    document.getElementById(
+        "contrato"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "loading"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "sucesso"
+    ).style.display =
+    "block";
+
+
+    document.getElementById(
+        "dataSucesso"
+    ).textContent =
+    data
+    ?
+    `Registrado em ${formatarDataHora(data)}`
+    :
+    "";
+
+}
+
+
+/* =========================================
+JÁ ASSINADO
+========================================= */
+
+function mostrarJaAssinado(
+    dados
+){
+
+    document.getElementById(
+        "loading"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "sucesso"
+    ).style.display =
+    "block";
+
+
+    document.getElementById(
+        "dataSucesso"
+    ).textContent =
+    dados.data_assinatura
+    ?
+    `Assinado em ${formatarDataHora(
+        dados.data_assinatura
+    )}`
+    :
+    "Este contrato já foi assinado.";
+
+}
+
+
+/* =========================================
+ERRO
+========================================= */
+
+function mostrarErro(
+    mensagem
+){
+
+    document.getElementById(
+        "loading"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "contrato"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "erroPagina"
+    ).style.display =
+    "block";
+
+
+    document.getElementById(
+        "erroTexto"
+    ).textContent =
+    mensagem;
+
+}
+
+
+/* =========================================
+FORMATAR DATA
+========================================= */
+
+function formatarData(
+    data
+){
+
+    if(!data){
+        return "-";
+    }
+
+
+    const partes =
+    String(data)
+    .split("-");
+
+
+    if(
+        partes.length === 3
+    ){
+
+        return `${
+            partes[2]
+        }/${
+            partes[1]
+        }/${
+            partes[0]
+        }`;
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================
+HORÁRIO
+========================================= */
+
+function formatarHorario(
+    horario
+){
+
+    if(!horario){
+        return "";
+    }
+
+
+    return String(
+        horario
+    )
+    .slice(
+        0,
+        5
+    );
+
+}
+
+
+/* =========================================
+MOEDA
+========================================= */
+
+function formatarMoeda(
+    valor
+){
+
+    return Number(
+        valor || 0
+    )
+    .toLocaleString(
+        "pt-BR",
+        {
+            style:
+            "currency",
+
+            currency:
+            "BRL"
+        }
+    );
+
+}
+
+
+/* =========================================
+DATA E HORA
+========================================= */
+
+function formatarDataHora(
+    data
+){
+
+    if(!data){
+        return "";
+    }
+
+
+    return new Date(
+        data
+    )
+    .toLocaleString(
+        "pt-BR"
+    );
+
+}
+
+
+/* =========================================
+ESCAPAR HTML
+========================================= */
+
+function escaparHTML(
+    texto
+){
+
+    return String(
+        texto || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================
+MÁSCARA CPF
+========================================= */
+
+document
+.addEventListener(
+    "input",
+    function(evento){
+
+        if(
+            evento.target.id
+            !==
+            "cpfAssinante"
+        ){
+            return;
+        }
+
+
+        let valor =
+        evento.target.value
+        .replace(
+            /\D/g,
+            ""
+        )
+        .slice(
+            0,
+            11
+        );
+
+
+        valor =
+        valor.replace(
+            /(\d{3})(\d)/,
+            "$1.$2"
+        );
+
+
+        valor =
+        valor.replace(
+            /(\d{3})(\d)/,
+            "$1.$2"
+        );
+
+
+        valor =
+        valor.replace(
+            /(\d{3})(\d{1,2})$/,
+            "$1-$2"
+        );
+
+
+        evento.target.value =
+        valor;
+
+    }
+);
+
+
+/* =========================================
+INICIAR PÁGINA
+========================================= */
+
+iniciarPagina();
+
+</script>
+
+</body>
+</html>
