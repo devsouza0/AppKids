@@ -4723,8 +4723,7 @@ async function gerarLinkAssinaturaAtual(){
             data,
             error
         } =
-        await supabaseClient
-        .rpc(
+        await supabaseClient.rpc(
             "gerar_link_assinatura",
             {
                 p_contrato_id:
@@ -4734,7 +4733,9 @@ async function gerarLinkAssinaturaAtual(){
 
 
         if(error){
+
             throw error;
+
         }
 
 
@@ -4744,7 +4745,7 @@ async function gerarLinkAssinaturaAtual(){
         ){
 
             throw new Error(
-                "Não foi possível gerar o token."
+                "Não foi possível gerar o token de assinatura."
             );
 
         }
@@ -4761,14 +4762,28 @@ async function gerarLinkAssinaturaAtual(){
         `${base}/assinatura.html?t=${data.token}`;
 
 
-        await navigator.clipboard.writeText(
-            link
-        );
+        try{
+
+            await navigator
+            .clipboard
+            .writeText(
+                link
+            );
+
+        }
+        catch(erroClipboard){
+
+            console.log(
+                "Não foi possível copiar automaticamente:",
+                erroClipboard
+            );
+
+        }
 
 
         mostrarToast(
             "Link criado",
-            "O link de assinatura foi copiado.",
+            "Link de assinatura gerado com sucesso.",
             false
         );
 
@@ -4777,6 +4792,7 @@ async function gerarLinkAssinaturaAtual(){
             "LINK ASSINATURA:",
             link
         );
+
 
     }
     catch(erro){
