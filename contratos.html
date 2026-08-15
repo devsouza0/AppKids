@@ -4796,7 +4796,146 @@ Se precisar de alguma informação, estamos à disposição! 😊`;
     );
 
 }
+    
+async function gerarLinkAssinaturaAtual(){
 
+    if(!contratoAtual){
+
+        mostrarToast(
+            "Atenção",
+            "Nenhum contrato selecionado.",
+            true
+        );
+
+        return;
+    }
+
+
+    try{
+
+        /* =====================================
+        VERIFICAR SE JÁ EXISTE TOKEN
+        ===================================== */
+
+        const {
+            data: assinaturaExistente,
+            error: erroConsulta
+        } =
+        await supabaseClient
+        .from("assinaturas_contratos")
+        .select("*")
+        .eq(
+            "contrato_id",
+            contratoAtual.id
+        )
+        .maybeSingle();
+
+
+        if(erroConsulta){
+
+            throw erroConsulta;
+
+        }
+
+
+        let assinatura =
+        assinaturaExistente;
+
+
+        /* =====================================
+        CRIAR TOKEN SE NÃO EXISTIR
+        ===================================== */
+
+        if(!assinatura){
+
+            const {
+                data,
+                error
+            } =
+            await supabaseClient
+            .from("assinaturas_contratos")
+            .insert({
+
+                contrato_id:
+                contratoAtual.id,
+
+                status:
+                "pendente"
+
+            })
+            .select()
+            .single();
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            assinatura =
+            data;
+
+        }
+
+
+        /* =====================================
+        GERAR LINK
+        ===================================== */
+
+        const base =
+        window.location.href
+        .split("/")
+        .slice(0,-1)
+        .join("/");
+
+
+        const link =
+        `${base}/assinatura.html?t=${assinatura.token}`;
+
+
+        /* =====================================
+        COPIAR LINK
+        ===================================== */
+
+        await navigator.clipboard.writeText(
+            link
+        );
+
+
+        mostrarToast(
+            "Link criado",
+            "O link de assinatura foi copiado.",
+            false
+        );
+
+
+        console.log(
+            "LINK ASSINATURA:",
+            link
+        );
+
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao gerar link de assinatura:",
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            erro.message ||
+            "Não foi possível gerar o link de assinatura.",
+            true
+        );
+
+    }
+
+}
 
 /* =========================================
 EXCLUSÃO
