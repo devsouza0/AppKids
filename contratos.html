@@ -4908,62 +4908,6 @@ Se precisar de alguma informação, estamos à disposição! 😊`;
 }
 
 
-        /* =====================================
-        GERAR LINK
-        ===================================== */
-
-        const base =
-        window.location.href
-        .split("/")
-        .slice(0,-1)
-        .join("/");
-
-
-        const link =
-`${base}/assinatura.html?t=${data.token}`;
-
-
-        /* =====================================
-        COPIAR LINK
-        ===================================== */
-
-        await navigator.clipboard.writeText(
-            link
-        );
-
-
-        mostrarToast(
-            "Link criado",
-            "O link de assinatura foi copiado.",
-            false
-        );
-
-
-        console.log(
-            "LINK ASSINATURA:",
-            link
-        );
-
-
-    }
-    catch(erro){
-
-        console.error(
-            "Erro ao gerar link de assinatura:",
-            erro
-        );
-
-
-        mostrarToast(
-            "Erro",
-            erro.message ||
-            "Não foi possível gerar o link de assinatura.",
-            true
-        );
-
-    }
-
-}
 
 /* =========================================
 EXCLUSÃO
