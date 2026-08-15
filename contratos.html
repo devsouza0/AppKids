@@ -4702,7 +4702,101 @@ function whatsappContrato(
     whatsappContratoAtual();
 
 }
+    
+async function gerarLinkAssinaturaAtual(){
 
+    if(!contratoAtual){
+
+        mostrarToast(
+            "Atenção",
+            "Nenhum contrato selecionado.",
+            true
+        );
+
+        return;
+    }
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .rpc(
+            "gerar_link_assinatura",
+            {
+                p_contrato_id:
+                contratoAtual.id
+            }
+        );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        if(
+            !data ||
+            !data.token
+        ){
+
+            throw new Error(
+                "Não foi possível gerar o token."
+            );
+
+        }
+
+
+        const base =
+        window.location.href
+        .split("/")
+        .slice(0,-1)
+        .join("/");
+
+
+        const link =
+        `${base}/assinatura.html?t=${data.token}`;
+
+
+        await navigator.clipboard.writeText(
+            link
+        );
+
+
+        mostrarToast(
+            "Link criado",
+            "O link de assinatura foi copiado.",
+            false
+        );
+
+
+        console.log(
+            "LINK ASSINATURA:",
+            link
+        );
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao gerar link de assinatura:",
+            erro
+        );
+
+
+        mostrarToast(
+            "Erro",
+            erro.message ||
+            "Não foi possível gerar o link de assinatura.",
+            true
+        );
+
+    }
+
+}
 
 /* =========================================
 WHATSAPP CONTRATO ATUAL
