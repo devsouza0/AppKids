@@ -1702,21 +1702,35 @@ onclick="gerarLinkAssinaturaAtual()">
                 </section>
 
 
-                <div class="signature-area">
+                <div class="assinatura-cliente-box">
 
-                    <div>
+    <img
+        id="paperImagemAssinatura"
+        class="paper-signature-image"
+        alt="Assinatura do contratante"
+    >
 
-                        <div class="signature-line"></div>
+    <div
+        id="paperStatusAssinatura"
+        class="paper-signature-status">
+    </div>
 
-                        <strong>
-                            CONTRATANTE
-                        </strong>
+    <div class="signature-line"></div>
 
-                        <span id="paperAssinaturaCliente">
-                            Cliente
-                        </span>
+    <strong>
+        CONTRATANTE
+    </strong>
 
-                    </div>
+    <span id="paperAssinaturaCliente">
+        Cliente
+    </span>
+
+    <small
+        id="paperDataAssinatura"
+        class="paper-signature-date">
+    </small>
+
+</div>
 
 
                     <div>
@@ -2383,6 +2397,45 @@ VISUALIZAÇÃO CONTRATO
     border-top:1px solid #111;
 
     margin-bottom:7px;
+}
+    .paper-signature-image{
+
+    display:none;
+
+    width:100%;
+    max-width:210px;
+
+    height:75px;
+
+    object-fit:contain;
+
+    margin:0 auto 8px;
+}
+
+.paper-signature-status{
+
+    display:none;
+
+    margin-bottom:7px;
+
+    color:#15803d;
+
+    font-size:8px;
+
+    font-weight:bold;
+
+    letter-spacing:.4px;
+}
+
+.paper-signature-date{
+
+    display:none;
+
+    margin-top:5px;
+
+    color:#666;
+
+    font-size:8px;
 }
 
 .signature-area strong{
@@ -4286,6 +4339,9 @@ function abrirContrato(
     preencherContratoPapel(
         contrato
     );
+    carregarAssinaturaContrato(
+    contrato.id
+);
 
 
     document.getElementById(
@@ -4606,7 +4662,165 @@ function preencherContratoPapel(
     "Cliente";
 
 }
+    
+async function carregarAssinaturaContrato(
+    contratoId
+){
 
+    const imagem =
+    document.getElementById(
+        "paperImagemAssinatura"
+    );
+
+    const status =
+    document.getElementById(
+        "paperStatusAssinatura"
+    );
+
+    const dataTexto =
+    document.getElementById(
+        "paperDataAssinatura"
+    );
+
+
+    /* =============================
+    LIMPAR ASSINATURA ANTERIOR
+    ============================= */
+
+    imagem.style.display =
+    "none";
+
+    imagem.removeAttribute(
+        "src"
+    );
+
+
+    status.style.display =
+    "none";
+
+    status.textContent =
+    "";
+
+
+    dataTexto.style.display =
+    "none";
+
+    dataTexto.textContent =
+    "";
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.rpc(
+            "buscar_assinatura_contrato_admin",
+            {
+                p_contrato_id:
+                contratoId
+            }
+        );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        if(
+            !data ||
+            String(
+                data.status || ""
+            )
+            .toLowerCase()
+            !==
+            "assinado"
+        ){
+
+            return;
+
+        }
+
+
+        /* =============================
+        IMAGEM DA ASSINATURA
+        ============================= */
+
+        if(data.assinatura){
+
+            imagem.src =
+            data.assinatura;
+
+            imagem.style.display =
+            "block";
+
+        }
+
+
+        /* =============================
+        STATUS
+        ============================= */
+
+        status.textContent =
+        "✓ ASSINADO DIGITALMENTE";
+
+        status.style.display =
+        "block";
+
+
+        /* =============================
+        NOME
+        ============================= */
+
+        if(data.nome_assinante){
+
+            document.getElementById(
+                "paperAssinaturaCliente"
+            ).textContent =
+            data.nome_assinante;
+
+        }
+
+
+        /* =============================
+        DATA / HORA
+        ============================= */
+
+        if(data.data_assinatura){
+
+            const dataFormatada =
+            new Date(
+                data.data_assinatura
+            )
+            .toLocaleString(
+                "pt-BR"
+            );
+
+
+            dataTexto.textContent =
+            dataFormatada;
+
+            dataTexto.style.display =
+            "block";
+
+        }
+
+
+    }
+    catch(erro){
+
+        console.error(
+            "Erro ao carregar assinatura:",
+            erro
+        );
+
+    }
+
+}
 
 /* =========================================
 IMPRIMIR
