@@ -1,4 +1,4 @@
-const CACHE_NAME = "encanto-kids-adm-v3";
+const CACHE_NAME = "encanto-kids-adm-v4";
 
 const ARQUIVOS_CACHE = [
     "./",
@@ -31,11 +31,36 @@ self.addEventListener(
 
             caches
             .open(CACHE_NAME)
-            .then(cache => {
+            .then(async cache => {
 
-                return cache.addAll(
-                    ARQUIVOS_CACHE
-                );
+                for(
+                    const arquivo
+                    of ARQUIVOS_CACHE
+                ){
+
+                    try{
+
+                        await cache.add(
+                            arquivo
+                        );
+
+                        console.log(
+                            "Cache OK:",
+                            arquivo
+                        );
+
+                    }
+                    catch(erro){
+
+                        console.warn(
+                            "Não foi possível colocar no cache:",
+                            arquivo,
+                            erro
+                        );
+
+                    }
+
+                }
 
             })
 
@@ -102,8 +127,6 @@ self.addEventListener(
         event.request;
 
 
-        /* NÃO INTERFERIR NO SUPABASE */
-
         if(
             requisicao.url.includes(
                 "supabase.co"
@@ -114,8 +137,6 @@ self.addEventListener(
 
         }
 
-
-        /* SOMENTE REQUISIÇÕES GET */
 
         if(
             requisicao.method !== "GET"
@@ -131,10 +152,6 @@ self.addEventListener(
             fetch(requisicao)
 
             .then(resposta => {
-
-                /*
-                Só salva respostas válidas.
-                */
 
                 if(
                     resposta &&
@@ -166,26 +183,22 @@ self.addEventListener(
 
             .catch(async () => {
 
-                const respostaCache =
+                const cache =
                 await caches.match(
                     requisicao
                 );
 
 
-                if(respostaCache){
+                if(cache){
 
-                    return respostaCache;
+                    return cache;
 
                 }
 
 
-                /*
-                Se for navegação e estiver offline,
-                tenta abrir o login.
-                */
-
                 if(
-                    requisicao.mode === "navigate"
+                    requisicao.mode ===
+                    "navigate"
                 ){
 
                     return caches.match(
