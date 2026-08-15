@@ -1,4 +1,4 @@
-const CACHE_NAME = "encanto-kids-adm-v1";
+const CACHE_NAME = "encanto-kids-adm-v2";
 
 const ARQUIVOS_CACHE = [
     "./",
@@ -14,6 +14,8 @@ const ARQUIVOS_CACHE = [
     "./manifest.json",
     "./assets/favicon.jpeg",
     "./assets/logo.png"
+    "./assets/icon-192.png",
+"./assets/icon-512.png",
 ];
 
 
